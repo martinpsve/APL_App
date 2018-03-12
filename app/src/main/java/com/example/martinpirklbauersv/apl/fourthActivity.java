@@ -78,8 +78,7 @@ public class fourthActivity extends AppCompatActivity {
     }
 
     private class GetDataActivity extends AsyncTask<String, Void, String> {
-
-
+        
         AlertDialog alertDialog;
         Context ctx;
         View v;
