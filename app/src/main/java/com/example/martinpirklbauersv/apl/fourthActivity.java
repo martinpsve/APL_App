@@ -78,7 +78,7 @@ public class fourthActivity extends AppCompatActivity {
     }
 
     private class GetDataActivity extends AsyncTask<String, Void, String> {
-        
+
         AlertDialog alertDialog;
         Context ctx;
         View v;
@@ -144,8 +144,7 @@ public class fourthActivity extends AppCompatActivity {
 
         @Override
         protected void onPostExecute(String result) {
-
-
+            
             StringBuilder b=new StringBuilder();
             StringBuilder c=new StringBuilder();
 
