@@ -1,0 +1,115 @@
+<?xml version="1.0" encoding="utf-8"?>
+<android.support.constraint.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context="com.example.martinpirklbauersv.apl.fourthActivity">
+
+    <ScrollView
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+
+        <LinearLayout
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal">
+
+            <LinearLayout
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="0dp"
+                android:orientation="horizontal">
+
+
+                <TextView
+                    android:id="@+id/textView2"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:text="Fnamn"
+                    tools:layout_editor_absoluteX="40dp"
+                    tools:layout_editor_absoluteY="242dp" />
+
+                <TextView
+                    android:id="@+id/textView4"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:text="Enamn"
+                    tools:layout_editor_absoluteX="162dp"
+                    tools:layout_editor_absoluteY="243dp" />
+
+                <LinearLayout
+                    android:id="@+id/UptLL"
+                    android:layout_width="15dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:orientation="vertical">
+
+                </LinearLayout>
+            </LinearLayout>
+
+            <LinearLayout
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="120dp"
+                android:orientation="vertical">
+
+                <Button
+                    android:id="@+id/button"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:onClick="userReg"
+                    android:text="Reg Användare"
+                    tools:layout_editor_absoluteX="231dp"
+                    tools:layout_editor_absoluteY="16dp" />
+
+                <Button
+                    android:id="@+id/RemoveUsers"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:onClick="RmUsers"
+                    android:text="Tabort Användare" />
+
+                <Button
+                    android:id="@+id/button2"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center_horizontal"
+                    android:onClick="userGetdata"
+                    android:text="hämtadata"
+                    tools:layout_editor_absoluteX="257dp"
+                    tools:layout_editor_absoluteY="139dp" />
+
+                <TextView
+                    android:id="@+id/användarID"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:text="användarID"
+                    tools:layout_editor_absoluteX="288dp"
+                    tools:layout_editor_absoluteY="216dp" />
+
+                <TextView
+                    android:id="@+id/text2"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:text="Roll"
+                    tools:layout_editor_absoluteX="334dp"
+                    tools:layout_editor_absoluteY="261dp" />
+
+                <Button
+                    android:id="@+id/buttonClose"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_centerHorizontal="true"
+                    android:layout_centerVertical="true"
+                    android:onClick="onClickClose"
+                    android:text="Close"
+                    tools:layout_editor_absoluteX="280dp"
+                    tools:layout_editor_absoluteY="328dp" />
+            </LinearLayout>
+        </LinearLayout>
+    </ScrollView>
+
+</android.support.constraint.ConstraintLayout>
