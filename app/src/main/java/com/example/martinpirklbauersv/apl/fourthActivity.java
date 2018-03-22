@@ -3,11 +3,16 @@ package com.example.martinpirklbauersv.apl;
 import android.app.AlertDialog;
 import android.content.Context;
 import android.content.Intent;
+import android.graphics.Color;
 import android.os.AsyncTask;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.text.style.UpdateLayout;
+import android.util.Log;
 import android.util.TypedValue;
 import android.view.View;
+import android.widget.Button;
+import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
@@ -27,15 +32,15 @@ import java.net.HttpURLConnection;
 import java.net.MalformedURLException;
 import java.net.URL;
 import java.net.URLEncoder;
+import java.util.Objects;
 
 public class fourthActivity extends AppCompatActivity {
     private TextView AnvandarID;
     private TextView RoleID;
-    private TextView Förnamn;
     private TextView  Efternamn;
-    private LinearLayout ImButlayout;
+    private LinearLayout RmButlayout;
+    private LinearLayout IDButLayout;
     String Anvandarnamn;
-    String Role;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -49,22 +54,35 @@ public class fourthActivity extends AppCompatActivity {
         String r = getIntent().getStringExtra("Role");
         RoleID.setText(r);
 
-        Förnamn = (TextView) findViewById(R.id.textView2);
+        //Förnamn = (TextView) findViewById(R.id.textView2);
         Efternamn = (TextView) findViewById(R.id.textView4);
 
-        ImButlayout = (LinearLayout) findViewById(R.id.UptLL);
 
-    }
-    public void onClickClose(View view) {
-        finish();
-    }
+        RmButlayout = (LinearLayout) findViewById(R.id.RMLL);
+        IDButLayout = (LinearLayout) findViewById(R.id.IDLL);
 
-    public void userGetdata(View view) {
         Anvandarnamn = AnvandarID.getText().toString();
 
         String method = "hämtadata";
         fourthActivity.GetDataActivity GetDataActivity = new fourthActivity.GetDataActivity(this);
-        GetDataActivity.execute(method, Anvandarnamn, Role);
+        GetDataActivity.execute(method, Anvandarnamn);
+
+    }
+
+    @Override
+    public void onRestart(){
+
+        super.onRestart();
+        Anvandarnamn = AnvandarID.getText().toString();
+        IDButLayout.removeAllViewsInLayout();
+        String method = "hämtadata";
+        fourthActivity.GetDataActivity GetDataActivity = new fourthActivity.GetDataActivity(this);
+        GetDataActivity.execute(method, Anvandarnamn);
+
+    }
+
+    public void onClickClose(View view) {
+        finish();
     }
 
     public void userReg(View view)
@@ -72,13 +90,16 @@ public class fourthActivity extends AppCompatActivity {
         startActivity(new Intent(this,RegUsersActivity.class));
     }
 
-    public void RmUsers(View view)
+    public void APLReguser(View view)
     {
-        startActivity(new Intent(this,RemoveUsersActivity.class));
+        startActivity(new Intent(this,APLRegUsers.class));
+    }
+
+    public void UserNarvaro(View view) {
+        startActivity(new Intent(this,CalenderActivity.class));
     }
 
     private class GetDataActivity extends AsyncTask<String, Void, String> {
-
 
         AlertDialog alertDialog;
         Context ctx;
@@ -146,8 +167,6 @@ public class fourthActivity extends AppCompatActivity {
         @Override
         protected void onPostExecute(String result) {
 
-
-            StringBuilder b=new StringBuilder();
             StringBuilder c=new StringBuilder();
 
             JSONArray jsonarray = null;
@@ -168,6 +187,8 @@ public class fourthActivity extends AppCompatActivity {
                 String sFörnamn = null;
                 try {
                     sFörnamn = obj.getString("Fnamn");
+                    Log.d("fel", sFörnamn);
+
                 } catch (JSONException e) {
                     e.printStackTrace();
                 }
@@ -188,42 +209,60 @@ public class fourthActivity extends AppCompatActivity {
                 }
 
 
-                final String finalSEfternamn = sEfternamn;
-                final String finalSFörnamn = sFörnamn;
                 final String finalSAnvadarID = sAnvadarID;
 
-                ImageView UptButton = new ImageView(fourthActivity.this);
-                UptButton.setImageResource(R.drawable.ic_launcher_background);
-                UptButton.setOnClickListener(new View.OnClickListener() {
+                ImageView RMButton = new ImageView(fourthActivity.this);
+                RMButton.setImageResource(R.drawable.ic_launcher_background);
+
+                RMButton.setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View view) {
 
-                        Intent intent = new Intent(ctx, UppdateUsersActivity.class);
-                        intent.putExtra("Fnamn", finalSFörnamn);
-                        intent.putExtra("Enamn", finalSEfternamn);
+                        Intent intent = new Intent(ctx, RemoveUsersActivity.class);
                         intent.putExtra("AnvandarID", finalSAnvadarID);
                         startActivity(intent);
                     }
                 });
 
+
+                    Button IDButton = new Button(fourthActivity.this);
+                    IDButton.setTextSize(10);
+                    IDButton.setBackgroundColor(Color.TRANSPARENT);
+                    IDButton.setOnClickListener(new View.OnClickListener() {
+                        @Override
+                        public void onClick(View view) {
+
+                            Intent intent = new Intent(ctx, UppdateUsersActivity.class);
+                            intent.putExtra("AnvandarID", finalSAnvadarID);
+                            startActivity(intent);
+                        }
+                    });
+
+                    IDButLayout.addView(IDButton);
+                    IDButton.setText(sFörnamn);
+
+
+
+
                 int height = (int) TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP, 16, getResources().getDisplayMetrics());
                 int width = (int) TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP, 16, getResources().getDisplayMetrics());
-                UptButton.setPadding(0,16,0,0);
+
+                RMButton.setPadding(0,16,0,0);
                 LinearLayout.LayoutParams lp = new LinearLayout.LayoutParams(width, height);
 
 
-                ImButlayout.addView(UptButton, lp);
+                RmButlayout.addView(RMButton, lp);
 
-                b.append(sFörnamn + "\n");
-
+              //  b.append(sFörnamn + "\n");
                 c.append(sEfternamn + "\n");
 
             }
 
-            Förnamn.setText(b.toString());
+            //Förnamn.setText(b.toString());
             Efternamn.setText(c.toString());
 
         }
+
     }
 
 }

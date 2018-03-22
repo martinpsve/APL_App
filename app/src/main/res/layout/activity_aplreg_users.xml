@@ -4,7 +4,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context="com.example.martinpirklbauersv.apl.RegUsersActivity">
+    tools:context="com.example.martinpirklbauersv.apl.APLRegUsers">
 
     <Button
         android:id="@+id/buttonClose"
@@ -27,33 +27,21 @@
         android:layout_marginStart="28dp"
         android:layout_marginTop="16dp"
         android:onClick="DataTooDB"
-        android:text="Registrera användare"
+        android:text="REg"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
-
-    <EditText
-        android:id="@+id/Narvarande"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginStart="16dp"
-        android:layout_marginTop="18dp"
-        android:ems="10"
-        android:hint="Förnamn"
-        android:inputType="textPersonName"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/Roller" />
 
     <EditText
         android:id="@+id/AnvandarID"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginStart="16dp"
-        android:layout_marginTop="12dp"
+        android:layout_marginTop="123dp"
         android:ems="10"
-        android:hint="Efternamn"
+        android:hint="AnvändarID"
         android:inputType="textPersonName"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/Narvarande" />
+        app:layout_constraintTop_toBottomOf="@+id/button2" />
 
     <EditText
         android:id="@+id/DagarID"
@@ -62,7 +50,7 @@
         android:layout_marginStart="16dp"
         android:layout_marginTop="19dp"
         android:ems="10"
-        android:hint="Lösenord"
+        android:hint="DagarID"
         android:inputType="textPersonName"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/AnvandarID" />
@@ -74,30 +62,21 @@
         android:layout_marginStart="16dp"
         android:layout_marginTop="27dp"
         android:ems="10"
-        android:hint="Telefonnummer"
+        android:hint="PeriodID"
         android:inputType="textPersonName"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/DagarID" />
 
     <EditText
-        android:id="@+id/Mailadress"
+        android:id="@+id/ArbetsplatsID"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginStart="16dp"
         android:layout_marginTop="16dp"
         android:ems="10"
-        android:hint="Mailadress"
+        android:hint="ArbetsplatsID"
         android:inputType="textPersonName"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/PeriodID" />
-
-    <Spinner
-        android:id="@+id/Roller"
-        android:layout_width="150dp"
-        android:layout_height="wrap_content"
-        android:layout_marginStart="16dp"
-        android:layout_marginTop="16dp"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/button2" />
 
 </android.support.constraint.ConstraintLayout>

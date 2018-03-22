@@ -29,7 +29,9 @@
         <activity android:name=".sixthActivity" />
         <activity android:name=".RegUsersActivity" />
         <activity android:name=".UppdateUsersActivity" />
-        <activity android:name=".RemoveUsersActivity"></activity>
+        <activity android:name=".RemoveUsersActivity" />
+        <activity android:name=".CalenderActivity" />
+        <activity android:name=".APLRegUsers"></activity>
     </application>
 
 </manifest>
