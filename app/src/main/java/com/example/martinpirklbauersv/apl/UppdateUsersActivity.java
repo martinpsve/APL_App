@@ -5,17 +5,18 @@ import android.content.Context;
 import android.os.AsyncTask;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.EditText;
+import android.widget.LinearLayout;
 import android.widget.Spinner;
 import android.widget.TextView;
 
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
-import org.w3c.dom.Text;
 
 import java.io.BufferedReader;
 import java.io.BufferedWriter;
@@ -28,36 +29,32 @@ import java.net.HttpURLConnection;
 import java.net.MalformedURLException;
 import java.net.URL;
 import java.net.URLEncoder;
+import java.util.Objects;
 
 public class UppdateUsersActivity extends AppCompatActivity implements AdapterView.OnItemSelectedListener {
 
-    private TextView AnvändarFnamn;
-    private TextView RoleID;
     private TextView AnvandarID;
-
+    private LinearLayout IDButLayout;
     private EditText FnamnField, EnamnField, LösenordField, TelefonnummerField, MailadressField;
+    private EditText EOnskan, Ematchning, EKlassID;
+    private EditText EArbetsplatsID;
+    private EditText EUndervisar;
     String UserID, Fnamn, Enamn, lösenord, Telefonnummer, Email, Role, str;
-
+    String Onskan, Matchning, KlassID;
+    String ArbetsplatsID;
+    String Undervisar;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_uppdate_users);
 
-        FnamnField = (EditText) findViewById(R.id.Förnamn);
-        EnamnField = (EditText) findViewById(R.id.Efternamn);
-        LösenordField = (EditText) findViewById(R.id.Lösenord);
-        TelefonnummerField = (EditText) findViewById(R.id.Telefonnummer);
+        FnamnField = (EditText) findViewById(R.id.Narvarande);
+        EnamnField = (EditText) findViewById(R.id.AnvandarID);
+        LösenordField = (EditText) findViewById(R.id.DagarID);
+        TelefonnummerField = (EditText) findViewById(R.id.PeriodID);
         MailadressField = (EditText) findViewById(R.id.Mailadress);
 
-
-        AnvändarFnamn = (TextView) findViewById(R.id.text1);
-        String a = getIntent().getStringExtra("Fnamn");
-        AnvändarFnamn.setText(a);
-        FnamnField.setText(a);
-
-        RoleID = (TextView) findViewById(R.id.text2);
-        String r = getIntent().getStringExtra("Enamn");
-        RoleID.setText(r);
+        IDButLayout = (LinearLayout) findViewById(R.id.IDLL);
 
         AnvandarID = (TextView) findViewById(R.id.text3);
         String i = getIntent().getStringExtra("AnvandarID");
@@ -74,6 +71,13 @@ public class UppdateUsersActivity extends AppCompatActivity implements AdapterVi
         adapter.setDropDownViewResource(android.R.layout.simple_spin‌​ner_dropdown_item);
         s.setAdapter(adapter);
 
+        UserID = AnvandarID.getText().toString();
+
+        String method = "hämtadata";
+        UppdateUsersActivity.GetDataActivity GetDataActivity = new UppdateUsersActivity.GetDataActivity(this);
+        GetDataActivity.execute(method, UserID);
+
+
     }
 
     public void onItemSelected(AdapterView<?> parent, View v,
@@ -87,9 +91,7 @@ public class UppdateUsersActivity extends AppCompatActivity implements AdapterVi
 
     }
 
-    public void onClickClose(View view) {
-        finish();
-    }
+    public void onClickClose(View view) {finish();}
 
     public void DataTooDB(View view) {
 
@@ -98,23 +100,57 @@ public class UppdateUsersActivity extends AppCompatActivity implements AdapterVi
         lösenord = LösenordField.getText().toString();
         Telefonnummer = TelefonnummerField.getText().toString();
         Email = MailadressField.getText().toString();
-        UserID = AnvandarID.getText().toString();
+        try {
+        Onskan = EOnskan.getText().toString();
+        }
+        catch(Exception e){
+            Onskan = "";
+        }
+        try {
+            Matchning = Ematchning.getText().toString();
+        }
+        catch(Exception e){
+            Matchning = "";
+        }
+        try {
+            KlassID = EKlassID.getText().toString();
+        }
+        catch(Exception e){
+            KlassID = "";
+        }
+
+        try {
+            Undervisar = EUndervisar.getText().toString();
+        }
+        catch(Exception e){
+            Undervisar = "";
+        }
+
+        try {
+            ArbetsplatsID = EArbetsplatsID.getText().toString();
+        }
+        catch(Exception e){
+            ArbetsplatsID = "";
+        }
+
+
         Role = str;
 
 
+
         String method = "mataInData";
-        UppdateUsersActivity.GetDataActivity GetDataActivity = new UppdateUsersActivity.GetDataActivity(this);
-        GetDataActivity.execute(method, UserID, Fnamn, Enamn, lösenord, Telefonnummer, Email, Role);
+        UppdateUsersActivity.SendDataActivity SendDataActivity = new UppdateUsersActivity.SendDataActivity(this);
+        SendDataActivity.execute(method, UserID, Fnamn, Enamn, lösenord, Telefonnummer, Email, Onskan, Matchning, KlassID, Undervisar, ArbetsplatsID, Role);
     }
 
-    private class GetDataActivity extends AsyncTask<String, Void, String> {
+    private class SendDataActivity extends AsyncTask<String, Void, String> {
 
 
         AlertDialog alertDialog;
         Context ctx;
         View v;
 
-        GetDataActivity(Context ctx)
+        SendDataActivity(Context ctx)
 
         {
             this.ctx = ctx;
@@ -138,7 +174,12 @@ public class UppdateUsersActivity extends AppCompatActivity implements AdapterVi
             String Lösenord = params[4];
             String Telefonnummer = params[5];
             String Email = params[6];
-            String Role = params[7];
+            String Onskan = params[7];
+            String Matchning = params[8];
+            String KlassID = params[9];
+            String Undervisar = params[10];
+            String ArbetsplatsID = params[11];
+            String Role = params[12];
 
 
             if (method.equals("mataInData")) {
@@ -156,8 +197,14 @@ public class UppdateUsersActivity extends AppCompatActivity implements AdapterVi
                             URLEncoder.encode("Enamn", "UTF-8") + "=" + URLEncoder.encode(Enamn, "UTF-8") + "&" +
                             URLEncoder.encode("Losenord", "UTF-8") + "=" + URLEncoder.encode(Lösenord, "UTF-8") + "&" +
                             URLEncoder.encode("Telefonnummer", "UTF-8") + "=" + URLEncoder.encode(Telefonnummer, "UTF-8") + "&" +
-                            URLEncoder.encode("Email", "UTF-8") + "=" + URLEncoder.encode(Email, "UTF-8") + "&" +
+                            URLEncoder.encode("Email", "UTF-8") + "=" + URLEncoder.encode(Email, "UTF-8")+ "&" +
+                            URLEncoder.encode("Onskan", "UTF-8") + "=" + URLEncoder.encode(Onskan, "UTF-8") + "&" +
+                            URLEncoder.encode("matchning", "UTF-8") + "=" + URLEncoder.encode(Matchning, "UTF-8") + "&" +
+                            URLEncoder.encode("KlassID", "UTF-8") + "=" + URLEncoder.encode(KlassID, "UTF-8") + "&" +
+                            URLEncoder.encode("Undervisar", "UTF-8") + "=" + URLEncoder.encode(Undervisar, "UTF-8") + "&" +
+                            URLEncoder.encode("ArbetsplatsID", "UTF-8") + "=" + URLEncoder.encode(ArbetsplatsID, "UTF-8") + "&" +
                             URLEncoder.encode("Role", "UTF-8") + "=" + URLEncoder.encode(Role, "UTF-8");
+                    Log.d("fel", ArbetsplatsID);
                     bufferedWriter.write(data);
                     bufferedWriter.flush();
                     bufferedWriter.close();
@@ -173,8 +220,6 @@ public class UppdateUsersActivity extends AppCompatActivity implements AdapterVi
                     }
                     bufferedReader.close();
                     IS.close();
-
-
 
                     //httpURLConnection.connect();
                     httpURLConnection.disconnect();
@@ -192,6 +237,259 @@ public class UppdateUsersActivity extends AppCompatActivity implements AdapterVi
         protected void onPostExecute(String result) {
 
 
+
+        }
+    }
+
+    private class GetDataActivity extends AsyncTask<String, Void, String> {
+
+        AlertDialog alertDialog;
+        Context ctx;
+        View v;
+
+        GetDataActivity(Context ctx)
+
+        {
+            this.ctx = ctx;
+            this.v = v;
+        }
+
+        @Override
+        protected void onPreExecute() {
+            //   alertDialog = new AlertDialog.Builder(ctx).create();
+            // alertDialog.setTitle("Login Information....");
+        }
+
+        @Override
+        protected String doInBackground(String... params) {
+
+            String login_url = "http://10.0.2.2/APL-APP/APL_PHP/APL_AdminListUsersUpdate.php";
+            String method = params[0];
+            String UserID = params[1];
+            if (method.equals("hämtadata")) {
+
+                try {
+                    URL url = new URL(login_url);
+                    HttpURLConnection httpURLConnection = (HttpURLConnection) url.openConnection();
+                    httpURLConnection.setRequestMethod("POST");
+                    httpURLConnection.setDoOutput(true);
+                    httpURLConnection.setDoInput(true);
+                    OutputStream outputStream = httpURLConnection.getOutputStream();
+                    BufferedWriter bufferedWriter = new BufferedWriter(new OutputStreamWriter(outputStream, "UTF-8"));
+                     String data = URLEncoder.encode("AnvandarID", "UTF-8") + "=" + URLEncoder.encode(UserID, "UTF-8");
+                    bufferedWriter.write(data);
+                    bufferedWriter.flush();
+                    bufferedWriter.close();
+                    outputStream.close();
+                    InputStream inputStream = httpURLConnection.getInputStream();
+                    BufferedReader bufferedReader = new BufferedReader(new InputStreamReader(inputStream, "iso-8859-1"));
+                    String response = "";
+                    String line = "";
+                    while ((line = bufferedReader.readLine()) != null) {
+                        response += line;
+                    }
+                    bufferedReader.close();
+                    inputStream.close();
+                    httpURLConnection.disconnect();
+                    return response;
+                } catch (MalformedURLException e) {
+                    e.printStackTrace();
+                } catch (IOException e) {
+                    e.printStackTrace();
+                }
+            }
+            return null;
+        }
+
+        @Override
+        protected void onProgressUpdate(Void... values) {
+            super.onProgressUpdate(values);
+
+        }
+
+        @Override
+        protected void onPostExecute(String result) {
+
+
+
+            JSONArray jsonarray = null;
+            try {
+                jsonarray = new JSONArray(result);
+            } catch (JSONException e) {
+                e.printStackTrace();
+            }
+
+            for (int i = 0; i < jsonarray.length(); i++) {
+                JSONObject obj = null;
+                try {
+                    obj = jsonarray.getJSONObject(i);
+                } catch (JSONException e) {
+                    e.printStackTrace();
+                }
+
+                String sFörnamn = null;
+                try {
+                    sFörnamn = obj.getString("Fnamn");
+                } catch (JSONException e) {
+                    e.printStackTrace();
+                }
+
+                String sEfternamn = null;
+                try {
+                    sEfternamn = obj.getString("Enamn");
+                } catch (JSONException e) {
+                    e.printStackTrace();
+                }
+                String sLosenord = null;
+                try {
+                    sLosenord = obj.getString("Losenord");
+                } catch (JSONException e) {
+                    e.printStackTrace();
+                }
+
+                String sTelefonnummer = null;
+                try {
+                    sTelefonnummer = obj.getString("Telefonnummer");
+                } catch (JSONException e) {
+                    e.printStackTrace();
+                }
+
+                String sEmail = null;
+                try {
+                    sEmail = obj.getString("Email");
+                } catch (JSONException e) {
+                    e.printStackTrace();
+                }
+
+                String sElevID = null;
+                try {
+                    sElevID = obj.getString("ElevID");
+                } catch (JSONException e) {
+                    e.printStackTrace();
+                }
+
+                String sOnskan = null;
+                try {
+                    sOnskan = obj.getString("Onskan");
+                } catch (JSONException e) {
+                    e.printStackTrace();
+                }
+
+                String sMatchning = null;
+                try {
+                    sMatchning = obj.getString("matchning");
+                } catch (JSONException e) {
+                    e.printStackTrace();
+                }
+
+                String sKlassID = null;
+                try {
+                    sKlassID = obj.getString("KlassID");
+                } catch (JSONException e) {
+                    e.printStackTrace();
+                }
+
+                String sAdminID = null;
+                try {
+                    sAdminID = obj.getString("AdminID");
+                } catch (JSONException e) {
+                    e.printStackTrace();
+                }
+
+                String sHandledareID = null;
+                try {
+                    sHandledareID = obj.getString("HandledareID");
+                } catch (JSONException e) {
+                    e.printStackTrace();
+                }
+
+                String sArbetsplatsID = null;
+                try {
+                    sArbetsplatsID = obj.getString("ArbetsplatsID");
+                } catch (JSONException e) {
+                    e.printStackTrace();
+                }
+
+                String sLärareID = null;
+                try {
+                    sLärareID = obj.getString("LarareID");
+                } catch (JSONException e) {
+                    e.printStackTrace();
+                }
+
+                String sUndervisar = null;
+                try {
+                    sUndervisar = obj.getString("Undervisar");
+                } catch (JSONException e) {
+                    e.printStackTrace();
+                }
+
+                String sKansliID = null;
+                try {
+                    sKansliID = obj.getString("KansliID");
+                } catch (JSONException e) {
+                    e.printStackTrace();
+                }
+
+
+                if (Objects.equals(sElevID, "1")) {
+
+                    EditText test = new EditText(UppdateUsersActivity.this);
+                    IDButLayout.addView(test);
+                    test.setText(sElevID);
+
+                    EOnskan = new EditText(UppdateUsersActivity.this);
+                    IDButLayout.addView(EOnskan);
+                    EOnskan.setText(sOnskan);
+
+                    Ematchning = new EditText(UppdateUsersActivity.this);
+                    IDButLayout.addView(Ematchning);
+                    Ematchning.setText(sMatchning);
+
+                    EKlassID= new EditText(UppdateUsersActivity.this);
+                    IDButLayout.addView(EKlassID);
+                    EKlassID.setText(sKlassID);
+                }
+
+                if (Objects.equals(sAdminID,"1")) {
+                    EditText test = new EditText(UppdateUsersActivity.this);
+                    IDButLayout.addView(test);
+                    test.setText(sAdminID);
+                }
+
+                if (Objects.equals(sHandledareID,"1")) {
+                    EditText test = new EditText(UppdateUsersActivity.this);
+                    IDButLayout.addView(test);
+                    test.setText(sHandledareID);
+
+                    EArbetsplatsID = new EditText(UppdateUsersActivity.this);
+                    IDButLayout.addView(EArbetsplatsID);
+                    EArbetsplatsID.setText(sArbetsplatsID);
+                }
+
+                if (Objects.equals(sLärareID,"1")) {
+                    EditText test = new EditText(UppdateUsersActivity.this);
+                    IDButLayout.addView(test);
+                    test.setText(sLärareID);
+
+                    EUndervisar = new EditText(UppdateUsersActivity.this);
+                    IDButLayout.addView(EUndervisar);
+                    EUndervisar.setText(sUndervisar);
+                }
+
+                if (Objects.equals(sKansliID,"1")) {
+                    EditText test = new EditText(UppdateUsersActivity.this);
+                    IDButLayout.addView(test);
+                    test.setText(sKansliID);
+                }
+
+                FnamnField.setText(sFörnamn);
+                EnamnField.setText(sEfternamn);
+                LösenordField.setText(sLosenord);
+                TelefonnummerField.setText(sTelefonnummer);
+                MailadressField.setText(sEmail);
+
+            }
 
         }
     }

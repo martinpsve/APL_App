@@ -6,10 +6,7 @@ import android.os.AsyncTask;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.view.View;
-import android.widget.AdapterView;
-import android.widget.ArrayAdapter;
 import android.widget.EditText;
-import android.widget.Spinner;
 
 import java.io.BufferedReader;
 import java.io.BufferedWriter;
@@ -23,47 +20,23 @@ import java.net.MalformedURLException;
 import java.net.URL;
 import java.net.URLEncoder;
 
-public class RegUsersActivity extends AppCompatActivity implements AdapterView.OnItemSelectedListener {
 
-    private EditText FnamnField, EnamnField, LösenordField, TelefonnummerField, MailadressField;
-    String Fnamn, Enamn, lösenord, Telefonnummer, Email, Role, str;
+public class APLRegUsers extends AppCompatActivity {
 
+
+    private EditText AnvandarID, DagarID, PeriodID, ArbetsplatsID;
+    String sNarvarande, sAnvandarID, sDagarID, sPeriodID, sArbetsplatsID;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_reg_users);
-
-        FnamnField = (EditText) findViewById(R.id.Narvarande);
-        EnamnField = (EditText) findViewById(R.id.AnvandarID);
-        LösenordField = (EditText) findViewById(R.id.DagarID);
-        TelefonnummerField = (EditText) findViewById(R.id.PeriodID);
-        MailadressField = (EditText) findViewById(R.id.Mailadress);
-
-        Spinner s = (Spinner) findViewById(R.id.Roller);
-        s.setOnItemSelectedListener(this);
-        String[] arraySpinner = new String[]{
-                "Admin", "Handledare", "Elev", "Lärare", "Kansli"
-        };
-
-        ArrayAdapter<String> adapter = new ArrayAdapter<String>(this,
-                android.R.layout.simple_spinner_item, arraySpinner);
-        adapter.setDropDownViewResource(android.R.layout.simple_spin‌​ner_dropdown_item);
-        s.setAdapter(adapter);
+        setContentView(R.layout.activity_aplreg_users);
 
 
-    }
-
-    public void onItemSelected(AdapterView<?> parent, View v,
-                               int pos, long id) {
-
-
-
-        str = (String ) parent.getItemAtPosition(pos);
-
-    }
-
-    public void onNothingSelected(AdapterView<?> arg0) {
+        AnvandarID = (EditText) findViewById(R.id.AnvandarID);
+        DagarID = (EditText) findViewById(R.id.DagarID);
+        PeriodID = (EditText) findViewById(R.id.PeriodID);
+        ArbetsplatsID = (EditText) findViewById(R.id.ArbetsplatsID);
 
     }
 
@@ -73,17 +46,16 @@ public class RegUsersActivity extends AppCompatActivity implements AdapterView.O
 
     public void DataTooDB(View view) {
 
-        Fnamn = FnamnField.getText().toString();
-        Enamn = EnamnField.getText().toString();
-        lösenord = LösenordField.getText().toString();
-        Telefonnummer = TelefonnummerField.getText().toString();
-        Email = MailadressField.getText().toString();
-        Role = str;
+        sAnvandarID = AnvandarID.getText().toString();
+        sDagarID = DagarID.getText().toString();
+        sPeriodID = PeriodID.getText().toString();
+        sArbetsplatsID = ArbetsplatsID.getText().toString();
+
 
 
         String method = "mataInData";
-        RegUsersActivity.GetDataActivity GetDataActivity = new RegUsersActivity.GetDataActivity(this);
-        GetDataActivity.execute(method, Fnamn, Enamn, lösenord, Telefonnummer, Email, Role);
+        APLRegUsers.GetDataActivity GetDataActivity = new APLRegUsers.GetDataActivity(this);
+        GetDataActivity.execute(method, sAnvandarID, sDagarID, sPeriodID, sArbetsplatsID);
     }
 
     private class GetDataActivity extends AsyncTask<String, Void, String> {
@@ -109,15 +81,12 @@ public class RegUsersActivity extends AppCompatActivity implements AdapterView.O
         @Override
         protected String doInBackground(String... params) {
 
-            String reg_url = "http://10.0.2.2/APL-APP/APL_PHP/APL_AdminCreateUsers.php";
+            String reg_url = "http://10.0.2.2/APL-APP/APL_PHP/APL_AdminCreateNarvaro.php";
             String method = params[0];
-            String Fnamn = params[1];
-            String Enamn = params[2];
-            String Lösenord = params[3];
-            String Telefonnummer = params[4];
-            String Email = params[5];
-            String Role = params[6];
-
+            String sAnvandarID = params[1];
+            String sDagarID = params[2];
+            String sPeriodID = params[3];
+            String sArbetsplatsID = params[4];
 
             if (method.equals("mataInData")) {
 
@@ -129,19 +98,15 @@ public class RegUsersActivity extends AppCompatActivity implements AdapterView.O
                     //httpURLConnection.setDoInput(true);
                     OutputStream OS = httpURLConnection.getOutputStream();
                     BufferedWriter bufferedWriter = new BufferedWriter(new OutputStreamWriter(OS, "UTF-8"));
-                    String data = URLEncoder.encode("Fnamn", "UTF-8") + "=" + URLEncoder.encode(Fnamn, "UTF-8") + "&" +
-                            URLEncoder.encode("Enamn", "UTF-8") + "=" + URLEncoder.encode(Enamn, "UTF-8") + "&" +
-                            URLEncoder.encode("Losenord", "UTF-8") + "=" + URLEncoder.encode(Lösenord, "UTF-8") + "&" +
-                            URLEncoder.encode("Telefonnummer", "UTF-8") + "=" + URLEncoder.encode(Telefonnummer, "UTF-8") + "&" +
-                            URLEncoder.encode("Email", "UTF-8") + "=" + URLEncoder.encode(Email, "UTF-8") + "&" +
-                            URLEncoder.encode("Role", "UTF-8") + "=" + URLEncoder.encode(Role, "UTF-8");
+                    String data = URLEncoder.encode("AnvandarID", "UTF-8") + "=" + URLEncoder.encode(sAnvandarID, "UTF-8") + "&" +
+                            URLEncoder.encode("DagarID", "UTF-8") + "=" + URLEncoder.encode(sDagarID, "UTF-8") + "&" +
+                            URLEncoder.encode("PeriodID", "UTF-8") + "=" + URLEncoder.encode(sPeriodID, "UTF-8") + "&" +
+                            URLEncoder.encode("ArbetsplatsID", "UTF-8") + "=" + URLEncoder.encode(sArbetsplatsID, "UTF-8");
                     bufferedWriter.write(data);
                     bufferedWriter.flush();
                     bufferedWriter.close();
                     OS.close();
                     InputStream IS = httpURLConnection.getInputStream();
-
-
                     BufferedReader bufferedReader = new BufferedReader(new InputStreamReader(IS, "iso-8859-1"));
                     String response = "";
                     String line = "";
@@ -156,7 +121,7 @@ public class RegUsersActivity extends AppCompatActivity implements AdapterView.O
                     //httpURLConnection.connect();
                     httpURLConnection.disconnect();
                     return response;
-                   // return "Registration Success...";
+                    // return "Registration Success...";
                 } catch (MalformedURLException e) {
                     e.printStackTrace();
                 } catch (IOException e) {
@@ -170,5 +135,5 @@ public class RegUsersActivity extends AppCompatActivity implements AdapterView.O
 
         }
     }
-}
 
+}
