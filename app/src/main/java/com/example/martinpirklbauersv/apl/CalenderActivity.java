@@ -161,7 +161,7 @@ int dag = 1;
         GetDataActivity.execute(method);
 
 
-        method = "hämtadata";
+        method = "hämtaUserdata";
         CalenderActivity.GetDataActivity2 GetDataActivity2 = new CalenderActivity.GetDataActivity2(this);
         GetDataActivity2.execute(method);
 
@@ -632,7 +632,7 @@ int dag = 1;
 
             String login_url = "http://10.0.2.2/APL-APP/APL_PHP/APL_GetUsersFromNarvaro.php";
             String method = params[0];
-            if (method.equals("hämtadata")) {
+            if (method.equals("hämtaUserdata")) {
 
                 try {
                     URL url = new URL(login_url);
