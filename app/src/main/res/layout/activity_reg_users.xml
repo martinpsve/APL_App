@@ -1,103 +1,111 @@
 <?xml version="1.0" encoding="utf-8"?>
-<android.support.constraint.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<android.support.v4.widget.DrawerLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/drawer_layout"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context="com.example.martinpirklbauersv.apl.RegUsersActivity">
+    android:fitsSystemWindows="true" >
 
-    <Button
-        android:id="@+id/buttonClose"
+    <FrameLayout
+        android:id="@+id/content_frame"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+
+        <android.support.v7.widget.Toolbar
+            android:id="@+id/toolbar"
+            android:layout_width="match_parent"
+            android:layout_height="?attr/actionBarSize"
+            android:background="?attr/colorPrimary"
+            android:theme="@style/ThemeOverlay.AppCompat.ActionBar" />
+
+    </FrameLayout>
+
+    <android.support.design.widget.NavigationView
+        android:id="@+id/nav_view"
         android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_centerHorizontal="true"
-        android:layout_centerVertical="true"
-        android:layout_marginEnd="16dp"
-        android:layout_marginTop="424dp"
-        android:onClick="onClickClose"
-        android:text="Close"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
+        android:layout_height="match_parent"
+        android:layout_gravity="start"
+        android:fitsSystemWindows="true"
+        app:menu="@menu/drawer_view"
+        app:headerLayout="@layout/nav_header" />
 
-    <Button
-        android:id="@+id/button2"
-        android:layout_width="113dp"
-        android:layout_height="wrap_content"
-        android:layout_gravity="center_horizontal"
-        android:layout_marginStart="28dp"
-        android:layout_marginTop="16dp"
-        android:onClick="DataTooDB"
-        android:text="Registrera användare"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
+    <ScrollView
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:paddingTop="68dp">
 
-    <EditText
-        android:id="@+id/Narvarande"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginStart="16dp"
-        android:layout_marginTop="18dp"
-        android:ems="10"
-        android:hint="Förnamn"
-        android:inputType="textPersonName"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/Roller" />
+        <LinearLayout
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:orientation="vertical">
 
-    <EditText
-        android:id="@+id/AnvandarID"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginStart="16dp"
-        android:layout_marginTop="12dp"
-        android:ems="10"
-        android:hint="Efternamn"
-        android:inputType="textPersonName"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/Narvarande" />
+            <Button
+                android:id="@+id/button3"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center_horizontal"
+                android:onClick="DataTooDB"
+                android:text="Registrera användare"
+                tools:layout_editor_absoluteX="28dp"
+                tools:layout_editor_absoluteY="16dp" />
 
-    <EditText
-        android:id="@+id/DagarID"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginStart="16dp"
-        android:layout_marginTop="19dp"
-        android:ems="10"
-        android:hint="Lösenord"
-        android:inputType="textPersonName"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/AnvandarID" />
+            <Spinner
+                android:id="@+id/Roller"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                tools:layout_editor_absoluteX="16dp"
+                tools:layout_editor_absoluteY="87dp" />
 
-    <EditText
-        android:id="@+id/PeriodID"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginStart="16dp"
-        android:layout_marginTop="27dp"
-        android:ems="10"
-        android:hint="Telefonnummer"
-        android:inputType="textPersonName"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/DagarID" />
+            <EditText
+                android:id="@+id/narvarande2"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:ems="10"
+                android:hint="Förnamn"
+                android:inputType="textPersonName"
+                tools:layout_editor_absoluteX="16dp"
+                tools:layout_editor_absoluteY="129dp" />
 
-    <EditText
-        android:id="@+id/Mailadress"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginStart="16dp"
-        android:layout_marginTop="16dp"
-        android:ems="10"
-        android:hint="Mailadress"
-        android:inputType="textPersonName"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/PeriodID" />
+            <EditText
+                android:id="@+id/anvandarID2"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:ems="10"
+                android:hint="Efternamn"
+                android:inputType="textPersonName"
+                tools:layout_editor_absoluteX="16dp"
+                tools:layout_editor_absoluteY="187dp" />
 
-    <Spinner
-        android:id="@+id/Roller"
-        android:layout_width="150dp"
-        android:layout_height="wrap_content"
-        android:layout_marginStart="16dp"
-        android:layout_marginTop="16dp"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/button2" />
+            <EditText
+                android:id="@+id/dagarID2"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:ems="10"
+                android:hint="Lösenord"
+                android:inputType="textPersonName"
+                tools:layout_editor_absoluteX="16dp"
+                tools:layout_editor_absoluteY="252dp" />
 
-</android.support.constraint.ConstraintLayout>
+            <EditText
+                android:id="@+id/periodID2"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:ems="10"
+                android:hint="Telefonnummer"
+                android:inputType="textPersonName"
+                tools:layout_editor_absoluteX="16dp"
+                tools:layout_editor_absoluteY="325dp" />
+
+            <EditText
+                android:id="@+id/mailadress2"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:ems="10"
+                android:hint="Mailadress"
+                android:inputType="textPersonName"
+                tools:layout_editor_absoluteX="16dp"
+                tools:layout_editor_absoluteY="387dp" />
+        </LinearLayout>
+    </ScrollView>
+</android.support.v4.widget.DrawerLayout>
