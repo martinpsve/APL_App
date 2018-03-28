@@ -21,15 +21,15 @@
         </activity>
         <activity
             android:name=".SecondActivity"
-            android:label="@string/title_activity_second"
+            android:label="Elev"
             android:theme="@style/AppTheme.NoActionBar" />
         <activity
             android:name=".ThirdActivity"
-            android:label="ThirdActivity"
+            android:label="Lärare"
             android:theme="@style/AppTheme.NoActionBar" />
         <activity
             android:name=".fourthActivity"
-            android:label="fourthActivity"
+            android:label="Admin"
             android:theme="@style/AppTheme.NoActionBar" />
         <activity android:name=".fifthActivity" />
         <activity android:name=".sixthActivity" />
@@ -43,15 +43,15 @@
         <activity android:name=".RemoveUsersActivity" />
         <activity
             android:name=".CalenderActivity"
-            android:label="CalenderActivity"
+            android:label="Sätta Nävaro"
             android:theme="@style/AppTheme.NoActionBar" />
         <activity android:name=".APLRegUsers" />
         <activity android:name=".CalenderReadActivity"
-            android:label="CalenderReadActivity"
+            android:label="Närvaro lista"
             android:theme="@style/AppTheme.NoActionBar" />
         <activity
             android:name=".userListActivity"
-            android:label="userListActivity"
+            android:label="Användar Lista"
             android:theme="@style/AppTheme.NoActionBar">
 
         </activity>

@@ -58,7 +58,6 @@ import java.net.URLEncoder;
             actionbar.setDisplayHomeAsUpEnabled(true);
             actionbar.setHomeAsUpIndicator(R.drawable.ic_menu);
 
-            //Intent intent = getIntent();
             myDrawerLayout = findViewById(R.id.drawer_layout);
             NavigationView navView = findViewById(R.id.nav_view);
             navView.setNavigationItemSelectedListener

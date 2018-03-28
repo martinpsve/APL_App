@@ -62,6 +62,9 @@ int UserID;
     ArrayList<String> fList = new ArrayList<String>();
     ArrayList<String> eList = new ArrayList<String>();
 
+    ArrayList<String> KList = new ArrayList<String>();
+
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -85,12 +88,9 @@ int UserID;
         dFredag = (TextView) findViewById(R.id.textView20);
 
         Spinner K = (Spinner)findViewById(R.id.spinner3);
-        String[] arraySpinner10 = new String[] {
-                "El2","El3", "Te3", "Te4"
-        };
 
         ArrayAdapter<String> adapter10 = new ArrayAdapter<String>(this,
-                android.R.layout.simple_spinner_item, arraySpinner10);
+                android.R.layout.simple_spinner_item, KList);
         adapter10.setDropDownViewResource(android.R.layout.simple_spin‌​ner_dropdown_item);
         K.setAdapter(adapter10);
         K.setOnItemSelectedListener(this);
@@ -191,6 +191,10 @@ int UserID;
         method = "hämtaUserdata";
         CalenderActivity.GetDataActivity2 GetDataActivity2 = new CalenderActivity.GetDataActivity2(this);
         GetDataActivity2.execute(method);
+
+        method = "hämtaKlassdata";
+        CalenderActivity. GetDataActivity3  GetDataActivity3 = new CalenderActivity. GetDataActivity3(this);
+        GetDataActivity3.execute(method);
 
     }
 
@@ -740,6 +744,112 @@ int UserID;
             Spinner U = (Spinner)findViewById(R.id.UserSpinner);
             U.invalidate();
             U.setSelection(0);
+
+        }
+    }
+
+    private class GetDataActivity3 extends AsyncTask<String, Void, String> {
+
+
+        AlertDialog alertDialog;
+        Context ctx;
+        View v;
+
+        GetDataActivity3(Context ctx)
+
+        {
+            this.ctx = ctx;
+            this.v = v;
+        }
+
+
+        @Override
+        protected void onPreExecute() {
+
+            //   alertDialog = new AlertDialog.Builder(ctx).create();
+            // alertDialog.setTitle("Login Information....");
+
+        }
+
+        @Override
+        protected String doInBackground(String... params) {
+            String login_url = "http://192.168.216.46/APL-APP/APL_PHP/APL_GetUsersFromNarvaro.php";
+
+            String method = params[0];
+            if (method.equals("hämtaKlassdata")) {
+
+                try {
+                    URL url = new URL(login_url);
+                    HttpURLConnection httpURLConnection = (HttpURLConnection) url.openConnection();
+                    httpURLConnection.setRequestMethod("POST");
+                    httpURLConnection.setDoOutput(true);
+                    httpURLConnection.setDoInput(true);
+                    OutputStream outputStream = httpURLConnection.getOutputStream();
+                    BufferedWriter bufferedWriter = new BufferedWriter(new OutputStreamWriter(outputStream, "UTF-8"));
+                    //String data = URLEncoder.encode("AnvandarID", "UTF-8") + "=" + URLEncoder.encode(AnvandarID, "UTF-8");
+                    //bufferedWriter.write(data);
+                    bufferedWriter.flush();
+                    bufferedWriter.close();
+                    outputStream.close();
+                    InputStream inputStream = httpURLConnection.getInputStream();
+                    BufferedReader bufferedReader = new BufferedReader(new InputStreamReader(inputStream, "iso-8859-1"));
+                    String response = "";
+                    String line = "";
+                    while ((line = bufferedReader.readLine()) != null) {
+                        response += line;
+                    }
+                    bufferedReader.close();
+                    inputStream.close();
+                    httpURLConnection.disconnect();
+                    return response;
+                } catch (MalformedURLException e) {
+                    e.printStackTrace();
+                } catch (IOException e) {
+                    e.printStackTrace();
+                }
+            }
+
+            return null;
+
+        }
+
+        @Override
+        protected void onProgressUpdate(Void... values) {
+            super.onProgressUpdate(values);
+
+        }
+
+        @Override
+        protected void onPostExecute(String result) {
+
+            JSONArray jsonarray = null;
+            try {
+                jsonarray = new JSONArray(result);
+            } catch (JSONException e) {
+                e.printStackTrace();
+            }
+
+
+            for (int i = 0; i < jsonarray.length(); i++) {
+                JSONObject obj = null;
+                try {
+                    obj = jsonarray.getJSONObject(i);
+                } catch (JSONException e) {
+                    e.printStackTrace();
+                }
+
+                Enamn = null;
+                try {
+                    Enamn = obj.getString("Enamn");
+                    eList.add(Enamn);
+                } catch (JSONException e) {
+                    e.printStackTrace();
+                }
+
+            }
+            Spinner K = (Spinner)findViewById(R.id.spinner3);
+            K.invalidate();
+            K.setSelection(0);
 
         }
     }

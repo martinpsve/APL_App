@@ -63,10 +63,7 @@ public class CalenderReadActivity extends AppCompatActivity implements AdapterVi
             närvarolista = (TextView) findViewById(R.id.textView21);
 
             tMåndag = (TextView) findViewById(R.id.test1);
-            tTisdag = (TextView) findViewById(R.id.test2);
-            tOnsdag = (TextView) findViewById(R.id.test3);
-            tTorsdag = (TextView) findViewById(R.id.test4);
-            tFredag = (TextView) findViewById(R.id.test5);
+
             testingNarvaro = (TextView) findViewById(R.id.textView27);
 
 
