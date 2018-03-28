@@ -2,9 +2,16 @@ package com.example.martinpirklbauersv.apl;
 
 import android.app.AlertDialog;
 import android.content.Context;
+import android.content.Intent;
 import android.os.AsyncTask;
+import android.support.design.widget.NavigationView;
+import android.support.v4.view.GravityCompat;
+import android.support.v4.widget.DrawerLayout;
+import android.support.v7.app.ActionBar;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.support.v7.widget.Toolbar;
+import android.view.MenuItem;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
@@ -25,6 +32,8 @@ import java.net.URLEncoder;
 
 public class RegUsersActivity extends AppCompatActivity implements AdapterView.OnItemSelectedListener {
 
+    private DrawerLayout myDrawerLayout;
+
     private EditText FnamnField, EnamnField, LösenordField, TelefonnummerField, MailadressField;
     String Fnamn, Enamn, lösenord, Telefonnummer, Email, Role, str;
 
@@ -33,6 +42,66 @@ public class RegUsersActivity extends AppCompatActivity implements AdapterView.O
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_reg_users);
+
+        Toolbar toolbar = findViewById(R.id.toolbar);
+        setSupportActionBar(toolbar);
+        ActionBar actionbar = getSupportActionBar();
+        actionbar.setDisplayHomeAsUpEnabled(true);
+        actionbar.setHomeAsUpIndicator(R.drawable.ic_menu);
+
+        myDrawerLayout = findViewById(R.id.drawer_layout);
+        NavigationView navView = findViewById(R.id.nav_view);
+        navView.setNavigationItemSelectedListener
+                (
+                        new NavigationView.OnNavigationItemSelectedListener()
+                        {
+
+                            @Override
+                            public boolean onNavigationItemSelected(MenuItem menuItem)
+                            {
+                                switch (menuItem.getItemId()){
+
+                                    case R.id.nav_startpage:
+                                        Intent fourthActivity = new Intent(RegUsersActivity.this,fourthActivity.class);
+                                        startActivity(fourthActivity);
+                                        break;
+
+                                    case R.id.nav_Narvaro:
+                                        Intent CalenderActivity = new Intent(RegUsersActivity.this,CalenderActivity.class);
+                                        startActivity(CalenderActivity);
+                                        break;
+
+                                    case R.id.nav_regUsersApl:
+                                        Intent  APLRegUsers = new Intent(RegUsersActivity.this, APLRegUsers.class);
+                                        startActivity( APLRegUsers);
+                                        break;
+
+                                    case R.id.nav_regUsers:
+                                        Intent  RegUsersActivity = new Intent(RegUsersActivity.this, RegUsersActivity.class);
+                                        startActivity( RegUsersActivity);
+                                        break;
+
+                                    case R.id.nav_listUsers:
+                                        Intent  userListActivity = new Intent(RegUsersActivity.this, userListActivity.class);
+                                        startActivity( userListActivity);
+                                        break;
+
+                                    case R.id.    navl_logOut:
+                                        Intent  MainActivity = new Intent(RegUsersActivity.this, MainActivity.class);
+                                        startActivity( MainActivity);
+                                        break;
+                                }
+
+
+                                menuItem.setChecked(true);
+
+                                myDrawerLayout.closeDrawers();
+
+                                return true;
+                            }
+                        });
+
+
 
         FnamnField = (EditText) findViewById(R.id.Narvarande);
         EnamnField = (EditText) findViewById(R.id.AnvandarID);
@@ -52,6 +121,17 @@ public class RegUsersActivity extends AppCompatActivity implements AdapterView.O
         s.setAdapter(adapter);
 
 
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        switch (item.getItemId()) {
+            case android.R.id.home:
+                myDrawerLayout.openDrawer(GravityCompat.START);
+                return true;
+        }
+
+        return super.onOptionsItemSelected(item);
     }
 
     public void onItemSelected(AdapterView<?> parent, View v,

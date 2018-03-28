@@ -23,15 +23,38 @@
             android:name=".SecondActivity"
             android:label="@string/title_activity_second"
             android:theme="@style/AppTheme.NoActionBar" />
-        <activity android:name=".ThirdActivity" />
-        <activity android:name=".fourthActivity" />
+        <activity
+            android:name=".ThirdActivity"
+            android:label="ThirdActivity"
+            android:theme="@style/AppTheme.NoActionBar" />
+        <activity
+            android:name=".fourthActivity"
+            android:label="fourthActivity"
+            android:theme="@style/AppTheme.NoActionBar" />
         <activity android:name=".fifthActivity" />
         <activity android:name=".sixthActivity" />
-        <activity android:name=".RegUsersActivity" />
-        <activity android:name=".UppdateUsersActivity" />
+        <activity android:name=".RegUsersActivity"
+            android:label="RegUsersActivity"
+            android:theme="@style/AppTheme.NoActionBar"/>
+        <activity
+            android:name=".UppdateUsersActivity"
+            android:label="UppdateUsersActivity"
+            android:theme="@style/AppTheme.NoActionBar" />
         <activity android:name=".RemoveUsersActivity" />
-        <activity android:name=".CalenderActivity" />
-        <activity android:name=".APLRegUsers"></activity>
+        <activity
+            android:name=".CalenderActivity"
+            android:label="CalenderActivity"
+            android:theme="@style/AppTheme.NoActionBar" />
+        <activity android:name=".APLRegUsers" />
+        <activity android:name=".CalenderReadActivity"
+            android:label="CalenderReadActivity"
+            android:theme="@style/AppTheme.NoActionBar" />
+        <activity
+            android:name=".userListActivity"
+            android:label="userListActivity"
+            android:theme="@style/AppTheme.NoActionBar">
+
+        </activity>
     </application>
 
 </manifest>

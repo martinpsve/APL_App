@@ -18,6 +18,7 @@ import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
+import android.widget.ListView;
 import android.widget.Spinner;
 import android.widget.TextView;
 
@@ -36,6 +37,7 @@ import java.net.HttpURLConnection;
 import java.net.MalformedURLException;
 import java.net.URL;
 import java.net.URLEncoder;
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Objects;
 
@@ -47,17 +49,25 @@ private TextView dMåndag, dTisdag, dOnsdag, dTorsdag, dFredag;
 private TextView tMåndag, tTisdag, tOnsdag, tTorsdag, tFredag;
 private ImageView iMåndag, iTisdag, iOnsdag, iTorsdag, iFredag;
 String stWeek, stMonN, stTisN, stOnsN, stTorN, stFreN;
-String Datum, DagarID, test;
-String Fnamn, Enamn;
+String Datum, NarvaroRaknare;
+String Fnamn, Enamn, AnvandarID;
+String sFnamn, sEnman;
 String method;
-int start = 9;
-int slut = 11;
-int dag = 1;
+String startDag, slutdag;
+int UserID;
+
+
+    ArrayAdapter<String> adapter7;
+    ArrayList<Integer> IDList = new ArrayList<Integer>();
+    ArrayList<String> fList = new ArrayList<String>();
+    ArrayList<String> eList = new ArrayList<String>();
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        fList.add("Användare");
         setContentView(R.layout.activity_calender);
+
 
         Tstartdag = (TextView) findViewById(R.id.textView10);
         Tslutdag = (TextView) findViewById(R.id.textView11);
@@ -74,12 +84,43 @@ int dag = 1;
         dTorsdag = (TextView) findViewById(R.id.textView17);
         dFredag = (TextView) findViewById(R.id.textView20);
 
+        Spinner K = (Spinner)findViewById(R.id.spinner3);
+        String[] arraySpinner10 = new String[] {
+                "El2","El3", "Te3", "Te4"
+        };
+
+        ArrayAdapter<String> adapter10 = new ArrayAdapter<String>(this,
+                android.R.layout.simple_spinner_item, arraySpinner10);
+        adapter10.setDropDownViewResource(android.R.layout.simple_spin‌​ner_dropdown_item);
+        K.setAdapter(adapter10);
+        K.setOnItemSelectedListener(this);
+
+
+        Spinner U = (Spinner)findViewById(R.id.UserSpinner);
+
+        adapter7 = new ArrayAdapter<String>(this,
+                android.R.layout.simple_spinner_item, fList);
+        adapter7.setDropDownViewResource(android.R.layout.simple_spin‌​ner_dropdown_item);
+        U.setAdapter(adapter7);
+        U.setOnItemSelectedListener(this);
+
         Spinner s = (Spinner) findViewById(R.id.spinner2);
         s.setOnItemSelectedListener(this);
 
-        String[] arraySpinner1 = new String[2];
+
+
+        int start = 9;
+        int slut = 12;
+
+//        start = Integer.parseInt(startDag);
+//        slut = Integer.parseInt(slutdag);
+
         int antal = (slut - start) + 1;
-        for (int vecka = start, i = 0; vecka < slut; vecka++, i++) {
+
+
+        String[] arraySpinner1 = new String[antal];
+
+        for (int vecka = start, i = 0; vecka < slut+1; vecka++, i++) {
             arraySpinner1[i] = "" + vecka;
         }
 
@@ -87,19 +128,6 @@ int dag = 1;
                 android.R.layout.simple_spinner_item, arraySpinner1);
         adapter.setDropDownViewResource(android.R.layout.simple_spin‌​ner_dropdown_item);
         s.setAdapter(adapter);
-
-
-        Spinner U = (Spinner)findViewById(R.id.UserSpinner);
-        String[] arraySpinner7 = new String[] {
-                "Fnman"
-        };
-
-        ArrayAdapter<String> adapter7 = new ArrayAdapter<String>(this,
-                android.R.layout.simple_spinner_item, arraySpinner7);
-        adapter7.setDropDownViewResource(android.R.layout.simple_spin‌​ner_dropdown_item);
-        U.setAdapter(adapter7);
-        U.setOnItemSelectedListener(this);
-
 
         Spinner M = (Spinner)findViewById(R.id.måndagspinner);
         String[] arraySpinner2 = new String[] {
@@ -160,8 +188,7 @@ int dag = 1;
         CalenderActivity.GetDataActivity GetDataActivity = new CalenderActivity.GetDataActivity(this);
         GetDataActivity.execute(method);
 
-
-        method = "hämtadata";
+        method = "hämtaUserdata";
         CalenderActivity.GetDataActivity2 GetDataActivity2 = new CalenderActivity.GetDataActivity2(this);
         GetDataActivity2.execute(method);
 
@@ -175,45 +202,61 @@ int dag = 1;
         iTorsdag = (ImageView) findViewById(R.id.TorsdagView);
         iFredag = (ImageView) findViewById(R.id.FredagView);
 
-        if (parent.getId() == R.id.spinner2) {
+
+        if (parent.getId() == R.id.UserSpinner) {
+
+            sFnamn = (String) parent.getItemAtPosition(pos);
+
+            if (!sFnamn.equals("Användare")){
+            UserID = IDList.get(pos -1);
+            }
+        }
+
+       if (parent.getId() == R.id.spinner2) {
             stWeek = (String) parent.getItemAtPosition(pos);
+            try {
+                method = "hämtadata";
+                CalenderActivity.GetDataActivity1 GetDataActivity1 = new CalenderActivity.GetDataActivity1(this);
+                GetDataActivity1.execute(method, stWeek, "" + UserID);
+            }
 
-            method = "hämtadata";
-            CalenderActivity.GetDataActivity1 GetDataActivity1 = new CalenderActivity.GetDataActivity1(this);
-            GetDataActivity1.execute(method, stWeek);
+            catch(Exception e){
 
+            }
+        }
+
+        if (parent.getId() == R.id.spinner3) {
+
+            String Klass = (String) parent.getItemAtPosition(pos);
+/*
+            method = "hämtaUserdata";
+            CalenderActivity.GetDataActivity3 GetDataActivity3 = new CalenderActivity.GetDataActivity3(this);
+            GetDataActivity3.execute(method, Klass);
+            */
         }
 
         else if (parent.getId() == R.id.måndagspinner) {
 
             stMonN = (String) parent.getItemAtPosition(pos);
-            String DagarID = dMåndag.getText().toString();
+            String NarvaroRaknare = dMåndag.getText().toString();
 
             if (Objects.equals(stMonN, "Närvarande")) {
 
                 iMåndag.setBackgroundColor(Color.GREEN);
-                Tstartdag.setText(stMonN);
-
-                test = Tstartdag.getText().toString();
 
                 String method = "mataInData";
                 CalenderActivity.SendDataActivity SendDataActivity = new CalenderActivity.SendDataActivity(this);
-                SendDataActivity.execute(method, test, DagarID);
+                SendDataActivity.execute(method, stMonN, NarvaroRaknare, sFnamn);
 
 
             }
             else if (Objects.equals(stMonN, "EjNärvarande")) {
 
                 iMåndag.setBackgroundColor(Color.RED);
-                Tstartdag.setText(stMonN);
-
-                Tstartdag.setText(stMonN);
-
-                test = Tstartdag.getText().toString();
 
                 String method = "mataInData";
                 CalenderActivity.SendDataActivity SendDataActivity = new CalenderActivity.SendDataActivity(this);
-                SendDataActivity.execute(method, test, DagarID);
+                SendDataActivity.execute(method, stMonN, NarvaroRaknare);
 
             }
 
@@ -222,31 +265,23 @@ int dag = 1;
         else if (parent.getId() == R.id.tidagspinner) {
 
             stTisN = (String) parent.getItemAtPosition(pos);
-            String DagarID = dTisdag.getText().toString();
+            String NarvaroRaknare = dTisdag.getText().toString();
 
             if (Objects.equals(stTisN, "Närvarande")) {
 
                 iTisdag.setBackgroundColor(Color.GREEN);
-                Tstartdag.setText(stTisN);
-
-                test = Tstartdag.getText().toString();
-
 
                 String method = "mataInData";
                 CalenderActivity.SendDataActivity SendDataActivity = new CalenderActivity.SendDataActivity(this);
-                SendDataActivity.execute(method, test, DagarID);
+                SendDataActivity.execute(method, stTisN, NarvaroRaknare);
 
             }
             else if (Objects.equals(stTisN, "EjNärvarande")) {
                 iTisdag.setBackgroundColor(Color.RED);
-                Tstartdag.setText(stTisN);
-
-                test = Tstartdag.getText().toString();
-
 
                 String method = "mataInData";
                 CalenderActivity.SendDataActivity SendDataActivity = new CalenderActivity.SendDataActivity(this);
-                SendDataActivity.execute(method, test, DagarID);
+                SendDataActivity.execute(method, stTisN, NarvaroRaknare);
 
             }
         }
@@ -254,31 +289,23 @@ int dag = 1;
         else if (parent.getId() == R.id.onsdagspinner) {
 
             stOnsN = (String) parent.getItemAtPosition(pos);
-            String DagarID = dOnsdag.getText().toString();
+            String NarvaroRaknare = dOnsdag.getText().toString();
 
             if (Objects.equals(stOnsN, "Närvarande")) {
 
                 iOnsdag.setBackgroundColor(Color.GREEN);
-                Tstartdag.setText(stOnsN);
-
-                test = Tstartdag.getText().toString();
-
 
                 String method = "mataInData";
                 CalenderActivity.SendDataActivity SendDataActivity = new CalenderActivity.SendDataActivity(this);
-                SendDataActivity.execute(method, test, DagarID);
+                SendDataActivity.execute(method, stOnsN, NarvaroRaknare);
 
             }
             else if (Objects.equals(stOnsN, "EjNärvarande")) {
                 iOnsdag.setBackgroundColor(Color.RED);
-                Tstartdag.setText(stOnsN);
-
-                test = Tstartdag.getText().toString();
-
 
                 String method = "mataInData";
                 CalenderActivity.SendDataActivity SendDataActivity = new CalenderActivity.SendDataActivity(this);
-                SendDataActivity.execute(method, test, DagarID);
+                SendDataActivity.execute(method, stOnsN, NarvaroRaknare);
 
             }
         }
@@ -286,31 +313,23 @@ int dag = 1;
         else if (parent.getId() == R.id.torsdagspinner) {
 
             stTorN = (String) parent.getItemAtPosition(pos);
-            String DagarID = dTorsdag.getText().toString();
+            String NarvaroRaknare = dTorsdag.getText().toString();
 
             if (Objects.equals(stTorN, "Närvarande")) {
 
                 iTorsdag.setBackgroundColor(Color.GREEN);
-                Tstartdag.setText(stTorN);
-
-                test = Tstartdag.getText().toString();
-
 
                 String method = "mataInData";
                 CalenderActivity.SendDataActivity SendDataActivity = new CalenderActivity.SendDataActivity(this);
-                SendDataActivity.execute(method, test, DagarID);
+                SendDataActivity.execute(method, stTorN, NarvaroRaknare);
 
             }
             else if (Objects.equals(stTorN, "EjNärvarande")) {
                 iTorsdag.setBackgroundColor(Color.RED);
-                Tstartdag.setText(stTorN);
-
-                test = Tstartdag.getText().toString();
-
 
                 String method = "mataInData";
                 CalenderActivity.SendDataActivity SendDataActivity = new CalenderActivity.SendDataActivity(this);
-                SendDataActivity.execute(method, test, DagarID);
+                SendDataActivity.execute(method, stTorN, NarvaroRaknare);
 
             }
         }
@@ -318,31 +337,25 @@ int dag = 1;
         else if (parent.getId() == R.id.fredagspinner) {
 
             stFreN = (String) parent.getItemAtPosition(pos);
-            String DagarID = dFredag.getText().toString();
+            String NarvaroRaknare = dFredag.getText().toString();
 
             if (Objects.equals(stFreN, "Närvarande")) {
 
                 iFredag.setBackgroundColor(Color.GREEN);
-                Tstartdag.setText(stFreN);
-
-                test = Tstartdag.getText().toString();
 
 
                 String method = "mataInData";
                 CalenderActivity.SendDataActivity SendDataActivity = new CalenderActivity.SendDataActivity(this);
-                SendDataActivity.execute(method, test, DagarID);
+                SendDataActivity.execute(method, stFreN, NarvaroRaknare);
 
             }
             else if (Objects.equals(stFreN, "EjNärvarande")) {
                 iFredag.setBackgroundColor(Color.RED);
-                Tstartdag.setText(stFreN);
-
-                test = Tstartdag.getText().toString();
 
 
                 String method = "mataInData";
                 CalenderActivity.SendDataActivity SendDataActivity = new CalenderActivity.SendDataActivity(this);
-                SendDataActivity.execute(method, test, DagarID);
+                SendDataActivity.execute(method, stFreN, NarvaroRaknare);
 
             }
         }
@@ -385,7 +398,7 @@ int dag = 1;
         @Override
         protected String doInBackground(String... params) {
 
-            String login_url = "http://10.0.2.2/APL-APP/APL_PHP/APL_ADMINGetAPLWeeks.php";
+            String login_url = "http://192.168.216.46/APL-APP/APL_PHP/APL_ADMINGetAPLWeeks.php";
             String method = params[0];
             if (method.equals("hämtadata")) {
 
@@ -449,14 +462,14 @@ int dag = 1;
                     e.printStackTrace();
                 }
 
-                String startDag = null;
+                startDag = null;
                 try {
                     startDag = obj.getString("Week(startdag)");
                 } catch (JSONException e) {
                     e.printStackTrace();
                 }
 
-                String slutdag = null;
+                slutdag = null;
                 try {
                     slutdag = obj.getString("Week(slutdag)");
                 } catch (JSONException e) {
@@ -495,9 +508,10 @@ int dag = 1;
         @Override
         protected String doInBackground(String... params) {
 
-            String login_url = "http://10.0.2.2/APL-APP/APL_PHP/APL_AdminGetNarvaroDaysFromWeek.php";
+            String login_url = "http://192.168.216.46/APL-APP/APL_PHP/APL_AdminGetNarvaroDaysFromWeek.php";
             String method = params[0];
             String stWeek = params[1];
+            String UserID = params[2];
             if (method.equals("hämtadata")) {
 
                 try {
@@ -508,7 +522,8 @@ int dag = 1;
                     httpURLConnection.setDoInput(true);
                     OutputStream outputStream = httpURLConnection.getOutputStream();
                     BufferedWriter bufferedWriter = new BufferedWriter(new OutputStreamWriter(outputStream, "UTF-8"));
-                    String data = URLEncoder.encode("week", "UTF-8") + "=" + URLEncoder.encode(stWeek, "UTF-8");
+                    String data = URLEncoder.encode("week", "UTF-8") + "=" + URLEncoder.encode(stWeek, "UTF-8")+ "&" +
+                            URLEncoder.encode("AnvandarID", "UTF-8") + "=" + URLEncoder.encode(UserID, "UTF-8");
                     bufferedWriter.write(data);
                     bufferedWriter.flush();
                     bufferedWriter.close();
@@ -548,56 +563,60 @@ int dag = 1;
             try {
                 jsonarray = new JSONArray(result);
             } catch (JSONException e) {
-                e.printStackTrace();
+                //    e.printStackTrace();
             }
 
+            try {
+                for (int i = 0; i < jsonarray.length(); i++) {
+                    JSONObject obj = null;
+                    try {
+                        obj = jsonarray.getJSONObject(i);
+                    } catch (JSONException e) {
+                        e.printStackTrace();
+                    }
 
-            for (int i = 0; i < jsonarray.length(); i++) {
-                JSONObject obj = null;
-                try {
-                    obj = jsonarray.getJSONObject(i);
-                } catch (JSONException e) {
-                    e.printStackTrace();
-                }
+                    NarvaroRaknare = null;
+                    try {
+                        NarvaroRaknare = obj.getString("NarvaroRaknare");
+                    } catch (JSONException e) {
+                        e.printStackTrace();
+                    }
 
-                DagarID = null;
-                try {
-                    DagarID = obj.getString("DagarID");
-                } catch (JSONException e) {
-                    e.printStackTrace();
-                }
-
-                Datum = null;
-                try {
-                    Datum = obj.getString("Datum");
-                } catch (JSONException e) {
-                    e.printStackTrace();
-                }
+                    Datum = null;
+                    try {
+                        Datum = obj.getString("Datum");
+                    } catch (JSONException e) {
+                        e.printStackTrace();
+                    }
 
 
-                if (i == 0){
+                    if (i == 0) {
 
-                    tMåndag.setText("Måndag" + Datum);
-                    dMåndag.setText("" + DagarID);
+                        tMåndag.setText("Måndag" + Datum);
+                        dMåndag.setText("" + NarvaroRaknare);
+
+                    }
+                    if (i == 1) {
+                        tTisdag.setText("Tisdag" + Datum);
+                        dTisdag.setText("" + NarvaroRaknare);
+                    }
+                    if (i == 2) {
+                        tOnsdag.setText("Onsdag" + Datum);
+                        dOnsdag.setText("" + NarvaroRaknare);
+                    }
+                    if (i == 3) {
+                        tTorsdag.setText("Torsdag" + Datum);
+                        dTorsdag.setText("" + NarvaroRaknare);
+                    }
+                    if (i == 4) {
+                        tFredag.setText("Fredag" + Datum);
+                        dFredag.setText("" + NarvaroRaknare);
+                    }
+
 
                 }
-                if(i == 1){
-                    tTisdag.setText("Tisdag" + Datum);
-                    dTisdag.setText("" + DagarID);
-                }
-                if(i == 2){
-                    tOnsdag.setText("Onsdag" + Datum);
-                    dOnsdag.setText("" + DagarID);
-                }
-                if(i == 3){
-                    tTorsdag.setText("Torsdag" + Datum);
-                    dTorsdag.setText("" + DagarID);
-                }
-                if(i == 4){
-                    tFredag.setText("Fredag" + Datum);
-                    dFredag.setText("" + DagarID);
-                }
-
+            }
+            catch (Exception r){
 
             }
 
@@ -629,10 +648,10 @@ int dag = 1;
 
         @Override
         protected String doInBackground(String... params) {
+            String login_url = "http://192.168.216.46/APL-APP/APL_PHP/APL_GetUsersFromNarvaro.php";
 
-            String login_url = "http://10.0.2.2/APL-APP/APL_PHP/APL_GetUsersFromNarvaro.php";
             String method = params[0];
-            if (method.equals("hämtadata")) {
+            if (method.equals("hämtaUserdata")) {
 
                 try {
                     URL url = new URL(login_url);
@@ -664,6 +683,7 @@ int dag = 1;
                     e.printStackTrace();
                 }
             }
+
             return null;
 
         }
@@ -676,7 +696,6 @@ int dag = 1;
 
         @Override
         protected void onPostExecute(String result) {
-
 
             JSONArray jsonarray = null;
             try {
@@ -697,22 +716,34 @@ int dag = 1;
                 Enamn = null;
                 try {
                     Enamn = obj.getString("Enamn");
+                    eList.add(Enamn);
                 } catch (JSONException e) {
                     e.printStackTrace();
                 }
-
                 Fnamn = null;
                 try {
                     Fnamn = obj.getString("Fnamn");
+                    fList.add(Fnamn);
                 } catch (JSONException e) {
                     e.printStackTrace();
                 }
 
+                AnvandarID = null;
+                try {
+                    AnvandarID = obj.getString("AnvandarID");
+                    IDList.add(Integer.valueOf(AnvandarID));
+                } catch (JSONException e) {
+                    e.printStackTrace();
+                }
 
             }
+            Spinner U = (Spinner)findViewById(R.id.UserSpinner);
+            U.invalidate();
+            U.setSelection(0);
 
         }
     }
+
 
     private class SendDataActivity extends AsyncTask<String, Void, String> {
 
@@ -737,11 +768,10 @@ int dag = 1;
         @Override
         protected String doInBackground(String... params) {
 
-            String reg_url = "http://10.0.2.2/APL-APP/APL_PHP/APL_HandledareSetNarvaro.php";
+            String reg_url = "http://192.168.216.46/APL-APP/APL_PHP/APL_HandledareSetNarvaro.php";
             String method = params[0];
-            String test = params[1];
-            String DagarID = params[2];
-
+            String Veckodag = params[1];
+            String NarvaroRaknare = params[2];
 
             if (method.equals("mataInData")) {
 
@@ -753,9 +783,8 @@ int dag = 1;
                     //httpURLConnection.setDoInput(true);
                     OutputStream OS = httpURLConnection.getOutputStream();
                     BufferedWriter bufferedWriter = new BufferedWriter(new OutputStreamWriter(OS, "UTF-8"));
-                    String data = URLEncoder.encode("Narvarande", "UTF-8") + "=" + URLEncoder.encode(test, "UTF-8") + "&" +
-                            URLEncoder.encode("DagarID", "UTF-8") + "=" + URLEncoder.encode(DagarID, "UTF-8");
-
+                    String data = URLEncoder.encode("Narvarande", "UTF-8") + "=" + URLEncoder.encode(Veckodag, "UTF-8") + "&" +
+                            URLEncoder.encode("NarvaroRaknare", "UTF-8") + "=" + URLEncoder.encode(NarvaroRaknare, "UTF-8");
 
                     bufferedWriter.write(data);
                     bufferedWriter.flush();

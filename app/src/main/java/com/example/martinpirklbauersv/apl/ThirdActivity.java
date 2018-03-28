@@ -3,8 +3,14 @@ package com.example.martinpirklbauersv.apl;
 import android.app.AlertDialog;
 import android.content.Context;
 import android.os.AsyncTask;
+import android.support.design.widget.NavigationView;
+import android.support.v4.view.GravityCompat;
+import android.support.v4.widget.DrawerLayout;
+import android.support.v7.app.ActionBar;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.support.v7.widget.Toolbar;
+import android.view.MenuItem;
 import android.view.View;
 import android.widget.TextView;
 
@@ -32,11 +38,38 @@ public class ThirdActivity extends AppCompatActivity {
     private TextView mail;
     String Anvandarnamn;
     String Role;
-
+    private DrawerLayout myDrawerLayout;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_third);
+
+
+        Toolbar toolbar = findViewById(R.id.toolbar);
+        setSupportActionBar(toolbar);
+        ActionBar actionbar = getSupportActionBar();
+        actionbar.setDisplayHomeAsUpEnabled(true);
+        actionbar.setHomeAsUpIndicator(R.drawable.ic_menu);
+
+        //Intent intent = getIntent();
+        myDrawerLayout = findViewById(R.id.drawer_layout);
+        NavigationView navView = findViewById(R.id.nav_view);
+        navView.setNavigationItemSelectedListener
+                (
+                        new NavigationView.OnNavigationItemSelectedListener()
+                        {
+
+                            @Override
+                            public boolean onNavigationItemSelected(MenuItem menuItem)
+                            {
+
+                                menuItem.setChecked(true);
+
+                                myDrawerLayout.closeDrawers();
+
+                                return true;
+                            }
+                        });
 
         AnvandarID = (TextView) findViewById(R.id.användarID);
         String s = getIntent().getStringExtra("AnvandarID");
@@ -49,7 +82,15 @@ public class ThirdActivity extends AppCompatActivity {
         arbetsplats = (TextView) findViewById(R.id.textView2);
         mail = (TextView) findViewById(R.id.textView4);
     }
-
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        switch (item.getItemId()) {
+            case android.R.id.home:
+                myDrawerLayout.openDrawer(GravityCompat.START);
+                return true;
+        }
+        return super.onOptionsItemSelected(item);
+    }
     public void onClickClose(View view) {
         finish();
     }

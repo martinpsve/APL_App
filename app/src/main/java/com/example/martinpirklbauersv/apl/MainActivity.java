@@ -58,7 +58,6 @@ public class MainActivity extends AppCompatActivity implements AdapterView.OnIte
         adapter.setDropDownViewResource(android.R.layout.simple_spin‌​ner_dropdown_item);
         s.setAdapter(adapter);
 
-
     }
 
     int Roll1 = 1;
