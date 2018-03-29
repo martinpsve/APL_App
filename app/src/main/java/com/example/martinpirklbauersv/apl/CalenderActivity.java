@@ -21,6 +21,7 @@ import android.widget.LinearLayout;
 import android.widget.ListView;
 import android.widget.Spinner;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -51,10 +52,12 @@ private ImageView iMåndag, iTisdag, iOnsdag, iTorsdag, iFredag;
 String stWeek, stMonN, stTisN, stOnsN, stTorN, stFreN;
 String Datum, NarvaroRaknare;
 String Fnamn, Enamn, AnvandarID;
+String kNamn, klassID;
+String sKlass;
 String sFnamn, sEnman;
 String method;
 String startDag, slutdag;
-int UserID;
+int UserID, KlassID;
 
 
     ArrayAdapter<String> adapter7;
@@ -62,13 +65,20 @@ int UserID;
     ArrayList<String> fList = new ArrayList<String>();
     ArrayList<String> eList = new ArrayList<String>();
 
+    ArrayAdapter<String> adapter10;
+    ArrayList<Integer> klassIDlist = new ArrayList<Integer>();
     ArrayList<String> KList = new ArrayList<String>();
+
+
+    ArrayList<String> antallist = new ArrayList<String>();
 
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         fList.add("Användare");
+        KList.add("Klasser");
+        antallist.add("Veckor");
         setContentView(R.layout.activity_calender);
 
 
@@ -89,7 +99,7 @@ int UserID;
 
         Spinner K = (Spinner)findViewById(R.id.spinner3);
 
-        ArrayAdapter<String> adapter10 = new ArrayAdapter<String>(this,
+        adapter10 = new ArrayAdapter<String>(this,
                 android.R.layout.simple_spinner_item, KList);
         adapter10.setDropDownViewResource(android.R.layout.simple_spin‌​ner_dropdown_item);
         K.setAdapter(adapter10);
@@ -104,28 +114,13 @@ int UserID;
         U.setAdapter(adapter7);
         U.setOnItemSelectedListener(this);
 
+
         Spinner s = (Spinner) findViewById(R.id.spinner2);
         s.setOnItemSelectedListener(this);
 
 
-
-        int start = 9;
-        int slut = 12;
-
-//        start = Integer.parseInt(startDag);
-//        slut = Integer.parseInt(slutdag);
-
-        int antal = (slut - start) + 1;
-
-
-        String[] arraySpinner1 = new String[antal];
-
-        for (int vecka = start, i = 0; vecka < slut+1; vecka++, i++) {
-            arraySpinner1[i] = "" + vecka;
-        }
-
         ArrayAdapter<String> adapter = new ArrayAdapter<String>(this,
-                android.R.layout.simple_spinner_item, arraySpinner1);
+                android.R.layout.simple_spinner_item, antallist);
         adapter.setDropDownViewResource(android.R.layout.simple_spin‌​ner_dropdown_item);
         s.setAdapter(adapter);
 
@@ -184,13 +179,9 @@ int UserID;
         F.setAdapter(adapter6);
         F.setOnItemSelectedListener(this);
 
-        method = "hämtadata";
-        CalenderActivity.GetDataActivity GetDataActivity = new CalenderActivity.GetDataActivity(this);
-        GetDataActivity.execute(method);
 
-        method = "hämtaUserdata";
-        CalenderActivity.GetDataActivity2 GetDataActivity2 = new CalenderActivity.GetDataActivity2(this);
-        GetDataActivity2.execute(method);
+
+
 
         method = "hämtaKlassdata";
         CalenderActivity. GetDataActivity3  GetDataActivity3 = new CalenderActivity. GetDataActivity3(this);
@@ -214,14 +205,25 @@ int UserID;
             if (!sFnamn.equals("Användare")){
             UserID = IDList.get(pos -1);
             }
+
+            method = "hämtadata";
+            CalenderActivity.GetDataActivity GetDataActivity = new CalenderActivity.GetDataActivity(this);
+            GetDataActivity.execute(method, "" + UserID);
+
         }
 
        if (parent.getId() == R.id.spinner2) {
             stWeek = (String) parent.getItemAtPosition(pos);
+
+
             try {
                 method = "hämtadata";
                 CalenderActivity.GetDataActivity1 GetDataActivity1 = new CalenderActivity.GetDataActivity1(this);
                 GetDataActivity1.execute(method, stWeek, "" + UserID);
+
+                /*Toast toast = Toast.makeText(this, "" + stWeek, Toast.LENGTH_LONG);
+                toast.show();
+               */
             }
 
             catch(Exception e){
@@ -231,12 +233,16 @@ int UserID;
 
         if (parent.getId() == R.id.spinner3) {
 
-            String Klass = (String) parent.getItemAtPosition(pos);
-/*
+            sKlass = (String) parent.getItemAtPosition(pos);
+
+            if (!sKlass.equals("Klasser")){
+                KlassID = klassIDlist.get(pos -1);
+            }
+
             method = "hämtaUserdata";
-            CalenderActivity.GetDataActivity3 GetDataActivity3 = new CalenderActivity.GetDataActivity3(this);
-            GetDataActivity3.execute(method, Klass);
-            */
+            CalenderActivity.GetDataActivity2 GetDataActivity2 = new CalenderActivity.GetDataActivity2(this);
+            GetDataActivity2.execute(method, "" + KlassID);
+
         }
 
         else if (parent.getId() == R.id.måndagspinner) {
@@ -402,8 +408,9 @@ int UserID;
         @Override
         protected String doInBackground(String... params) {
 
-            String login_url = "http://192.168.216.46/APL-APP/APL_PHP/APL_ADMINGetAPLWeeks.php";
+            String login_url = "http://"+getResources().getString(R.string.ip) +"/APL-APP/APL_PHP/APL_ADMINGetAPLWeeks.php";
             String method = params[0];
+            String UserID = params[1];
             if (method.equals("hämtadata")) {
 
                 try {
@@ -414,8 +421,8 @@ int UserID;
                     httpURLConnection.setDoInput(true);
                     OutputStream outputStream = httpURLConnection.getOutputStream();
                     BufferedWriter bufferedWriter = new BufferedWriter(new OutputStreamWriter(outputStream, "UTF-8"));
-                    //String data = URLEncoder.encode("Anvandarnamn", "UTF-8") + "=" + URLEncoder.encode(Anvandarnamn, "UTF-8");
-                    //bufferedWriter.write(data);
+                    String data = URLEncoder.encode("AnvandarID", "UTF-8") + "=" + URLEncoder.encode(UserID, "UTF-8");
+                    bufferedWriter.write(data);
                     bufferedWriter.flush();
                     bufferedWriter.close();
                     outputStream.close();
@@ -457,33 +464,46 @@ int UserID;
                 e.printStackTrace();
             }
 
+            try {
+                for (int i = 0; i < jsonarray.length(); i++) {
+                    JSONObject obj = null;
+                    try {
+                        obj = jsonarray.getJSONObject(i);
+                    } catch (JSONException e) {
+                        e.printStackTrace();
+                    }
 
-            for (int i = 0; i < jsonarray.length(); i++) {
-                JSONObject obj = null;
-                try {
-                    obj = jsonarray.getJSONObject(i);
-                } catch (JSONException e) {
-                    e.printStackTrace();
+                    startDag = null;
+                    try {
+                        startDag = obj.getString("Week(startdag)");
+                    } catch (JSONException e) {
+                        e.printStackTrace();
+                    }
+
+                    slutdag = null;
+                    try {
+                        slutdag = obj.getString("Week(slutdag)");
+                    } catch (JSONException e) {
+                        e.printStackTrace();
+                    }
+
+                    Tstartdag.setText(startDag);
+                    Tslutdag.setText(slutdag);
                 }
 
-                startDag = null;
-                try {
-                    startDag = obj.getString("Week(startdag)");
-                } catch (JSONException e) {
-                    e.printStackTrace();
-                }
+                int start = Integer.parseInt(startDag);
+                int slut = Integer.parseInt(slutdag);
 
-                slutdag = null;
-                try {
-                    slutdag = obj.getString("Week(slutdag)");
-                } catch (JSONException e) {
-                    e.printStackTrace();
-                }
+           // int antal = (slut - start) + 1;
 
-                Tstartdag.setText(startDag);
-                Tslutdag.setText(slutdag);
+
+            for (int vecka = start, i = 0; vecka < slut+1; vecka++, i++) {
+                antallist.add(String.valueOf(vecka));
+              //  arraySpinner1[i] = "" + vecka;
             }
+            }catch (Exception w){
 
+            }
         }
     }
     private class GetDataActivity1 extends AsyncTask<String, Void, String> {
@@ -512,7 +532,7 @@ int UserID;
         @Override
         protected String doInBackground(String... params) {
 
-            String login_url = "http://192.168.216.46/APL-APP/APL_PHP/APL_AdminGetNarvaroDaysFromWeek.php";
+            String login_url = "http://"+getResources().getString(R.string.ip) +"/APL-APP/APL_PHP/APL_AdminGetNarvaroDaysFromWeek.php";
             String method = params[0];
             String stWeek = params[1];
             String UserID = params[2];
@@ -526,7 +546,7 @@ int UserID;
                     httpURLConnection.setDoInput(true);
                     OutputStream outputStream = httpURLConnection.getOutputStream();
                     BufferedWriter bufferedWriter = new BufferedWriter(new OutputStreamWriter(outputStream, "UTF-8"));
-                    String data = URLEncoder.encode("week", "UTF-8") + "=" + URLEncoder.encode(stWeek, "UTF-8")+ "&" +
+                    String data = URLEncoder.encode("week", "UTF-8") + "=" + URLEncoder.encode(stWeek, "UTF-8") + "&" +
                             URLEncoder.encode("AnvandarID", "UTF-8") + "=" + URLEncoder.encode(UserID, "UTF-8");
                     bufferedWriter.write(data);
                     bufferedWriter.flush();
@@ -592,7 +612,7 @@ int UserID;
                     } catch (JSONException e) {
                         e.printStackTrace();
                     }
-
+                    Log.d("test2","asd" + Datum);
 
                     if (i == 0) {
 
@@ -652,9 +672,10 @@ int UserID;
 
         @Override
         protected String doInBackground(String... params) {
-            String login_url = "http://192.168.216.46/APL-APP/APL_PHP/APL_GetUsersFromNarvaro.php";
+            String login_url = "http://"+getResources().getString(R.string.ip) +"/APL-APP/APL_PHP/APL_GetUsersFromNarvaro.php";
 
             String method = params[0];
+            String KlassID = params[1];
             if (method.equals("hämtaUserdata")) {
 
                 try {
@@ -665,8 +686,8 @@ int UserID;
                     httpURLConnection.setDoInput(true);
                     OutputStream outputStream = httpURLConnection.getOutputStream();
                     BufferedWriter bufferedWriter = new BufferedWriter(new OutputStreamWriter(outputStream, "UTF-8"));
-                    //String data = URLEncoder.encode("AnvandarID", "UTF-8") + "=" + URLEncoder.encode(AnvandarID, "UTF-8");
-                    //bufferedWriter.write(data);
+                    String data = URLEncoder.encode("KlassID", "UTF-8") + "=" + URLEncoder.encode(KlassID, "UTF-8");
+                    bufferedWriter.write(data);
                     bufferedWriter.flush();
                     bufferedWriter.close();
                     outputStream.close();
@@ -708,7 +729,7 @@ int UserID;
                 e.printStackTrace();
             }
 
-
+try{
             for (int i = 0; i < jsonarray.length(); i++) {
                 JSONObject obj = null;
                 try {
@@ -741,9 +762,13 @@ int UserID;
                 }
 
             }
+}catch (Exception k) {
+
+}
             Spinner U = (Spinner)findViewById(R.id.UserSpinner);
             U.invalidate();
             U.setSelection(0);
+
 
         }
     }
@@ -773,7 +798,7 @@ int UserID;
 
         @Override
         protected String doInBackground(String... params) {
-            String login_url = "http://192.168.216.46/APL-APP/APL_PHP/APL_GetUsersFromNarvaro.php";
+            String login_url = "http://"+getResources().getString(R.string.ip) +"/APL-APP/APL_PHP/APL_NarvaroGetKlass.php";
 
             String method = params[0];
             if (method.equals("hämtaKlassdata")) {
@@ -838,14 +863,23 @@ int UserID;
                     e.printStackTrace();
                 }
 
-                Enamn = null;
+                kNamn = null;
                 try {
-                    Enamn = obj.getString("Enamn");
-                    eList.add(Enamn);
+                    kNamn = obj.getString("Namn");
+                    KList.add(kNamn);
                 } catch (JSONException e) {
                     e.printStackTrace();
                 }
+                Log.d("test","aa" + kNamn);
+                klassID = null;
+                try {
+                    klassID = obj.getString("KlassID");
+                    klassIDlist.add(Integer.valueOf(klassID));
 
+                } catch (JSONException e) {
+                    e.printStackTrace();
+                }
+                Log.d("test","aa" + klassID);
             }
             Spinner K = (Spinner)findViewById(R.id.spinner3);
             K.invalidate();
@@ -878,7 +912,7 @@ int UserID;
         @Override
         protected String doInBackground(String... params) {
 
-            String reg_url = "http://192.168.216.46/APL-APP/APL_PHP/APL_HandledareSetNarvaro.php";
+            String reg_url = "http://"+getResources().getString(R.string.ip) +"/APL-APP/APL_PHP/APL_HandledareSetNarvaro.php";
             String method = params[0];
             String Veckodag = params[1];
             String NarvaroRaknare = params[2];

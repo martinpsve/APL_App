@@ -139,7 +139,7 @@ public class CalenderReadActivity extends AppCompatActivity implements AdapterVi
 
             @Override
             protected String doInBackground(String... params) {
-                String login_url = "http://192.168.216.46/APL-APP/APL_PHP/APL_GetUsersFromNarvaro.php";
+                String login_url = "http://"+getResources().getString(R.string.ip) +"/APL-APP/APL_PHP/APL_GetUsersFromNarvaro.php";
 
                 String method = params[0];
                 if (method.equals("hämtaUserdata")) {
@@ -260,7 +260,7 @@ public class CalenderReadActivity extends AppCompatActivity implements AdapterVi
 
         @Override
         protected String doInBackground(String... params) {
-            String login_url = "http://192.168.216.46/APL-APP/APL_PHP/APL_listNarvaro.php";
+            String login_url = "http://"+getResources().getString(R.string.ip) +"/APL-APP/APL_PHP/APL_listNarvaro.php";
 
             String method = params[0];
             String UserID = params[1];

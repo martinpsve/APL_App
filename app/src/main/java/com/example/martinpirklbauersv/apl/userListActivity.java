@@ -75,19 +75,29 @@ import java.net.URLEncoder;
                                             startActivity(fourthActivity);
                                             break;
 
-                                        case R.id.nav_Narvaro:
+                                        case R.id. nav_setNarvaro:
                                             Intent CalenderActivity = new Intent(userListActivity.this,CalenderActivity.class);
                                             startActivity(CalenderActivity);
                                             break;
 
-                                        case R.id.nav_regUsers:
+                                        case R.id.nav_Narvaro:
+                                            Intent CalenderReadActivity = new Intent(userListActivity.this,CalenderReadActivity.class);
+                                            startActivity(CalenderReadActivity);
+                                            break;
+
+                                        case R.id.nav_regUsersApl:
                                             Intent  APLRegUsers = new Intent(userListActivity.this, APLRegUsers.class);
                                             startActivity( APLRegUsers);
                                             break;
 
-                                        case R.id.nav_regUsersApl:
+                                        case R.id.nav_regUsers:
                                             Intent  RegUsersActivity = new Intent(userListActivity.this, RegUsersActivity.class);
                                             startActivity( RegUsersActivity);
+                                            break;
+
+                                        case R.id.nav_listUsers:
+                                            Intent  userListActivity = new Intent(userListActivity.this, userListActivity.class);
+                                            startActivity( userListActivity);
                                             break;
 
                                         case R.id.    navl_logOut:
@@ -202,7 +212,7 @@ import java.net.URLEncoder;
 
             @Override
             protected String doInBackground(String... params) {
-                String login_url = "http://192.168.216.46/APL-APP/APL_PHP/APL_AdminListUsers_Role.php";
+                String login_url = "http://"+getResources().getString(R.string.ip) +"/APL-APP/APL_PHP/APL_AdminListUsers_Role.php";
 
                 String method = params[0];
                 String Roller = params[1];

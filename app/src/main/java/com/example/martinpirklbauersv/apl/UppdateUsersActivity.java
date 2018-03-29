@@ -244,7 +244,7 @@ public class UppdateUsersActivity extends AppCompatActivity implements AdapterVi
         @Override
         protected String doInBackground(String... params) {
 
-            String reg_url = "http://10.0.2.2/APL-APP/APL_PHP/APL_AdminUpdateUsers.php";
+            String reg_url = "http://"+getResources().getString(R.string.ip) +"/APL-APP/APL_PHP/APL_AdminUpdateUsers.php";
             String method = params[0];
             String UserID = params[1];
             String Fnamn = params[2];
@@ -341,7 +341,7 @@ public class UppdateUsersActivity extends AppCompatActivity implements AdapterVi
         @Override
         protected String doInBackground(String... params) {
 
-            String login_url = "http://10.0.2.2/APL-APP/APL_PHP/APL_AdminListUsersUpdate.php";
+            String login_url = "http://"+getResources().getString(R.string.ip) +"/APL-APP/APL_PHP/APL_AdminListUsersUpdate.php";
             String method = params[0];
             String UserID = params[1];
             if (method.equals("hämtadata")) {
