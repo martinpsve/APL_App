@@ -66,9 +66,14 @@ public class RegUsersActivity extends AppCompatActivity implements AdapterView.O
                                         startActivity(fourthActivity);
                                         break;
 
-                                    case R.id.nav_Narvaro:
+                                    case R.id. nav_setNarvaro:
                                         Intent CalenderActivity = new Intent(RegUsersActivity.this,CalenderActivity.class);
                                         startActivity(CalenderActivity);
+                                        break;
+
+                                    case R.id.nav_Narvaro:
+                                        Intent CalenderReadActivity = new Intent(RegUsersActivity.this,CalenderReadActivity.class);
+                                        startActivity(CalenderReadActivity);
                                         break;
 
                                     case R.id.nav_regUsersApl:
@@ -189,7 +194,7 @@ public class RegUsersActivity extends AppCompatActivity implements AdapterView.O
         @Override
         protected String doInBackground(String... params) {
 
-            String reg_url = "http://10.0.2.2/APL-APP/APL_PHP/APL_AdminCreateUsers.php";
+            String reg_url = "http://"+getResources().getString(R.string.ip) +"/APL-APP/APL_PHP/APL_AdminCreateUsers.php";
             String method = params[0];
             String Fnamn = params[1];
             String Enamn = params[2];

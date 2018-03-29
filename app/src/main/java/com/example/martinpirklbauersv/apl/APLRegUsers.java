@@ -81,7 +81,7 @@ public class APLRegUsers extends AppCompatActivity {
         @Override
         protected String doInBackground(String... params) {
 
-            String reg_url = "http://10.0.2.2/APL-APP/APL_PHP/APL_AdminCreateNarvaro.php";
+            String reg_url = "http://"+getResources().getString(R.string.ip) +"/APL-APP/APL_PHP/APL_AdminCreateNarvaro.php";
             String method = params[0];
             String sAnvandarID = params[1];
             String sDagarID = params[2];

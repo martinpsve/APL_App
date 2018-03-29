@@ -63,10 +63,7 @@ public class CalenderReadActivity extends AppCompatActivity implements AdapterVi
             närvarolista = (TextView) findViewById(R.id.textView21);
 
             tMåndag = (TextView) findViewById(R.id.test1);
-            tTisdag = (TextView) findViewById(R.id.test2);
-            tOnsdag = (TextView) findViewById(R.id.test3);
-            tTorsdag = (TextView) findViewById(R.id.test4);
-            tFredag = (TextView) findViewById(R.id.test5);
+
             testingNarvaro = (TextView) findViewById(R.id.textView27);
 
 
@@ -142,7 +139,7 @@ public class CalenderReadActivity extends AppCompatActivity implements AdapterVi
 
             @Override
             protected String doInBackground(String... params) {
-                String login_url = "http://192.168.216.46/APL-APP/APL_PHP/APL_GetUsersFromNarvaro.php";
+                String login_url = "http://"+getResources().getString(R.string.ip) +"/APL-APP/APL_PHP/APL_GetUsersFromNarvaro.php";
 
                 String method = params[0];
                 if (method.equals("hämtaUserdata")) {
@@ -263,7 +260,7 @@ public class CalenderReadActivity extends AppCompatActivity implements AdapterVi
 
         @Override
         protected String doInBackground(String... params) {
-            String login_url = "http://192.168.216.46/APL-APP/APL_PHP/APL_listNarvaro.php";
+            String login_url = "http://"+getResources().getString(R.string.ip) +"/APL-APP/APL_PHP/APL_listNarvaro.php";
 
             String method = params[0];
             String UserID = params[1];

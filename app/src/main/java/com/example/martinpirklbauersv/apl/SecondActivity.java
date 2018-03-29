@@ -138,7 +138,7 @@ private DrawerLayout myDrawerLayout;
         @Override
         protected String doInBackground(String... params) {
 
-            String login_url = "http://10.0.2.2/APL-APP/APL_PHP/APL_afterLogin.php";
+            String login_url = "http://"+getResources().getString(R.string.ip) +"/APL-APP/APL_PHP/APL_afterLogin.php";
             String method = params[0];
             if (method.equals("hämtadata")) {
 
