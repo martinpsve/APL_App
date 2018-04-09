@@ -39,7 +39,7 @@ import java.net.MalformedURLException;
 import java.net.URL;
 import java.net.URLEncoder;
 
-    public class userListActivity extends AppCompatActivity implements AdapterView.OnItemSelectedListener {
+    public class ListUsersActivity extends AppCompatActivity implements AdapterView.OnItemSelectedListener {
 
         private DrawerLayout myDrawerLayout;
 
@@ -50,7 +50,7 @@ import java.net.URLEncoder;
         @Override
         protected void onCreate(Bundle savedInstanceState) {
             super.onCreate(savedInstanceState);
-            setContentView(R.layout.activity_user_list);
+            setContentView(R.layout.activity_listusers);
 
             Toolbar toolbar = findViewById(R.id.toolbar);
             setSupportActionBar(toolbar);
@@ -70,38 +70,34 @@ import java.net.URLEncoder;
                                 {
                                     switch (menuItem.getItemId()){
 
-                                        case R.id.nav_startpage:
-                                            Intent fourthActivity = new Intent(userListActivity.this,fourthActivity.class);
-                                            startActivity(fourthActivity);
-                                            break;
 
                                         case R.id. nav_setNarvaro:
-                                            Intent CalenderActivity = new Intent(userListActivity.this,CalenderActivity.class);
+                                            Intent CalenderActivity = new Intent(ListUsersActivity.this,SetNarvaroActivity.class);
                                             startActivity(CalenderActivity);
                                             break;
 
                                         case R.id.nav_Narvaro:
-                                            Intent CalenderReadActivity = new Intent(userListActivity.this,CalenderReadActivity.class);
+                                            Intent CalenderReadActivity = new Intent(ListUsersActivity.this,ListNarvaroActivity.class);
                                             startActivity(CalenderReadActivity);
                                             break;
 
                                         case R.id.nav_regUsersApl:
-                                            Intent  APLRegUsers = new Intent(userListActivity.this, APLRegUsers.class);
+                                            Intent  APLRegUsers = new Intent(ListUsersActivity.this, ConnectUsersToAPLActivity.class);
                                             startActivity( APLRegUsers);
                                             break;
 
                                         case R.id.nav_regUsers:
-                                            Intent  RegUsersActivity = new Intent(userListActivity.this, RegUsersActivity.class);
+                                            Intent  RegUsersActivity = new Intent(ListUsersActivity.this, RegisterUsersActivity.class);
                                             startActivity( RegUsersActivity);
                                             break;
 
                                         case R.id.nav_listUsers:
-                                            Intent  userListActivity = new Intent(userListActivity.this, userListActivity.class);
+                                            Intent  userListActivity = new Intent(ListUsersActivity.this, ListUsersActivity.class);
                                             startActivity( userListActivity);
                                             break;
 
                                         case R.id.    navl_logOut:
-                                            Intent  MainActivity = new Intent(userListActivity.this, MainActivity.class);
+                                            Intent  MainActivity = new Intent(ListUsersActivity.this, LoginActivity.class);
                                             startActivity( MainActivity);
                                             break;
                                     }
@@ -167,8 +163,8 @@ import java.net.URLEncoder;
                 Roller = (String) parent.getItemAtPosition(pos);
 
                 String method = "hämtaUserdata";
-                userListActivity.GetDataActivity2 GetDataActivity2 = new userListActivity.GetDataActivity2(this);
-                GetDataActivity2.execute(method, Roller);
+                ListUsersActivity.GetUsersActivity GetUsersActivity = new ListUsersActivity.GetUsersActivity(this);
+                GetUsersActivity.execute(method, Roller);
             }
 
         }
@@ -185,18 +181,18 @@ import java.net.URLEncoder;
             RmButlayout.removeAllViewsInLayout();
 
             String method = "hämtaUserdata";
-            userListActivity.GetDataActivity2 GetDataActivity2 = new userListActivity.GetDataActivity2(this);
-            GetDataActivity2.execute(method, Roller);
+            ListUsersActivity.GetUsersActivity GetUsersActivity = new ListUsersActivity.GetUsersActivity(this);
+            GetUsersActivity.execute(method, Roller);
         }
 
-        private class GetDataActivity2 extends AsyncTask<String, Void, String> {
+        private class GetUsersActivity extends AsyncTask<String, Void, String> {
 
 
             AlertDialog alertDialog;
             Context ctx;
             View v;
 
-            GetDataActivity2(Context ctx)
+            GetUsersActivity(Context ctx)
 
             {
                 this.ctx = ctx;
@@ -292,7 +288,7 @@ import java.net.URLEncoder;
 
                     final String finalSAnvadarID = sAnvadarID;
 
-                    ImageView RMButton = new ImageView(userListActivity.this);
+                    ImageView RMButton = new ImageView(ListUsersActivity.this);
                     RMButton.setImageResource(R.drawable.ic_launcher_background);
 
                     RMButton.setOnClickListener(new View.OnClickListener() {
@@ -306,7 +302,7 @@ import java.net.URLEncoder;
                     });
 
 
-                    Button IDButton = new Button(userListActivity.this);
+                    Button IDButton = new Button(ListUsersActivity.this);
                     IDButton.setTextSize(10);
                     IDButton.setBackgroundColor(Color.TRANSPARENT);
                     IDButton.setOnClickListener(new View.OnClickListener() {

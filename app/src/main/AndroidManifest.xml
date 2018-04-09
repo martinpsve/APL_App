@@ -12,7 +12,7 @@
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
-        <activity android:name=".MainActivity">
+        <activity android:name=".LoginActivity">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
@@ -20,20 +20,25 @@
             </intent-filter>
         </activity>
         <activity
-            android:name=".SecondActivity"
+            android:name=".ElevActivity"
             android:label="Elev"
             android:theme="@style/AppTheme.NoActionBar" />
         <activity
-            android:name=".ThirdActivity"
+            android:name=".HandledareActivity"
             android:label="Lärare"
             android:theme="@style/AppTheme.NoActionBar" />
         <activity
-            android:name=".fourthActivity"
+            android:name=".AdminActivity"
             android:label="Admin"
             android:theme="@style/AppTheme.NoActionBar" />
-        <activity android:name=".fifthActivity" />
-        <activity android:name=".sixthActivity" />
-        <activity android:name=".RegUsersActivity"
+        <activity
+            android:name=".LarareActivity"
+            android:label="Admin"
+            android:theme="@style/AppTheme.NoActionBar" />
+        <activity android:name=".KansliActivity"
+            android:label="Admin"
+            android:theme="@style/AppTheme.NoActionBar" />
+        <activity android:name=".RegisterUsersActivity"
             android:label="RegUsersActivity"
             android:theme="@style/AppTheme.NoActionBar"/>
         <activity
@@ -42,15 +47,17 @@
             android:theme="@style/AppTheme.NoActionBar" />
         <activity android:name=".RemoveUsersActivity" />
         <activity
-            android:name=".CalenderActivity"
+            android:name=".SetNarvaroActivity"
             android:label="Sätta Nävaro"
             android:theme="@style/AppTheme.NoActionBar" />
-        <activity android:name=".APLRegUsers" />
-        <activity android:name=".CalenderReadActivity"
+        <activity android:name=".ConnectUsersToAPLActivity"
+            android:label="regga apl users"
+            android:theme="@style/AppTheme.NoActionBar"/>
+        <activity android:name=".ListNarvaroActivity"
             android:label="Närvaro lista"
             android:theme="@style/AppTheme.NoActionBar" />
         <activity
-            android:name=".userListActivity"
+            android:name=".ListUsersActivity"
             android:label="Användar Lista"
             android:theme="@style/AppTheme.NoActionBar">
 

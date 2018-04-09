@@ -6,19 +6,19 @@ import android.content.Context;
 import android.content.Intent;
 import android.graphics.Color;
 import android.os.AsyncTask;
-import android.provider.ContactsContract;
+import android.support.design.widget.NavigationView;
+import android.support.v4.view.GravityCompat;
+import android.support.v4.widget.DrawerLayout;
+import android.support.v7.app.ActionBar;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
-import android.text.Html;
+import android.support.v7.widget.Toolbar;
 import android.util.Log;
+import android.view.MenuItem;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
-import android.widget.Button;
-import android.widget.EditText;
 import android.widget.ImageView;
-import android.widget.LinearLayout;
-import android.widget.ListView;
 import android.widget.Spinner;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -39,26 +39,29 @@ import java.net.MalformedURLException;
 import java.net.URL;
 import java.net.URLEncoder;
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.Objects;
 
-public class CalenderActivity extends AppCompatActivity implements AdapterView.OnItemSelectedListener {
+public class SetNarvaroActivity extends AppCompatActivity implements AdapterView.OnItemSelectedListener {
 
-private TextView Tstartdag;
-private TextView Tslutdag;
-private TextView dMåndag, dTisdag, dOnsdag, dTorsdag, dFredag;
-private TextView tMåndag, tTisdag, tOnsdag, tTorsdag, tFredag;
-private ImageView iMåndag, iTisdag, iOnsdag, iTorsdag, iFredag;
-String stWeek, stMonN, stTisN, stOnsN, stTorN, stFreN;
-String Datum, NarvaroRaknare;
-String Fnamn, Enamn, AnvandarID;
-String kNamn, klassID;
-String sKlass;
-String sFnamn, sEnman;
-String method;
-String startDag, slutdag;
-int UserID, KlassID;
+    private DrawerLayout myDrawerLayout;
 
+
+    private TextView Tstartdag;
+    private TextView Tslutdag;
+    private TextView dMåndag, dTisdag, dOnsdag, dTorsdag, dFredag;
+    private TextView tMåndag, tTisdag, tOnsdag, tTorsdag, tFredag;
+    private ImageView iMåndagEjNärvarande, iTisdagEjNärvarande, iOnsdagEjNärvarande, iTorsdagEjNärvarande, iFredagEjNärvarande;
+    private ImageView iMåndagNärvarande, iTisdagNärvarande, iOnsdagNärvarande, iTorsdagNärvarande, iFredagNärvarande;
+    String stWeek, stMonN, stTisN, stOnsN, stTorN, stFreN;
+    String Datum, NarvaroRaknare;
+    String Fnamn, Enamn, AnvandarID;
+    String kNamn, klassID;
+    String sKlass;
+    String sFnamn, sEnman;
+    String method;
+    String startDag, slutdag;
+    int UserID, KlassID;
+    Spinner U, s;
 
     ArrayAdapter<String> adapter7;
     ArrayList<Integer> IDList = new ArrayList<Integer>();
@@ -79,7 +82,64 @@ int UserID, KlassID;
         fList.add("Användare");
         KList.add("Klasser");
         antallist.add("Veckor");
-        setContentView(R.layout.activity_calender);
+        setContentView(R.layout.activity_setnarvaro);
+
+        Toolbar toolbar = findViewById(R.id.toolbar);
+        setSupportActionBar(toolbar);
+        ActionBar actionbar = getSupportActionBar();
+        actionbar.setDisplayHomeAsUpEnabled(true);
+        actionbar.setHomeAsUpIndicator(R.drawable.ic_menu);
+
+        myDrawerLayout = findViewById(R.id.drawer_layout);
+        NavigationView navView = findViewById(R.id.nav_view);
+        navView.setNavigationItemSelectedListener
+                (
+                        new NavigationView.OnNavigationItemSelectedListener() {
+
+                            @Override
+                            public boolean onNavigationItemSelected(MenuItem menuItem) {
+                                switch (menuItem.getItemId()) {
+
+
+                                    case R.id.nav_setNarvaro:
+                                        Intent CalenderActivity = new Intent(SetNarvaroActivity.this, SetNarvaroActivity.class);
+                                        startActivity(CalenderActivity);
+                                        break;
+
+                                    case R.id.nav_Narvaro:
+                                        Intent CalenderReadActivity = new Intent(SetNarvaroActivity.this, ListNarvaroActivity.class);
+                                        startActivity(CalenderReadActivity);
+                                        break;
+
+                                    case R.id.nav_regUsersApl:
+                                        Intent APLRegUsers = new Intent(SetNarvaroActivity.this, ConnectUsersToAPLActivity.class);
+                                        startActivity(APLRegUsers);
+                                        break;
+
+                                    case R.id.nav_regUsers:
+                                        Intent RegUsersActivity = new Intent(SetNarvaroActivity.this, RegisterUsersActivity.class);
+                                        startActivity(RegUsersActivity);
+                                        break;
+
+                                    case R.id.nav_listUsers:
+                                        Intent userListActivity = new Intent(SetNarvaroActivity.this, ListUsersActivity.class);
+                                        startActivity(userListActivity);
+                                        break;
+
+                                    case R.id.navl_logOut:
+                                        Intent MainActivity = new Intent(SetNarvaroActivity.this, LoginActivity.class);
+                                        startActivity(MainActivity);
+                                        break;
+                                }
+
+
+                                menuItem.setChecked(true);
+
+                                myDrawerLayout.closeDrawers();
+
+                                return true;
+                            }
+                        });
 
 
         Tstartdag = (TextView) findViewById(R.id.textView10);
@@ -97,277 +157,141 @@ int UserID, KlassID;
         dTorsdag = (TextView) findViewById(R.id.textView17);
         dFredag = (TextView) findViewById(R.id.textView20);
 
-        Spinner K = (Spinner)findViewById(R.id.spinner3);
+        Spinner K = (Spinner) findViewById(R.id.spinner3);
 
         adapter10 = new ArrayAdapter<String>(this,
                 android.R.layout.simple_spinner_item, KList);
         adapter10.setDropDownViewResource(android.R.layout.simple_spin‌​ner_dropdown_item);
+        //K.setEnabled(false);
         K.setAdapter(adapter10);
         K.setOnItemSelectedListener(this);
 
 
-        Spinner U = (Spinner)findViewById(R.id.UserSpinner);
+        U = (Spinner) findViewById(R.id.UserSpinner);
 
         adapter7 = new ArrayAdapter<String>(this,
                 android.R.layout.simple_spinner_item, fList);
         adapter7.setDropDownViewResource(android.R.layout.simple_spin‌​ner_dropdown_item);
+        U.setEnabled(false);
         U.setAdapter(adapter7);
         U.setOnItemSelectedListener(this);
 
-
-        Spinner s = (Spinner) findViewById(R.id.spinner2);
-        s.setOnItemSelectedListener(this);
+        s = (Spinner) findViewById(R.id.spinner2);
 
 
         ArrayAdapter<String> adapter = new ArrayAdapter<String>(this,
                 android.R.layout.simple_spinner_item, antallist);
         adapter.setDropDownViewResource(android.R.layout.simple_spin‌​ner_dropdown_item);
+
+        s.setEnabled(false);
         s.setAdapter(adapter);
-
-        Spinner M = (Spinner)findViewById(R.id.måndagspinner);
-        String[] arraySpinner2 = new String[] {
-                "val","Närvarande", "EjNärvarande"
-        };
-
-        ArrayAdapter<String> adapter2 = new ArrayAdapter<String>(this,
-                android.R.layout.simple_spinner_item, arraySpinner2);
-        adapter2.setDropDownViewResource(android.R.layout.simple_spin‌​ner_dropdown_item);
-        M.setAdapter(adapter2);
-        M.setOnItemSelectedListener(this);
-
-        Spinner T = (Spinner)findViewById(R.id.tidagspinner);
-        String[] arraySpinner3 = new String[] {
-                "val","Närvarande", "EjNärvarande"
-        };
-
-        ArrayAdapter<String> adapter3 = new ArrayAdapter<String>(this,
-                android.R.layout.simple_spinner_item, arraySpinner3);
-        adapter3.setDropDownViewResource(android.R.layout.simple_spin‌​ner_dropdown_item);
-        T.setAdapter(adapter3);
-        T.setOnItemSelectedListener(this);
-
-        Spinner O = (Spinner)findViewById(R.id.onsdagspinner);
-        String[] arraySpinner4 = new String[] {
-                "val","Närvarande", "EjNärvarande"
-        };
-
-        ArrayAdapter<String> adapter4 = new ArrayAdapter<String>(this,
-                android.R.layout.simple_spinner_item, arraySpinner4);
-        adapter4.setDropDownViewResource(android.R.layout.simple_spin‌​ner_dropdown_item);
-        O.setAdapter(adapter4);
-        O.setOnItemSelectedListener(this);
-
-        Spinner To = (Spinner)findViewById(R.id.torsdagspinner);
-        String[] arraySpinner5 = new String[] {
-                "val","Närvarande", "EjNärvarande"
-        };
-
-        ArrayAdapter<String> adapter5 = new ArrayAdapter<String>(this,
-                android.R.layout.simple_spinner_item, arraySpinner5);
-        adapter5.setDropDownViewResource(android.R.layout.simple_spin‌​ner_dropdown_item);
-        To.setAdapter(adapter5);
-        To.setOnItemSelectedListener(this);
-
-        Spinner F = (Spinner)findViewById(R.id.fredagspinner);
-        String[] arraySpinner6 = new String[] {
-                "val","Närvarande", "EjNärvarande"
-        };
-
-        ArrayAdapter<String> adapter6 = new ArrayAdapter<String>(this,
-                android.R.layout.simple_spinner_item, arraySpinner6);
-        adapter6.setDropDownViewResource(android.R.layout.simple_spin‌​ner_dropdown_item);
-        F.setAdapter(adapter6);
-        F.setOnItemSelectedListener(this);
-
-
-
+        s.setOnItemSelectedListener(this);
 
 
         method = "hämtaKlassdata";
-        CalenderActivity. GetDataActivity3  GetDataActivity3 = new CalenderActivity. GetDataActivity3(this);
-        GetDataActivity3.execute(method);
+        SetNarvaroActivity.GetClassActivity GetClassActivity = new SetNarvaroActivity.GetClassActivity(this);
+        GetClassActivity.execute(method);
+
+
+        iMåndagEjNärvarande = (ImageView) findViewById(R.id.MåndagEjNärvarandeView);
+        iMåndagNärvarande = (ImageView) findViewById(R.id.måndagNärvarandeView);
+        iTisdagEjNärvarande = (ImageView) findViewById(R.id.TisdagEjNärvarandeView);
+        iTisdagNärvarande = (ImageView) findViewById(R.id.tisdagNärvarandeView);
+        iOnsdagEjNärvarande = (ImageView) findViewById(R.id.OnsdagEjNärvarandeView);
+        iOnsdagNärvarande = (ImageView) findViewById(R.id.onsdagNärvarandeView);
+        iTorsdagEjNärvarande = (ImageView) findViewById(R.id.TorsdagEjNärvarandeView);
+        iTorsdagNärvarande = (ImageView) findViewById(R.id.torsdagNärvarandeView);
+        iFredagEjNärvarande = (ImageView) findViewById(R.id.FredagEjNärvarandeView);
+        iFredagNärvarande = (ImageView) findViewById(R.id.FredagNärvarandeView);
+
+
+        iMåndagEjNärvarande.setEnabled(false);
+        iMåndagNärvarande.setEnabled(false);
+        iTisdagEjNärvarande.setEnabled(false);
+        iTisdagNärvarande.setEnabled(false);
+        iOnsdagEjNärvarande.setEnabled(false);
+        iOnsdagNärvarande.setEnabled(false);
+        iTorsdagEjNärvarande.setEnabled(false);
+        iTorsdagNärvarande.setEnabled(false);
+        iFredagEjNärvarande.setEnabled(false);
+        iFredagNärvarande.setEnabled(false);
+
 
     }
 
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        switch (item.getItemId()) {
+            case android.R.id.home:
+                myDrawerLayout.openDrawer(GravityCompat.START);
+                return true;
+        }
+
+        return super.onOptionsItemSelected(item);
+    }
+
+
     public void onItemSelected(AdapterView<?> parent, View v,
                                int pos, long id) {
-        iMåndag = (ImageView) findViewById(R.id.MåndagView);
-        iTisdag = (ImageView) findViewById(R.id.TisdagView);
-        iOnsdag = (ImageView) findViewById(R.id.OnsdagView);
-        iTorsdag = (ImageView) findViewById(R.id.TorsdagView);
-        iFredag = (ImageView) findViewById(R.id.FredagView);
 
 
         if (parent.getId() == R.id.UserSpinner) {
 
             sFnamn = (String) parent.getItemAtPosition(pos);
-
-            if (!sFnamn.equals("Användare")){
-            UserID = IDList.get(pos -1);
+            //s.setEnabled(true);
+            if (!sFnamn.equals("Användare")) {
+                UserID = IDList.get(pos - 1);
+                s.setEnabled(true);
             }
 
             method = "hämtadata";
-            CalenderActivity.GetDataActivity GetDataActivity = new CalenderActivity.GetDataActivity(this);
-            GetDataActivity.execute(method, "" + UserID);
+            SetNarvaroActivity.GetAPLWeeksActivity GetAPLWeeksActivity = new SetNarvaroActivity.GetAPLWeeksActivity(this);
+            GetAPLWeeksActivity.execute(method, "" + UserID);
 
         }
 
-       if (parent.getId() == R.id.spinner2) {
+        if (parent.getId() == R.id.spinner2) {
             stWeek = (String) parent.getItemAtPosition(pos);
 
 
+            if (!stWeek.equals("Veckor")) {
+
+                iMåndagEjNärvarande.setEnabled(true);
+                iMåndagNärvarande.setEnabled(true);
+                iTisdagEjNärvarande.setEnabled(true);
+                iTisdagNärvarande.setEnabled(true);
+                iOnsdagEjNärvarande.setEnabled(true);
+                iOnsdagNärvarande.setEnabled(true);
+                iTorsdagEjNärvarande.setEnabled(true);
+                iTorsdagNärvarande.setEnabled(true);
+                iFredagEjNärvarande.setEnabled(true);
+                iFredagNärvarande.setEnabled(true);
+
+            }
+
             try {
                 method = "hämtadata";
-                CalenderActivity.GetDataActivity1 GetDataActivity1 = new CalenderActivity.GetDataActivity1(this);
-                GetDataActivity1.execute(method, stWeek, "" + UserID);
-
-                /*Toast toast = Toast.makeText(this, "" + stWeek, Toast.LENGTH_LONG);
-                toast.show();
-               */
-            }
-
-            catch(Exception e){
+                SetNarvaroActivity.GetDaysFromWeekActivity GetDaysFromWeekActivity = new SetNarvaroActivity.GetDaysFromWeekActivity(this);
+                GetDaysFromWeekActivity.execute(method, stWeek, "" + UserID);
+            } catch (Exception e) {
 
             }
+
         }
 
         if (parent.getId() == R.id.spinner3) {
 
             sKlass = (String) parent.getItemAtPosition(pos);
 
-            if (!sKlass.equals("Klasser")){
-                KlassID = klassIDlist.get(pos -1);
+            if (!sKlass.equals("Klasser")) {
+                KlassID = klassIDlist.get(pos - 1);
+                U.setEnabled(true);
             }
 
             method = "hämtaUserdata";
-            CalenderActivity.GetDataActivity2 GetDataActivity2 = new CalenderActivity.GetDataActivity2(this);
-            GetDataActivity2.execute(method, "" + KlassID);
+            SetNarvaroActivity.GetUsersWithNarvaroActivity GetUsersWithNarvaroActivity = new SetNarvaroActivity.GetUsersWithNarvaroActivity(this);
+            GetUsersWithNarvaroActivity.execute(method, "" + KlassID);
 
-        }
-
-        else if (parent.getId() == R.id.måndagspinner) {
-
-            stMonN = (String) parent.getItemAtPosition(pos);
-            String NarvaroRaknare = dMåndag.getText().toString();
-
-            if (Objects.equals(stMonN, "Närvarande")) {
-
-                iMåndag.setBackgroundColor(Color.GREEN);
-
-                String method = "mataInData";
-                CalenderActivity.SendDataActivity SendDataActivity = new CalenderActivity.SendDataActivity(this);
-                SendDataActivity.execute(method, stMonN, NarvaroRaknare, sFnamn);
-
-
-            }
-            else if (Objects.equals(stMonN, "EjNärvarande")) {
-
-                iMåndag.setBackgroundColor(Color.RED);
-
-                String method = "mataInData";
-                CalenderActivity.SendDataActivity SendDataActivity = new CalenderActivity.SendDataActivity(this);
-                SendDataActivity.execute(method, stMonN, NarvaroRaknare);
-
-            }
-
-        }
-
-        else if (parent.getId() == R.id.tidagspinner) {
-
-            stTisN = (String) parent.getItemAtPosition(pos);
-            String NarvaroRaknare = dTisdag.getText().toString();
-
-            if (Objects.equals(stTisN, "Närvarande")) {
-
-                iTisdag.setBackgroundColor(Color.GREEN);
-
-                String method = "mataInData";
-                CalenderActivity.SendDataActivity SendDataActivity = new CalenderActivity.SendDataActivity(this);
-                SendDataActivity.execute(method, stTisN, NarvaroRaknare);
-
-            }
-            else if (Objects.equals(stTisN, "EjNärvarande")) {
-                iTisdag.setBackgroundColor(Color.RED);
-
-                String method = "mataInData";
-                CalenderActivity.SendDataActivity SendDataActivity = new CalenderActivity.SendDataActivity(this);
-                SendDataActivity.execute(method, stTisN, NarvaroRaknare);
-
-            }
-        }
-
-        else if (parent.getId() == R.id.onsdagspinner) {
-
-            stOnsN = (String) parent.getItemAtPosition(pos);
-            String NarvaroRaknare = dOnsdag.getText().toString();
-
-            if (Objects.equals(stOnsN, "Närvarande")) {
-
-                iOnsdag.setBackgroundColor(Color.GREEN);
-
-                String method = "mataInData";
-                CalenderActivity.SendDataActivity SendDataActivity = new CalenderActivity.SendDataActivity(this);
-                SendDataActivity.execute(method, stOnsN, NarvaroRaknare);
-
-            }
-            else if (Objects.equals(stOnsN, "EjNärvarande")) {
-                iOnsdag.setBackgroundColor(Color.RED);
-
-                String method = "mataInData";
-                CalenderActivity.SendDataActivity SendDataActivity = new CalenderActivity.SendDataActivity(this);
-                SendDataActivity.execute(method, stOnsN, NarvaroRaknare);
-
-            }
-        }
-
-        else if (parent.getId() == R.id.torsdagspinner) {
-
-            stTorN = (String) parent.getItemAtPosition(pos);
-            String NarvaroRaknare = dTorsdag.getText().toString();
-
-            if (Objects.equals(stTorN, "Närvarande")) {
-
-                iTorsdag.setBackgroundColor(Color.GREEN);
-
-                String method = "mataInData";
-                CalenderActivity.SendDataActivity SendDataActivity = new CalenderActivity.SendDataActivity(this);
-                SendDataActivity.execute(method, stTorN, NarvaroRaknare);
-
-            }
-            else if (Objects.equals(stTorN, "EjNärvarande")) {
-                iTorsdag.setBackgroundColor(Color.RED);
-
-                String method = "mataInData";
-                CalenderActivity.SendDataActivity SendDataActivity = new CalenderActivity.SendDataActivity(this);
-                SendDataActivity.execute(method, stTorN, NarvaroRaknare);
-
-            }
-        }
-
-        else if (parent.getId() == R.id.fredagspinner) {
-
-            stFreN = (String) parent.getItemAtPosition(pos);
-            String NarvaroRaknare = dFredag.getText().toString();
-
-            if (Objects.equals(stFreN, "Närvarande")) {
-
-                iFredag.setBackgroundColor(Color.GREEN);
-
-
-                String method = "mataInData";
-                CalenderActivity.SendDataActivity SendDataActivity = new CalenderActivity.SendDataActivity(this);
-                SendDataActivity.execute(method, stFreN, NarvaroRaknare);
-
-            }
-            else if (Objects.equals(stFreN, "EjNärvarande")) {
-                iFredag.setBackgroundColor(Color.RED);
-
-
-                String method = "mataInData";
-                CalenderActivity.SendDataActivity SendDataActivity = new CalenderActivity.SendDataActivity(this);
-                SendDataActivity.execute(method, stFreN, NarvaroRaknare);
-
-            }
         }
 
     }
@@ -376,20 +300,157 @@ int UserID, KlassID;
 
     }
 
+    public void clickEventMondagEjNärvarande(View v)
+    {
+        iMåndagEjNärvarande.setBackgroundColor(Color.RED);
+        iMåndagNärvarande.setBackgroundColor(Color.rgb(40,75,17));
+
+
+        String NarvaroRaknare = dMåndag.getText().toString();
+        stMonN = "EjNärvarande";
+
+        String method = "mataInData";
+        SetNarvaroActivity.SendDataActivity SendDataActivity = new SetNarvaroActivity.SendDataActivity(this);
+        SendDataActivity.execute(method, stMonN, NarvaroRaknare, sFnamn);
+
+    }
+
+    public void clickEventMondagNärvarande (View v)
+    {
+        iMåndagNärvarande.setBackgroundColor(Color.GREEN);
+        iMåndagEjNärvarande.setBackgroundColor(Color.rgb(156,5,17));
+        String NarvaroRaknare = dMåndag.getText().toString();
+        stMonN = "Närvarande";
+
+        String method = "mataInData";
+        SetNarvaroActivity.SendDataActivity SendDataActivity = new SetNarvaroActivity.SendDataActivity(this);
+        SendDataActivity.execute(method, stMonN, NarvaroRaknare, sFnamn);
+    }
+
+    public void clickEventTisdagEjNärvarande(View v)
+    {
+        iTisdagEjNärvarande.setBackgroundColor(Color.RED);
+        iTisdagNärvarande.setBackgroundColor(Color.GRAY);
+
+        String NarvaroRaknare = dTisdag.getText().toString();
+        stTisN = "EjNärvarande";
+
+        String method = "mataInData";
+        SetNarvaroActivity.SendDataActivity SendDataActivity = new SetNarvaroActivity.SendDataActivity(this);
+        SendDataActivity.execute(method, stTisN, NarvaroRaknare, sFnamn);
+
+    }
+
+    public void clickEventTisdagNärvarande (View v)
+    {
+        iTisdagNärvarande.setBackgroundColor(Color.GREEN);
+        iTisdagEjNärvarande.setBackgroundColor(Color.GRAY);
+        String NarvaroRaknare = dTisdag.getText().toString();
+        stTisN = "Närvarande";
+
+        String method = "mataInData";
+        SetNarvaroActivity.SendDataActivity SendDataActivity = new SetNarvaroActivity.SendDataActivity(this);
+        SendDataActivity.execute(method, stTisN, NarvaroRaknare, sFnamn);
+    }
+
+    public void clickEventOnsdagEjNärvarande(View v)
+    {
+        iOnsdagEjNärvarande.setBackgroundColor(Color.RED);
+        iOnsdagNärvarande.setBackgroundColor(Color.GRAY);
+
+        String NarvaroRaknare = dOnsdag.getText().toString();
+        stOnsN = "EjNärvarande";
+
+        String method = "mataInData";
+        SetNarvaroActivity.SendDataActivity SendDataActivity = new SetNarvaroActivity.SendDataActivity(this);
+        SendDataActivity.execute(method, stOnsN, NarvaroRaknare, sFnamn);
+
+    }
+
+    public void clickEventOnsdagNärvarande (View v)
+    {
+        iOnsdagNärvarande.setBackgroundColor(Color.GREEN);
+        iOnsdagEjNärvarande.setBackgroundColor(Color.GRAY);
+        String NarvaroRaknare = dOnsdag.getText().toString();
+        stOnsN = "Närvarande";
+
+        String method = "mataInData";
+        SetNarvaroActivity.SendDataActivity SendDataActivity = new SetNarvaroActivity.SendDataActivity(this);
+        SendDataActivity.execute(method, stOnsN, NarvaroRaknare, sFnamn);
+    }
+
+    public void clickEventTorsdagEjNärvarande(View v)
+    {
+        iTorsdagEjNärvarande.setBackgroundColor(Color.RED);
+        iTorsdagNärvarande.setBackgroundColor(Color.GRAY);
+
+        String NarvaroRaknare = dTorsdag.getText().toString();
+        stTorN = "EjNärvarande";
+
+        String method = "mataInData";
+        SetNarvaroActivity.SendDataActivity SendDataActivity = new SetNarvaroActivity.SendDataActivity(this);
+        SendDataActivity.execute(method, stTorN, NarvaroRaknare, sFnamn);
+
+    }
+
+    public void clickEventTorsdagNärvarande (View v)
+    {
+        iTorsdagNärvarande.setBackgroundColor(Color.GREEN);
+        iTorsdagEjNärvarande.setBackgroundColor(Color.GRAY);
+        String NarvaroRaknare = dTorsdag.getText().toString();
+        stTorN = "Närvarande";
+
+        String method = "mataInData";
+        SetNarvaroActivity.SendDataActivity SendDataActivity = new SetNarvaroActivity.SendDataActivity(this);
+        SendDataActivity.execute(method, stTorN, NarvaroRaknare, sFnamn);
+    }
+
+    public void clickEventFredagEjNärvarande(View v)
+    {
+        iFredagEjNärvarande.setBackgroundColor(Color.RED);
+        iFredagNärvarande.setBackgroundColor(Color.GRAY);
+
+        String NarvaroRaknare = dFredag.getText().toString();
+        stFreN = "EjNärvarande";
+
+        String method = "mataInData";
+        SetNarvaroActivity.SendDataActivity SendDataActivity = new SetNarvaroActivity.SendDataActivity(this);
+        SendDataActivity.execute(method, stFreN, NarvaroRaknare, sFnamn);
+
+    }
+
+    public void clickEventFredagNärvarande (View v)
+    {
+        iFredagNärvarande.setBackgroundColor(Color.GREEN);
+        iFredagEjNärvarande.setBackgroundColor(Color.GRAY);
+        String NarvaroRaknare = dFredag.getText().toString();
+        stFreN = "Närvarande";
+
+        String method = "mataInData";
+        SetNarvaroActivity.SendDataActivity SendDataActivity = new SetNarvaroActivity.SendDataActivity(this);
+        SendDataActivity.execute(method, stFreN, NarvaroRaknare, sFnamn);
+    }
+
+
+
+
+
+
+
     public void onClickClose(View view) {
         finish();
     }
 
 
 
-    private class GetDataActivity extends AsyncTask<String, Void, String> {
+    private class GetAPLWeeksActivity extends AsyncTask<String, Void, String> {
 
 
         AlertDialog alertDialog;
         Context ctx;
         View v;
 
-        GetDataActivity(Context ctx)
+        GetAPLWeeksActivity(Context ctx)
 
         {
             this.ctx = ctx;
@@ -506,14 +567,14 @@ int UserID, KlassID;
             }
         }
     }
-    private class GetDataActivity1 extends AsyncTask<String, Void, String> {
+    private class GetDaysFromWeekActivity extends AsyncTask<String, Void, String> {
 
 
         AlertDialog alertDialog;
         Context ctx;
         View v;
 
-        GetDataActivity1(Context ctx)
+        GetDaysFromWeekActivity(Context ctx)
 
         {
             this.ctx = ctx;
@@ -612,10 +673,9 @@ int UserID, KlassID;
                     } catch (JSONException e) {
                         e.printStackTrace();
                     }
-                    Log.d("test2","asd" + Datum);
+
 
                     if (i == 0) {
-
                         tMåndag.setText("Måndag" + Datum);
                         dMåndag.setText("" + NarvaroRaknare);
 
@@ -647,14 +707,14 @@ int UserID, KlassID;
         }
     }
 
-    private class GetDataActivity2 extends AsyncTask<String, Void, String> {
+    private class GetUsersWithNarvaroActivity extends AsyncTask<String, Void, String> {
 
 
         AlertDialog alertDialog;
         Context ctx;
         View v;
 
-        GetDataActivity2(Context ctx)
+        GetUsersWithNarvaroActivity(Context ctx)
 
         {
             this.ctx = ctx;
@@ -773,14 +833,14 @@ try{
         }
     }
 
-    private class GetDataActivity3 extends AsyncTask<String, Void, String> {
+    private class GetClassActivity extends AsyncTask<String, Void, String> {
 
 
         AlertDialog alertDialog;
         Context ctx;
         View v;
 
-        GetDataActivity3(Context ctx)
+        GetClassActivity(Context ctx)
 
         {
             this.ctx = ctx;

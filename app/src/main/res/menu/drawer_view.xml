@@ -2,18 +2,13 @@
 <menu xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:android="http://schemas.android.com/apk/res/android">
 
-    <group >
-        <item
-            android:id="@+id/nav_startpage"
-            android:title="Hem" />
-    </group>
     <group
         android:id="@+id/Användare"
         android:checkableBehavior="single">
         <item
             android:id="@+id/nav_listUsers"
             android:icon="@android:drawable/ic_menu_share"
-            android:title="Användar Lista" />
+            android:title="Lista Användare" />
         <item
             android:id="@+id/nav_regUsers"
             android:icon="@android:drawable/ic_menu_share"
@@ -25,11 +20,11 @@
     <group android:id="@+id/Närvaro">
         <item
             android:id="@+id/nav_setNarvaro"
-            android:title="Sätt Närvaro" />
+            android:title="Rapportera Användare" />
         <item
             android:id="@+id/nav_Narvaro"
             android:icon="@android:drawable/ic_menu_share"
-            android:title="Närvaro Lista" />
+            android:title="Lista Närvaro" />
     </group>
     <group android:id="@+id/Logga_ut">
         <item

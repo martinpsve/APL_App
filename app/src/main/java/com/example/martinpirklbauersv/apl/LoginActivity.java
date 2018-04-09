@@ -6,7 +6,6 @@ import android.content.Intent;
 import android.os.AsyncTask;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
-import android.util.Log;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
@@ -27,7 +26,7 @@ import java.net.URL;
 import java.net.URLEncoder;
 import java.util.Objects;
 
-public class MainActivity extends AppCompatActivity implements AdapterView.OnItemSelectedListener {
+public class LoginActivity extends AppCompatActivity implements AdapterView.OnItemSelectedListener {
 
     private EditText userNameField, passwordField;
     private TextView Roll;
@@ -39,7 +38,7 @@ public class MainActivity extends AppCompatActivity implements AdapterView.OnIte
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_main);
+        setContentView(R.layout.activity_login);
 
         userNameField = (EditText) findViewById(R.id.userName);
         passwordField = (EditText) findViewById(R.id.password);
@@ -101,18 +100,19 @@ public class MainActivity extends AppCompatActivity implements AdapterView.OnIte
         Role = Roll.getText().toString();
 
         String method = "login";
-        LoginActivity LoginActivity = new LoginActivity(this);
-        LoginActivity.execute(method, Anvandarnamn, Losenord, Role);
+        LoginActivity.CheckLoginActivity CheckLoginActivity = new LoginActivity.CheckLoginActivity(this);
+        CheckLoginActivity.execute(method, Anvandarnamn, Losenord, Role);
 
     }
 
-    private class LoginActivity extends AsyncTask<String, Void, String> {
+
+    private class CheckLoginActivity extends AsyncTask<String, Void, String> {
 
         AlertDialog alertDialog;
         Context ctx;
         View v;
 
-        LoginActivity(Context ctx)
+        CheckLoginActivity(Context ctx)
 
         {
             this.ctx = ctx;
@@ -177,40 +177,39 @@ public class MainActivity extends AppCompatActivity implements AdapterView.OnIte
 
         @Override
         protected void onPostExecute(String result) {
-
             Lösenord.setText(result);
 
             if (Integer.parseInt(result) == 1) {
                 if (Objects.equals(Role, "1")) {
-                    Intent intent = new Intent(ctx, fourthActivity.class);
+                    Intent intent = new Intent(ctx, AdminActivity.class);
                     intent.putExtra("AnvandarID", Anvandarnamn);
                     intent.putExtra("Role", Role);
                     startActivity(intent);
                 }
 
                 if (Objects.equals(Role, "2")) {
-                    Intent intent = new Intent(ctx, ThirdActivity.class);
+                    Intent intent = new Intent(ctx, HandledareActivity.class);
                     intent.putExtra("AnvandarID", Anvandarnamn);
                     intent.putExtra("Role", Role);
                     startActivity(intent);
                 }
 
                 if (Objects.equals(Role, "3")) {
-                    Intent intent = new Intent(ctx, SecondActivity.class);
+                    Intent intent = new Intent(ctx, ElevActivity.class);
                     intent.putExtra("AnvandarID", Anvandarnamn);
                     intent.putExtra("Role", Role);
                     startActivity(intent);
                 }
 
                 if (Objects.equals(Role, "4")) {
-                    Intent intent = new Intent(ctx, fifthActivity.class);
+                    Intent intent = new Intent(ctx, LarareActivity.class);
                     intent.putExtra("AnvandarID", Anvandarnamn);
                     intent.putExtra("Role", Role);
                     startActivity(intent);
                 }
 
                 if (Objects.equals(Role, "5")) {
-                    Intent intent = new Intent(ctx, sixthActivity.class);
+                    Intent intent = new Intent(ctx, KansliActivity.class);
                     intent.putExtra("AnvandarID", Anvandarnamn);
                     intent.putExtra("Role", Role);
                     startActivity(intent);
