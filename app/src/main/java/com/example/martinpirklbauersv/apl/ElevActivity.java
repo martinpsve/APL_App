@@ -30,7 +30,7 @@ import java.net.MalformedURLException;
 import java.net.URL;
 import java.net.URLEncoder;
 
-public class SecondActivity extends AppCompatActivity {
+public class ElevActivity extends AppCompatActivity {
     private TextView AnvandarID;
     private TextView RoleID;
     private TextView arbetsplats;
@@ -43,7 +43,7 @@ private DrawerLayout myDrawerLayout;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_second);
+        setContentView(R.layout.activity_elev);
 
         Toolbar toolbar = findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);

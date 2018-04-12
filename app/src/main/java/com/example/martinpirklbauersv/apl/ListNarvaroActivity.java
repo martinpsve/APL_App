@@ -2,17 +2,12 @@ package com.example.martinpirklbauersv.apl;
 
 import android.app.AlertDialog;
 import android.content.Context;
-import android.content.Intent;
-import android.graphics.Color;
 import android.os.AsyncTask;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
-import android.util.Log;
-import android.util.TypedValue;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
-import android.widget.Button;
 import android.widget.LinearLayout;
 import android.widget.Spinner;
 import android.widget.TextView;
@@ -35,7 +30,7 @@ import java.net.URL;
 import java.net.URLEncoder;
 import java.util.ArrayList;
 
-public class CalenderReadActivity extends AppCompatActivity implements AdapterView.OnItemSelectedListener {
+public class ListNarvaroActivity extends AppCompatActivity implements AdapterView.OnItemSelectedListener {
 
         String Fnamn, Enamn, AnvandarID, Narvarande, Datum;
         String sFnamn;
@@ -58,7 +53,7 @@ public class CalenderReadActivity extends AppCompatActivity implements AdapterVi
         protected void onCreate(Bundle savedInstanceState) {
             super.onCreate(savedInstanceState);
             fList.add("Användare");
-            setContentView(R.layout.activity_calender_read);
+            setContentView(R.layout.activity_listnarvaro);
 
             närvarolista = (TextView) findViewById(R.id.textView21);
 
@@ -77,8 +72,8 @@ public class CalenderReadActivity extends AppCompatActivity implements AdapterVi
 
 
             method = "hämtaUserdata";
-            CalenderReadActivity.GetDataActivity1 GetDataActivity1 = new CalenderReadActivity.GetDataActivity1(this);
-            GetDataActivity1.execute(method);
+            ListNarvaroActivity.GetUsersFromNarvaroActivity GetUsersFromNarvaroActivity = new ListNarvaroActivity.GetUsersFromNarvaroActivity(this);
+            GetUsersFromNarvaroActivity.execute(method);
 
 
         }
@@ -101,8 +96,8 @@ public class CalenderReadActivity extends AppCompatActivity implements AdapterVi
 
 
                 method = "hämtaNärvarodata";
-                CalenderReadActivity.GetDataActivity2 GetDataActivity2 = new CalenderReadActivity.GetDataActivity2(this);
-                GetDataActivity2.execute(method, "" + UserID);
+                ListNarvaroActivity.GetUsersNarvaroActivity GetUsersNarvaroActivity = new ListNarvaroActivity.GetUsersNarvaroActivity(this);
+                GetUsersNarvaroActivity.execute(method, "" + UserID);
 
 
 
@@ -114,14 +109,14 @@ public class CalenderReadActivity extends AppCompatActivity implements AdapterVi
 
         }
 
-        private class GetDataActivity1 extends AsyncTask<String, Void, String> {
+        private class GetUsersFromNarvaroActivity extends AsyncTask<String, Void, String> {
 
 
             AlertDialog alertDialog;
             Context ctx;
             View v;
 
-            GetDataActivity1(Context ctx)
+            GetUsersFromNarvaroActivity(Context ctx)
 
             {
                 this.ctx = ctx;
@@ -235,14 +230,14 @@ public class CalenderReadActivity extends AppCompatActivity implements AdapterVi
             }
         }
 
-    private class GetDataActivity2 extends AsyncTask<String, Void, String> {
+    private class GetUsersNarvaroActivity extends AsyncTask<String, Void, String> {
 
 
         AlertDialog alertDialog;
         Context ctx;
         View v;
 
-        GetDataActivity2(Context ctx)
+        GetUsersNarvaroActivity(Context ctx)
 
         {
             this.ctx = ctx;

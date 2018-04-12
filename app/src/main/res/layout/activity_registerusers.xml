@@ -7,29 +7,6 @@
     android:layout_height="match_parent"
     android:fitsSystemWindows="true" >
 
-    <FrameLayout
-        android:id="@+id/content_frame"
-        android:layout_width="match_parent"
-        android:layout_height="match_parent">
-
-        <android.support.v7.widget.Toolbar
-            android:id="@+id/toolbar"
-            android:layout_width="match_parent"
-            android:layout_height="?attr/actionBarSize"
-            android:background="?attr/colorPrimary"
-            android:theme="@style/ThemeOverlay.AppCompat.ActionBar" />
-
-    </FrameLayout>
-
-    <android.support.design.widget.NavigationView
-        android:id="@+id/nav_view"
-        android:layout_width="wrap_content"
-        android:layout_height="match_parent"
-        android:layout_gravity="start"
-        android:fitsSystemWindows="true"
-        app:menu="@menu/drawer_view"
-        app:headerLayout="@layout/nav_header" />
-
     <ScrollView
         android:layout_width="match_parent"
         android:layout_height="match_parent"
@@ -58,7 +35,7 @@
                 tools:layout_editor_absoluteY="87dp" />
 
             <EditText
-                android:id="@+id/narvarande2"
+                android:id="@+id/FnamnField"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:ems="10"
@@ -68,7 +45,7 @@
                 tools:layout_editor_absoluteY="129dp" />
 
             <EditText
-                android:id="@+id/anvandarID2"
+                android:id="@+id/EnamnField"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:ems="10"
@@ -78,7 +55,7 @@
                 tools:layout_editor_absoluteY="187dp" />
 
             <EditText
-                android:id="@+id/dagarID2"
+                android:id="@+id/LösenordField"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:ems="10"
@@ -88,7 +65,7 @@
                 tools:layout_editor_absoluteY="252dp" />
 
             <EditText
-                android:id="@+id/periodID2"
+                android:id="@+id/TelefonnummerField"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:ems="10"
@@ -98,7 +75,7 @@
                 tools:layout_editor_absoluteY="325dp" />
 
             <EditText
-                android:id="@+id/mailadress2"
+                android:id="@+id/MailadressField"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:ems="10"
@@ -108,4 +85,27 @@
                 tools:layout_editor_absoluteY="387dp" />
         </LinearLayout>
     </ScrollView>
+
+    <FrameLayout
+        android:id="@+id/content_frame"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+
+        <android.support.v7.widget.Toolbar
+            android:id="@+id/toolbar"
+            android:layout_width="match_parent"
+            android:layout_height="?attr/actionBarSize"
+            android:background="?attr/colorPrimary"
+            android:theme="@style/ThemeOverlay.AppCompat.ActionBar" />
+
+    </FrameLayout>
+
+    <android.support.design.widget.NavigationView
+        android:id="@+id/nav_view"
+        android:layout_width="wrap_content"
+        android:layout_height="match_parent"
+        android:layout_gravity="start"
+        android:fitsSystemWindows="true"
+        app:headerLayout="@layout/nav_header"
+        app:menu="@menu/drawer_view" />
 </android.support.v4.widget.DrawerLayout>

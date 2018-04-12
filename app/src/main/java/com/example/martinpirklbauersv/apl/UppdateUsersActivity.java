@@ -52,10 +52,12 @@ public class UppdateUsersActivity extends AppCompatActivity implements AdapterVi
     String Onskan, Matchning, KlassID;
     String ArbetsplatsID;
     String Undervisar;
+    String sAnvandarnamn;
+    private TextView AnvandarNamn;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_uppdate_users);
+        setContentView(R.layout.activity_uppdateusers);
 
         Toolbar toolbar = findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
@@ -75,33 +77,34 @@ public class UppdateUsersActivity extends AppCompatActivity implements AdapterVi
                             {
                                 switch (menuItem.getItemId()){
 
-                                    case R.id.nav_startpage:
-                                        Intent fourthActivity = new Intent(UppdateUsersActivity.this,fourthActivity.class);
-                                        startActivity(fourthActivity);
-                                        break;
 
-                                    case R.id.nav_Narvaro:
-                                        Intent CalenderActivity = new Intent(UppdateUsersActivity.this,CalenderActivity.class);
+                                    case R.id. nav_setNarvaro:
+                                        Intent CalenderActivity = new Intent(UppdateUsersActivity.this,SetNarvaroActivity.class);
                                         startActivity(CalenderActivity);
                                         break;
 
-                                    case R.id.nav_regUsers:
-                                        Intent  APLRegUsers = new Intent(UppdateUsersActivity.this, APLRegUsers.class);
-                                        startActivity( APLRegUsers);
+                                    case R.id.nav_Narvaro:
+                                        Intent CalenderReadActivity = new Intent(UppdateUsersActivity.this,ListNarvaroActivity.class);
+                                        startActivity(CalenderReadActivity);
                                         break;
 
                                     case R.id.nav_regUsersApl:
-                                        Intent  RegUsersActivity = new Intent(UppdateUsersActivity.this, RegUsersActivity.class);
+                                        Intent  APLRegUsers = new Intent(UppdateUsersActivity.this, ConnectUsersToAPLActivity.class);
+                                        startActivity( APLRegUsers);
+                                        break;
+
+                                    case R.id.nav_regUsers:
+                                        Intent  RegUsersActivity = new Intent(UppdateUsersActivity.this, RegisterUsersActivity.class);
                                         startActivity( RegUsersActivity);
                                         break;
 
                                     case R.id.nav_listUsers:
-                                        Intent  userListActivity = new Intent(UppdateUsersActivity.this, userListActivity.class);
+                                        Intent  userListActivity = new Intent(UppdateUsersActivity.this, ListUsersActivity.class);
                                         startActivity( userListActivity);
                                         break;
 
                                     case R.id.    navl_logOut:
-                                        Intent  MainActivity = new Intent(UppdateUsersActivity.this, MainActivity.class);
+                                        Intent  MainActivity = new Intent(UppdateUsersActivity.this, LoginActivity.class);
                                         startActivity( MainActivity);
                                         break;
                                 }
@@ -120,6 +123,8 @@ public class UppdateUsersActivity extends AppCompatActivity implements AdapterVi
         LösenordField = (EditText) findViewById(R.id.DagarID);
         TelefonnummerField = (EditText) findViewById(R.id.PeriodID);
         MailadressField = (EditText) findViewById(R.id.Mailadress);
+
+        AnvandarNamn = (TextView) findViewById(R.id.anvandarNamn);
 
         IDButLayout = (LinearLayout) findViewById(R.id.IDLL);
 
@@ -217,18 +222,18 @@ public class UppdateUsersActivity extends AppCompatActivity implements AdapterVi
 
 
         String method = "mataInData";
-        UppdateUsersActivity.SendDataActivity SendDataActivity = new UppdateUsersActivity.SendDataActivity(this);
-        SendDataActivity.execute(method, UserID, Fnamn, Enamn, lösenord, Telefonnummer, Email, Onskan, Matchning, KlassID, Undervisar, ArbetsplatsID, Role);
+        UppdateUsersActivity.SendUpdateUserActivity SendUpdateUserActivity = new UppdateUsersActivity.SendUpdateUserActivity(this);
+        SendUpdateUserActivity.execute(method, UserID, Fnamn, Enamn, lösenord, Telefonnummer, Email, Onskan, Matchning, KlassID, Undervisar, ArbetsplatsID, Role);
     }
 
-    private class SendDataActivity extends AsyncTask<String, Void, String> {
+    private class SendUpdateUserActivity extends AsyncTask<String, Void, String> {
 
 
         AlertDialog alertDialog;
         Context ctx;
         View v;
 
-        SendDataActivity(Context ctx)
+        SendUpdateUserActivity(Context ctx)
 
         {
             this.ctx = ctx;
@@ -509,6 +514,13 @@ public class UppdateUsersActivity extends AppCompatActivity implements AdapterVi
                     e.printStackTrace();
                 }
 
+                sAnvandarnamn = null;
+                try {
+                    sAnvandarnamn = obj.getString("Anvandarnamn");
+                } catch (JSONException e) {
+                    e.printStackTrace();
+                }
+                AnvandarNamn.setText(sAnvandarnamn);
 
                 if (Objects.equals(sElevID, "1")) {
 
