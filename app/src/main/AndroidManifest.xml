@@ -25,8 +25,7 @@
             android:theme="@style/AppTheme.NoActionBar" />
         <activity
             android:name=".HandledareActivity"
-            android:label="Lärare"
-            android:theme="@style/AppTheme.NoActionBar" />
+            android:label="Handledare" />
         <activity
             android:name=".AdminActivity"
             android:label="Admin"

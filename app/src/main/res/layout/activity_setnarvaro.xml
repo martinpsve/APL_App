@@ -17,38 +17,11 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content">
 
-            <TextView
-                android:id="@+id/textView11"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="slutdag"
-                app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintTop_toBottomOf="@+id/textView10" />
-
-            <TextView
-                android:id="@+id/textView15"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginStart="16dp"
-                android:layout_marginTop="45dp"
-                android:text="Fredag"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@+id/textView16" />
-
-            <TextView
-                android:id="@+id/textView18"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginBottom="12dp"
-                android:layout_marginStart="16dp"
-                android:text="TiDagID"
-                app:layout_constraintBottom_toTopOf="@+id/textView9"
-                app:layout_constraintStart_toStartOf="parent" />
-
             <ImageView
                 android:id="@+id/MåndagEjNärvarandeView"
                 android:layout_width="50dp"
                 android:layout_height="30dp"
+                android:layout_marginEnd="16dp"
                 android:layout_marginTop="6dp"
                 android:background="@android:color/darker_gray"
                 android:onClick="clickEventMondagEjNärvarande"
@@ -70,6 +43,7 @@
                 android:id="@+id/TisdagEjNärvarandeView"
                 android:layout_width="50dp"
                 android:layout_height="30dp"
+                android:layout_marginEnd="16dp"
                 android:layout_marginTop="36dp"
                 android:background="@android:color/darker_gray"
                 android:onClick="clickEventTisdagEjNärvarande"
@@ -80,8 +54,8 @@
                 android:id="@+id/tisdagNärvarandeView"
                 android:layout_width="50dp"
                 android:layout_height="30dp"
-                android:layout_marginEnd="19dp"
-                android:layout_marginTop="35dp"
+                android:layout_marginEnd="16dp"
+                android:layout_marginTop="32dp"
                 android:background="@android:color/darker_gray"
                 android:onClick="clickEventTisdagNärvarande"
                 app:layout_constraintEnd_toStartOf="@+id/TisdagEjNärvarandeView"
@@ -91,6 +65,7 @@
                 android:id="@+id/OnsdagEjNärvarandeView"
                 android:layout_width="50dp"
                 android:layout_height="30dp"
+                android:layout_marginEnd="16dp"
                 android:layout_marginTop="33dp"
                 android:background="@android:color/darker_gray"
                 android:onClick="clickEventOnsdagEjNärvarande"
@@ -112,6 +87,7 @@
                 android:id="@+id/TorsdagEjNärvarandeView"
                 android:layout_width="50dp"
                 android:layout_height="30dp"
+                android:layout_marginEnd="16dp"
                 android:layout_marginTop="34dp"
                 android:background="@android:color/darker_gray"
                 android:onClick="clickEventTorsdagEjNärvarande"
@@ -133,6 +109,7 @@
                 android:id="@+id/FredagEjNärvarandeView"
                 android:layout_width="50dp"
                 android:layout_height="30dp"
+                android:layout_marginEnd="16dp"
                 android:layout_marginTop="34dp"
                 android:background="@android:color/darker_gray"
                 android:onClick="clickEventFredagEjNärvarande"
@@ -156,7 +133,7 @@
                 android:layout_height="wrap_content"
                 android:layout_centerHorizontal="true"
                 android:layout_centerVertical="true"
-                android:layout_marginEnd="31dp"
+                android:layout_marginEnd="16dp"
                 android:layout_marginTop="104dp"
                 android:onClick="onClickClose"
                 android:text="Close"
@@ -191,54 +168,6 @@
                 app:layout_constraintTop_toTopOf="parent" />
 
             <TextView
-                android:id="@+id/textView16"
-                android:layout_width="wrap_content"
-                android:layout_height="19dp"
-                android:layout_marginStart="16dp"
-                android:layout_marginTop="46dp"
-                android:text="Torsdag"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@+id/textView14" />
-
-            <TextView
-                android:id="@+id/textView19"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginBottom="12dp"
-                android:layout_marginStart="13dp"
-                android:text="OnDagID"
-                app:layout_constraintBottom_toTopOf="@+id/textView17"
-                app:layout_constraintStart_toEndOf="@+id/textView18" />
-
-            <TextView
-                android:id="@+id/textView20"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginStart="14dp"
-                android:text="FrDagID"
-                app:layout_constraintBottom_toBottomOf="parent"
-                app:layout_constraintStart_toEndOf="@+id/textView17" />
-
-            <TextView
-                android:id="@+id/textView14"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginStart="16dp"
-                android:layout_marginTop="45dp"
-                android:text="Onsdag"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@+id/textView13" />
-
-            <TextView
-                android:id="@+id/textView10"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginTop="41dp"
-                android:text="startdag"
-                app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintTop_toTopOf="parent" />
-
-            <TextView
                 android:id="@+id/textView12"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
@@ -259,6 +188,36 @@
                 app:layout_constraintTop_toBottomOf="@+id/textView12" />
 
             <TextView
+                android:id="@+id/textView14"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="16dp"
+                android:layout_marginTop="45dp"
+                android:text="Onsdag"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/textView13" />
+
+            <TextView
+                android:id="@+id/textView16"
+                android:layout_width="wrap_content"
+                android:layout_height="19dp"
+                android:layout_marginStart="16dp"
+                android:layout_marginTop="46dp"
+                android:text="Torsdag"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/textView14" />
+
+            <TextView
+                android:id="@+id/textView15"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="16dp"
+                android:layout_marginTop="45dp"
+                android:text="Fredag"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/textView16" />
+
+            <TextView
                 android:id="@+id/textView9"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
@@ -269,6 +228,26 @@
                 app:layout_constraintStart_toStartOf="parent" />
 
             <TextView
+                android:id="@+id/textView18"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginBottom="12dp"
+                android:layout_marginStart="16dp"
+                android:text="TiDagID"
+                app:layout_constraintBottom_toTopOf="@+id/textView9"
+                app:layout_constraintStart_toStartOf="parent" />
+
+            <TextView
+                android:id="@+id/textView19"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginBottom="12dp"
+                android:layout_marginStart="13dp"
+                android:text="OnDagID"
+                app:layout_constraintBottom_toTopOf="@+id/textView17"
+                app:layout_constraintStart_toEndOf="@+id/textView18" />
+
+            <TextView
                 android:id="@+id/textView17"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
@@ -277,6 +256,33 @@
                 android:text="ToDagID"
                 app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintStart_toEndOf="@+id/textView9" />
+
+            <TextView
+                android:id="@+id/textView20"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="14dp"
+                android:text="FrDagID"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintStart_toEndOf="@+id/textView17" />
+
+            <TextView
+                android:id="@+id/textView10"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="41dp"
+                android:text="startdag"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintTop_toTopOf="parent" />
+
+            <TextView
+                android:id="@+id/textView11"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="slutdag"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/textView10" />
+
         </android.support.constraint.ConstraintLayout>
 
     </ScrollView>
@@ -290,7 +296,7 @@
             android:id="@+id/toolbar"
             android:layout_width="match_parent"
             android:layout_height="?attr/actionBarSize"
-            android:background="?attr/colorPrimary"
+            android:background="?android:attr/colorActivatedHighlight"
             android:theme="@style/ThemeOverlay.AppCompat.ActionBar" />
 
     </FrameLayout>

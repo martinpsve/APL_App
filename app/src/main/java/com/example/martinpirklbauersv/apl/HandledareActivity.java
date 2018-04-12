@@ -40,35 +40,27 @@ import java.util.ArrayList;
 
 public class HandledareActivity extends AppCompatActivity implements AdapterView.OnItemSelectedListener {
 
-    private DrawerLayout myDrawerLayout;
-
-
     private TextView Tstartdag;
     private TextView Tslutdag;
     private TextView dMåndag, dTisdag, dOnsdag, dTorsdag, dFredag;
     private TextView tMåndag, tTisdag, tOnsdag, tTorsdag, tFredag;
+    private TextView tRole, tUserID;
     private ImageView iMåndagEjNärvarande, iTisdagEjNärvarande, iOnsdagEjNärvarande, iTorsdagEjNärvarande, iFredagEjNärvarande;
     private ImageView iMåndagNärvarande, iTisdagNärvarande, iOnsdagNärvarande, iTorsdagNärvarande, iFredagNärvarande;
     String stWeek, stMonN, stTisN, stOnsN, stTorN, stFreN;
     String Datum, NarvaroRaknare;
     String Fnamn, Enamn, AnvandarID;
-    String kNamn, klassID;
-    String sKlass;
     String sFnamn, sEnman;
     String method;
     String startDag, slutdag;
-    int UserID, KlassID;
+    String sAnvandarID;
+    int UserID;
     Spinner U, s;
 
     ArrayAdapter<String> adapter7;
     ArrayList<Integer> IDList = new ArrayList<Integer>();
     ArrayList<String> fList = new ArrayList<String>();
     ArrayList<String> eList = new ArrayList<String>();
-
-    ArrayAdapter<String> adapter10;
-    ArrayList<Integer> klassIDlist = new ArrayList<Integer>();
-    ArrayList<String> KList = new ArrayList<String>();
-
 
     ArrayList<String> antallist = new ArrayList<String>();
 
@@ -77,12 +69,20 @@ public class HandledareActivity extends AppCompatActivity implements AdapterView
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         fList.add("Användare");
-        KList.add("Klasser");
         antallist.add("Veckor");
-        setContentView(R.layout.activity_setnarvaro);
+        setContentView(R.layout.activity_handledare);
 
+        tUserID = (TextView) findViewById(R.id.tUserID);
+        tRole = (TextView) findViewById(R.id.tRole);
 
+        String sUserID = getIntent().getStringExtra("AnvandarID");
+        String sUserRole = getIntent().getStringExtra("Role");
+        Log.d("asd1" , "1" + sUserRole);
 
+        if (sUserRole == "2"){
+
+            tRole.setText("Handledare");
+        }
 
         Tstartdag = (TextView) findViewById(R.id.textView10);
         Tslutdag = (TextView) findViewById(R.id.textView11);
@@ -99,41 +99,33 @@ public class HandledareActivity extends AppCompatActivity implements AdapterView
         dTorsdag = (TextView) findViewById(R.id.textView17);
         dFredag = (TextView) findViewById(R.id.textView20);
 
-        Spinner K = (Spinner) findViewById(R.id.spinner3);
-
-        adapter10 = new ArrayAdapter<String>(this,
-                android.R.layout.simple_spinner_item, KList);
-        adapter10.setDropDownViewResource(android.R.layout.simple_spin‌​ner_dropdown_item);
-        //K.setEnabled(false);
-        K.setAdapter(adapter10);
-        K.setOnItemSelectedListener(this);
-
 
         U = (Spinner) findViewById(R.id.UserSpinner);
 
         adapter7 = new ArrayAdapter<String>(this,
                 android.R.layout.simple_spinner_item, fList);
         adapter7.setDropDownViewResource(android.R.layout.simple_spin‌​ner_dropdown_item);
-        U.setEnabled(false);
+        //U.setEnabled(false);
         U.setAdapter(adapter7);
         U.setOnItemSelectedListener(this);
 
-        s = (Spinner) findViewById(R.id.spinner2);
 
+        s = (Spinner) findViewById(R.id.spinner2);
 
         ArrayAdapter<String> adapter = new ArrayAdapter<String>(this,
                 android.R.layout.simple_spinner_item, antallist);
         adapter.setDropDownViewResource(android.R.layout.simple_spin‌​ner_dropdown_item);
-
         s.setEnabled(false);
         s.setAdapter(adapter);
         s.setOnItemSelectedListener(this);
 
+        method = "hämtaDataOmLoginUser";
+        HandledareActivity.GetUsersWithLoginInfoActivity GetUsersWithLoginInfoActivity = new HandledareActivity.GetUsersWithLoginInfoActivity(this);
+        GetUsersWithLoginInfoActivity.execute(method, sUserID);
 
-        method = "hämtaKlassdata";
-        HandledareActivity.GetClassActivity GetClassActivity = new HandledareActivity.GetClassActivity(this);
-        GetClassActivity.execute(method);
-
+        method = "hämtaUserID";
+        HandledareActivity.GetUsersFromIDActivity GetUsersFromIDActivity = new HandledareActivity.GetUsersFromIDActivity(this);
+        GetUsersFromIDActivity.execute(method);
 
         iMåndagEjNärvarande = (ImageView) findViewById(R.id.MåndagEjNärvarandeView);
         iMåndagNärvarande = (ImageView) findViewById(R.id.måndagNärvarandeView);
@@ -146,7 +138,6 @@ public class HandledareActivity extends AppCompatActivity implements AdapterView
         iFredagEjNärvarande = (ImageView) findViewById(R.id.FredagEjNärvarandeView);
         iFredagNärvarande = (ImageView) findViewById(R.id.FredagNärvarandeView);
 
-
         iMåndagEjNärvarande.setEnabled(false);
         iMåndagNärvarande.setEnabled(false);
         iTisdagEjNärvarande.setEnabled(false);
@@ -157,21 +148,7 @@ public class HandledareActivity extends AppCompatActivity implements AdapterView
         iTorsdagNärvarande.setEnabled(false);
         iFredagEjNärvarande.setEnabled(false);
         iFredagNärvarande.setEnabled(false);
-
-
     }
-
-    @Override
-    public boolean onOptionsItemSelected(MenuItem item) {
-        switch (item.getItemId()) {
-            case android.R.id.home:
-                myDrawerLayout.openDrawer(GravityCompat.START);
-                return true;
-        }
-
-        return super.onOptionsItemSelected(item);
-    }
-
 
     public void onItemSelected(AdapterView<?> parent, View v,
                                int pos, long id) {
@@ -218,21 +195,6 @@ public class HandledareActivity extends AppCompatActivity implements AdapterView
             } catch (Exception e) {
 
             }
-
-        }
-
-        if (parent.getId() == R.id.spinner3) {
-
-            sKlass = (String) parent.getItemAtPosition(pos);
-
-            if (!sKlass.equals("Klasser")) {
-                KlassID = klassIDlist.get(pos - 1);
-                U.setEnabled(true);
-            }
-
-            method = "hämtaUserdata";
-            HandledareActivity.GetUsersWithNarvaroActivity GetUsersWithNarvaroActivity = new HandledareActivity.GetUsersWithNarvaroActivity(this);
-            GetUsersWithNarvaroActivity.execute(method, "" + KlassID);
 
         }
 
@@ -375,14 +337,14 @@ public class HandledareActivity extends AppCompatActivity implements AdapterView
 
 
 
-
-
-
-
     public void onClickClose(View view) {
         finish();
     }
 
+    @Override
+    public void onPointerCaptureChanged(boolean hasCapture) {
+
+    }
 
 
     private class GetAPLWeeksActivity extends AsyncTask<String, Void, String> {
@@ -649,14 +611,14 @@ public class HandledareActivity extends AppCompatActivity implements AdapterView
         }
     }
 
-    private class GetUsersWithNarvaroActivity extends AsyncTask<String, Void, String> {
+    private class GetUsersFromIDActivity extends AsyncTask<String, Void, String> {
 
 
         AlertDialog alertDialog;
         Context ctx;
         View v;
 
-        GetUsersWithNarvaroActivity(Context ctx)
+        GetUsersFromIDActivity(Context ctx)
 
         {
             this.ctx = ctx;
@@ -674,10 +636,119 @@ public class HandledareActivity extends AppCompatActivity implements AdapterView
 
         @Override
         protected String doInBackground(String... params) {
-            String login_url = "http://"+getResources().getString(R.string.ip) +"/APL-APP/APL_PHP/APL_GetUsersFromNarvaro.php";
+            String login_url = "http://"+getResources().getString(R.string.ip) +"/APL-APP/APL_PHP/APL_HandledareListUsers.php";
 
             String method = params[0];
-            String KlassID = params[1];
+            if (method.equals("hämtaUserID")) {
+
+                try {
+                    URL url = new URL(login_url);
+                    HttpURLConnection httpURLConnection = (HttpURLConnection) url.openConnection();
+                    httpURLConnection.setRequestMethod("POST");
+                    httpURLConnection.setDoOutput(true);
+                    httpURLConnection.setDoInput(true);
+                    OutputStream outputStream = httpURLConnection.getOutputStream();
+                    BufferedWriter bufferedWriter = new BufferedWriter(new OutputStreamWriter(outputStream, "UTF-8"));
+                    //String data = URLEncoder.encode("KlassID", "UTF-8") + "=" + URLEncoder.encode(KlassID, "UTF-8");
+                    //bufferedWriter.write(data);
+                    bufferedWriter.flush();
+                    bufferedWriter.close();
+                    outputStream.close();
+                    InputStream inputStream = httpURLConnection.getInputStream();
+                    BufferedReader bufferedReader = new BufferedReader(new InputStreamReader(inputStream, "iso-8859-1"));
+                    String response = "";
+                    String line = "";
+                    while ((line = bufferedReader.readLine()) != null) {
+                        response += line;
+                    }
+                    bufferedReader.close();
+                    inputStream.close();
+                    httpURLConnection.disconnect();
+                    return response;
+                } catch (MalformedURLException e) {
+                    e.printStackTrace();
+                } catch (IOException e) {
+                    e.printStackTrace();
+                }
+            }
+
+            return null;
+
+        }
+
+        @Override
+        protected void onProgressUpdate(Void... values) {
+            super.onProgressUpdate(values);
+
+        }
+
+        @Override
+        protected void onPostExecute(String result) {
+
+            JSONArray jsonarray = null;
+            try {
+                jsonarray = new JSONArray(result);
+            } catch (JSONException e) {
+                e.printStackTrace();
+            }
+
+            try{
+                for (int i = 0; i < jsonarray.length(); i++) {
+                    JSONObject obj = null;
+                    try {
+                        obj = jsonarray.getJSONObject(i);
+                    } catch (JSONException e) {
+                        e.printStackTrace();
+                    }
+
+
+                    sAnvandarID = null;
+                    try {
+                        sAnvandarID = obj.getString("AnvandarID");
+                        method = "hämtaUserdata";
+                        HandledareActivity.GetUsersWithNarvaroActivity GetUsersWithNarvaroActivity = new HandledareActivity.GetUsersWithNarvaroActivity(this);
+                        GetUsersWithNarvaroActivity.execute(method, sAnvandarID);
+                    } catch (JSONException e) {
+                        e.printStackTrace();
+                    }
+
+                }
+            }catch (Exception k) {
+
+            }
+
+        }
+    }
+
+    private class GetUsersWithNarvaroActivity extends AsyncTask<String, Void, String> {
+
+
+        AlertDialog alertDialog;
+        GetUsersFromIDActivity ctx;
+        View v;
+
+        GetUsersWithNarvaroActivity(GetUsersFromIDActivity ctx)
+
+        {
+            this.ctx = ctx;
+            this.v = v;
+        }
+
+
+        @Override
+        protected void onPreExecute() {
+
+            //   alertDialog = new AlertDialog.Builder(ctx).create();
+            // alertDialog.setTitle("Login Information....");
+
+        }
+
+        @Override
+        protected String doInBackground(String... params) {
+            String login_url = "http://"+getResources().getString(R.string.ip) +"/APL-APP/APL_PHP/APL_HandledareGetUserDataFromId.php";
+
+            String method = params[0];
+            String sAnvandarID = params[1];
             if (method.equals("hämtaUserdata")) {
 
                 try {
@@ -688,7 +759,7 @@ public class HandledareActivity extends AppCompatActivity implements AdapterView
                     httpURLConnection.setDoInput(true);
                     OutputStream outputStream = httpURLConnection.getOutputStream();
                     BufferedWriter bufferedWriter = new BufferedWriter(new OutputStreamWriter(outputStream, "UTF-8"));
-                    String data = URLEncoder.encode("KlassID", "UTF-8") + "=" + URLEncoder.encode(KlassID, "UTF-8");
+                    String data = URLEncoder.encode("AnvandarID", "UTF-8") + "=" + URLEncoder.encode(sAnvandarID, "UTF-8");
                     bufferedWriter.write(data);
                     bufferedWriter.flush();
                     bufferedWriter.close();
@@ -775,14 +846,14 @@ public class HandledareActivity extends AppCompatActivity implements AdapterView
         }
     }
 
-    private class GetClassActivity extends AsyncTask<String, Void, String> {
+    private class GetUsersWithLoginInfoActivity extends AsyncTask<String, Void, String> {
 
 
         AlertDialog alertDialog;
         Context ctx;
         View v;
 
-        GetClassActivity(Context ctx)
+        GetUsersWithLoginInfoActivity(Context ctx)
 
         {
             this.ctx = ctx;
@@ -800,10 +871,11 @@ public class HandledareActivity extends AppCompatActivity implements AdapterView
 
         @Override
         protected String doInBackground(String... params) {
-            String login_url = "http://"+getResources().getString(R.string.ip) +"/APL-APP/APL_PHP/APL_NarvaroGetKlass.php";
+            String login_url = "http://"+getResources().getString(R.string.ip) +"/APL-APP/APL_PHP/APL_GetDataAboutUser.php";
 
             String method = params[0];
-            if (method.equals("hämtaKlassdata")) {
+            String sUserID = params[1];
+            if (method.equals("hämtaDataOmLoginUser")) {
 
                 try {
                     URL url = new URL(login_url);
@@ -813,8 +885,8 @@ public class HandledareActivity extends AppCompatActivity implements AdapterView
                     httpURLConnection.setDoInput(true);
                     OutputStream outputStream = httpURLConnection.getOutputStream();
                     BufferedWriter bufferedWriter = new BufferedWriter(new OutputStreamWriter(outputStream, "UTF-8"));
-                    //String data = URLEncoder.encode("AnvandarID", "UTF-8") + "=" + URLEncoder.encode(AnvandarID, "UTF-8");
-                    //bufferedWriter.write(data);
+                    String data = URLEncoder.encode("Anvandarnamn", "UTF-8") + "=" + URLEncoder.encode(sUserID, "UTF-8");
+                    bufferedWriter.write(data);
                     bufferedWriter.flush();
                     bufferedWriter.close();
                     outputStream.close();
@@ -856,40 +928,36 @@ public class HandledareActivity extends AppCompatActivity implements AdapterView
                 e.printStackTrace();
             }
 
+            try{
+                for (int i = 0; i < jsonarray.length(); i++) {
+                    JSONObject obj = null;
+                    try {
+                        obj = jsonarray.getJSONObject(i);
+                    } catch (JSONException e) {
+                        e.printStackTrace();
+                    }
 
-            for (int i = 0; i < jsonarray.length(); i++) {
-                JSONObject obj = null;
-                try {
-                    obj = jsonarray.getJSONObject(i);
-                } catch (JSONException e) {
-                    e.printStackTrace();
-                }
+                    Enamn = null;
+                    try {
+                        Enamn = obj.getString("Enamn");
+                    } catch (JSONException e) {
+                        e.printStackTrace();
+                    }
+                    Fnamn = null;
+                    try {
+                        Fnamn = obj.getString("Fnamn");
+                        Log.d("asd", "1" + Fnamn);
+                    } catch (JSONException e) {
+                        e.printStackTrace();
+                    }
 
-                kNamn = null;
-                try {
-                    kNamn = obj.getString("Namn");
-                    KList.add(kNamn);
-                } catch (JSONException e) {
-                    e.printStackTrace();
                 }
-                Log.d("test","aa" + kNamn);
-                klassID = null;
-                try {
-                    klassID = obj.getString("KlassID");
-                    klassIDlist.add(Integer.valueOf(klassID));
-
-                } catch (JSONException e) {
-                    e.printStackTrace();
-                }
-                Log.d("test","aa" + klassID);
+            }catch (Exception k) {
             }
-            Spinner K = (Spinner)findViewById(R.id.spinner3);
-            K.invalidate();
-            K.setSelection(0);
+            tUserID.setText("" + Fnamn + " " + Enamn);
 
         }
     }
-
 
     private class SendDataActivity extends AsyncTask<String, Void, String> {
 
