@@ -48,12 +48,12 @@ public class SetNarvaroActivity extends AppCompatActivity implements AdapterView
 
     private TextView Tstartdag;
     private TextView Tslutdag;
-    private TextView dMåndag, dTisdag, dOnsdag, dTorsdag, dFredag;
+    String sMåndag, sTisdag, sOnsdag, sTorsdag, sFredag;
     private TextView tMåndag, tTisdag, tOnsdag, tTorsdag, tFredag;
     private ImageView iMåndagEjNärvarande, iTisdagEjNärvarande, iOnsdagEjNärvarande, iTorsdagEjNärvarande, iFredagEjNärvarande;
     private ImageView iMåndagNärvarande, iTisdagNärvarande, iOnsdagNärvarande, iTorsdagNärvarande, iFredagNärvarande;
     String stWeek, stMonN, stTisN, stOnsN, stTorN, stFreN;
-    String Datum, NarvaroRaknare;
+    String Narvarande, Datum, NarvaroRaknare;
     String Fnamn, Enamn, AnvandarID;
     String kNamn, klassID;
     String sKlass;
@@ -150,12 +150,6 @@ public class SetNarvaroActivity extends AppCompatActivity implements AdapterView
         tOnsdag = (TextView) findViewById(R.id.textView14);
         tTorsdag = (TextView) findViewById(R.id.textView16);
         tFredag = (TextView) findViewById(R.id.textView15);
-
-        dMåndag = (TextView) findViewById(R.id.textView9);
-        dTisdag = (TextView) findViewById(R.id.textView18);
-        dOnsdag = (TextView) findViewById(R.id.textView19);
-        dTorsdag = (TextView) findViewById(R.id.textView17);
-        dFredag = (TextView) findViewById(R.id.textView20);
 
         Spinner K = (Spinner) findViewById(R.id.spinner3);
 
@@ -296,6 +290,21 @@ public class SetNarvaroActivity extends AppCompatActivity implements AdapterView
 
     }
 
+    @Override
+    public void onRestart(){
+
+        super.onRestart();
+
+
+        try {
+            method = "hämtadata";
+            SetNarvaroActivity.GetDaysFromWeekActivity GetDaysFromWeekActivity = new SetNarvaroActivity.GetDaysFromWeekActivity(this);
+            GetDaysFromWeekActivity.execute(method, stWeek, "" + UserID);
+        } catch (Exception e) {
+
+        }
+    }
+
     public void onNothingSelected(AdapterView<?> arg0) {
 
     }
@@ -306,7 +315,7 @@ public class SetNarvaroActivity extends AppCompatActivity implements AdapterView
         iMåndagNärvarande.setBackgroundColor(Color.rgb(40,75,17));
 
 
-        String NarvaroRaknare = dMåndag.getText().toString();
+        String NarvaroRaknare = sMåndag;
         stMonN = "EjNärvarande";
 
         String method = "mataInData";
@@ -319,7 +328,7 @@ public class SetNarvaroActivity extends AppCompatActivity implements AdapterView
     {
         iMåndagNärvarande.setBackgroundColor(Color.GREEN);
         iMåndagEjNärvarande.setBackgroundColor(Color.rgb(156,5,17));
-        String NarvaroRaknare = dMåndag.getText().toString();
+        String NarvaroRaknare = sMåndag;
         stMonN = "Närvarande";
 
         String method = "mataInData";
@@ -332,7 +341,7 @@ public class SetNarvaroActivity extends AppCompatActivity implements AdapterView
         iTisdagEjNärvarande.setBackgroundColor(Color.RED);
         iTisdagNärvarande.setBackgroundColor(Color.GRAY);
 
-        String NarvaroRaknare = dTisdag.getText().toString();
+        String NarvaroRaknare = sTisdag;
         stTisN = "EjNärvarande";
 
         String method = "mataInData";
@@ -345,7 +354,7 @@ public class SetNarvaroActivity extends AppCompatActivity implements AdapterView
     {
         iTisdagNärvarande.setBackgroundColor(Color.GREEN);
         iTisdagEjNärvarande.setBackgroundColor(Color.GRAY);
-        String NarvaroRaknare = dTisdag.getText().toString();
+        String NarvaroRaknare = sTisdag;
         stTisN = "Närvarande";
 
         String method = "mataInData";
@@ -358,7 +367,7 @@ public class SetNarvaroActivity extends AppCompatActivity implements AdapterView
         iOnsdagEjNärvarande.setBackgroundColor(Color.RED);
         iOnsdagNärvarande.setBackgroundColor(Color.GRAY);
 
-        String NarvaroRaknare = dOnsdag.getText().toString();
+        String NarvaroRaknare = sOnsdag;
         stOnsN = "EjNärvarande";
 
         String method = "mataInData";
@@ -371,7 +380,7 @@ public class SetNarvaroActivity extends AppCompatActivity implements AdapterView
     {
         iOnsdagNärvarande.setBackgroundColor(Color.GREEN);
         iOnsdagEjNärvarande.setBackgroundColor(Color.GRAY);
-        String NarvaroRaknare = dOnsdag.getText().toString();
+        String NarvaroRaknare = sOnsdag;
         stOnsN = "Närvarande";
 
         String method = "mataInData";
@@ -384,7 +393,7 @@ public class SetNarvaroActivity extends AppCompatActivity implements AdapterView
         iTorsdagEjNärvarande.setBackgroundColor(Color.RED);
         iTorsdagNärvarande.setBackgroundColor(Color.GRAY);
 
-        String NarvaroRaknare = dTorsdag.getText().toString();
+        String NarvaroRaknare = sTorsdag;
         stTorN = "EjNärvarande";
 
         String method = "mataInData";
@@ -397,7 +406,7 @@ public class SetNarvaroActivity extends AppCompatActivity implements AdapterView
     {
         iTorsdagNärvarande.setBackgroundColor(Color.GREEN);
         iTorsdagEjNärvarande.setBackgroundColor(Color.GRAY);
-        String NarvaroRaknare = dTorsdag.getText().toString();
+        String NarvaroRaknare = sTorsdag;
         stTorN = "Närvarande";
 
         String method = "mataInData";
@@ -410,7 +419,7 @@ public class SetNarvaroActivity extends AppCompatActivity implements AdapterView
         iFredagEjNärvarande.setBackgroundColor(Color.RED);
         iFredagNärvarande.setBackgroundColor(Color.GRAY);
 
-        String NarvaroRaknare = dFredag.getText().toString();
+        String NarvaroRaknare = sFredag;
         stFreN = "EjNärvarande";
 
         String method = "mataInData";
@@ -423,7 +432,7 @@ public class SetNarvaroActivity extends AppCompatActivity implements AdapterView
     {
         iFredagNärvarande.setBackgroundColor(Color.GREEN);
         iFredagEjNärvarande.setBackgroundColor(Color.GRAY);
-        String NarvaroRaknare = dFredag.getText().toString();
+        String NarvaroRaknare = sFredag;
         stFreN = "Närvarande";
 
         String method = "mataInData";
@@ -432,15 +441,9 @@ public class SetNarvaroActivity extends AppCompatActivity implements AdapterView
     }
 
 
-
-
-
-
-
     public void onClickClose(View view) {
         finish();
     }
-
 
 
     private class GetAPLWeeksActivity extends AsyncTask<String, Void, String> {
@@ -674,27 +677,98 @@ public class SetNarvaroActivity extends AppCompatActivity implements AdapterView
                         e.printStackTrace();
                     }
 
+                    Narvarande = null;
+                    try {
+                        Narvarande = obj.getString("Narvarande");
+                        Log.d("asd2", "1" + Narvarande);
+                    } catch (JSONException e) {
+                        e.printStackTrace();
+                    }
+
 
                     if (i == 0) {
                         tMåndag.setText("Måndag" + Datum);
-                        dMåndag.setText("" + NarvaroRaknare);
-
+                        sMåndag = NarvaroRaknare;
+                        if (Objects.equals(Narvarande, "1")) {
+                            iMåndagNärvarande.setBackgroundColor(Color.GREEN);
+                            iMåndagEjNärvarande.setBackgroundColor(Color.GRAY);
+                        }
+                        if (Objects.equals(Narvarande, "0")) {
+                            iMåndagEjNärvarande.setBackgroundColor(Color.RED);
+                            iMåndagNärvarande.setBackgroundColor(Color.GRAY);
+                        }
+                        if (Objects.equals(Narvarande, "")) {
+                            iMåndagNärvarande.setBackgroundColor(Color.GRAY);
+                            iMåndagEjNärvarande.setBackgroundColor(Color.GRAY);
+                        }
                     }
                     if (i == 1) {
                         tTisdag.setText("Tisdag" + Datum);
-                        dTisdag.setText("" + NarvaroRaknare);
+                        sTisdag = NarvaroRaknare;
+
+                        if (Objects.equals(Narvarande, "1")) {
+                            iTisdagNärvarande.setBackgroundColor(Color.GREEN);
+                            iTisdagEjNärvarande.setBackgroundColor(Color.GRAY);
+                        }
+                        if (Objects.equals(Narvarande, "0")) {
+                            iTisdagEjNärvarande.setBackgroundColor(Color.RED);
+                            iTisdagNärvarande.setBackgroundColor(Color.GRAY);
+                        }
+                        if (Objects.equals(Narvarande, "")) {
+                            iTisdagNärvarande.setBackgroundColor(Color.GRAY);
+                            iTisdagEjNärvarande.setBackgroundColor(Color.GRAY);
+                        }
                     }
                     if (i == 2) {
                         tOnsdag.setText("Onsdag" + Datum);
-                        dOnsdag.setText("" + NarvaroRaknare);
+                        sOnsdag = NarvaroRaknare;
+
+                        if (Objects.equals(Narvarande, "1")) {
+                            iOnsdagNärvarande.setBackgroundColor(Color.GREEN);
+                            iOnsdagEjNärvarande.setBackgroundColor(Color.GRAY);
+                        }
+                        if (Objects.equals(Narvarande, "0")) {
+                            iOnsdagEjNärvarande.setBackgroundColor(Color.RED);
+                            iOnsdagNärvarande.setBackgroundColor(Color.GRAY);
+                        }
+                        if (Objects.equals(Narvarande, "")) {
+                            iOnsdagNärvarande.setBackgroundColor(Color.GRAY);
+                            iOnsdagEjNärvarande.setBackgroundColor(Color.GRAY);
+                        }
                     }
                     if (i == 3) {
                         tTorsdag.setText("Torsdag" + Datum);
-                        dTorsdag.setText("" + NarvaroRaknare);
+                        sTorsdag = NarvaroRaknare;
+
+                        if (Objects.equals(Narvarande, "1")) {
+                            iTorsdagNärvarande.setBackgroundColor(Color.GREEN);
+                            iTorsdagEjNärvarande.setBackgroundColor(Color.GRAY);
+                        }
+                        if (Objects.equals(Narvarande, "0")) {
+                            iTorsdagEjNärvarande.setBackgroundColor(Color.RED);
+                            iTorsdagNärvarande.setBackgroundColor(Color.GRAY);
+                        }
+                        if (Objects.equals(Narvarande, "")) {
+                            iTorsdagNärvarande.setBackgroundColor(Color.GRAY);
+                            iTorsdagEjNärvarande.setBackgroundColor(Color.GRAY);
+                        }
                     }
                     if (i == 4) {
                         tFredag.setText("Fredag" + Datum);
-                        dFredag.setText("" + NarvaroRaknare);
+                        sFredag = NarvaroRaknare;
+
+                        if (Objects.equals(Narvarande, "1")) {
+                            iFredagNärvarande.setBackgroundColor(Color.GREEN);
+                            iFredagEjNärvarande.setBackgroundColor(Color.GRAY);
+                        }
+                        if (Objects.equals(Narvarande, "0")) {
+                            iFredagEjNärvarande.setBackgroundColor(Color.RED);
+                            iFredagNärvarande.setBackgroundColor(Color.GRAY);
+                        }
+                        if (Objects.equals(Narvarande, "")) {
+                            iFredagNärvarande.setBackgroundColor(Color.GRAY);
+                            iFredagEjNärvarande.setBackgroundColor(Color.GRAY);
+                        }
                     }
 
 

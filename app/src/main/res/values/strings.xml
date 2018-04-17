@@ -2,5 +2,5 @@
     <string name="app_name">APL</string>
     <string name="title_activity_second">SecondActivity</string>
     <string name="title_activity_uppdate_users">UppdateUsersActivity</string>
-    <string name="ip">192.168.216.82:8080</string>
+    <string name="ip">192.168.216.87:8080</string>
 </resources>

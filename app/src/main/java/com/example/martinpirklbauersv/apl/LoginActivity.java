@@ -29,7 +29,8 @@ import java.util.Objects;
 public class LoginActivity extends AppCompatActivity implements AdapterView.OnItemSelectedListener {
 
     private EditText userNameField, passwordField;
-    private TextView Roll;
+    //private TextView Roll;
+    String Roll;
     private TextView Namn;
     private TextView Lösenord;
     String Anvandarnamn, Losenord, Role;
@@ -41,10 +42,9 @@ public class LoginActivity extends AppCompatActivity implements AdapterView.OnIt
         setContentView(R.layout.activity_login);
 
         userNameField = (EditText) findViewById(R.id.userName);
-        passwordField = (EditText) findViewById(R.id.password);
+        passwordField = (EditText) findViewById(R.id.Password);
 
-        Namn = (TextView) findViewById(R.id.statusMessage);
-        Lösenord = (TextView) findViewById(R.id.statusMessage2);
+
 
         Spinner s = (Spinner) findViewById(R.id.spinner);
         s.setOnItemSelectedListener(this);
@@ -56,6 +56,7 @@ public class LoginActivity extends AppCompatActivity implements AdapterView.OnIt
                 android.R.layout.simple_spinner_item, arraySpinner);
         adapter.setDropDownViewResource(android.R.layout.simple_spin‌​ner_dropdown_item);
         s.setAdapter(adapter);
+        s.setSelection(1);
 
     }
 
@@ -68,23 +69,27 @@ public class LoginActivity extends AppCompatActivity implements AdapterView.OnIt
     public void onItemSelected(AdapterView<?> parent, View v,
                                int pos, long id) {
 
-        Roll = (TextView) findViewById(R.id.textView6);
+
 
         switch (pos) {
             case 0:
-                Roll.setText("" + Roll1);
+                Roll = String.valueOf(Integer.valueOf(Roll1));
                 break;
             case 1:
-                Roll.setText("" + Roll2);
+               // Roll.setText("" + Roll2);
+                Roll = String.valueOf(Integer.valueOf(Roll2));
                 break;
             case 2:
-                Roll.setText("" + Roll3);
+               // Roll.setText("" + Roll3);
+                Roll = String.valueOf(Integer.valueOf(Roll3));
                 break;
             case 3:
-                Roll.setText("" + Roll4);
+           //     Roll.setText("" + Roll4);
+                Roll = String.valueOf(Integer.valueOf(Roll4));
                 break;
             case 4:
-                Roll.setText("" + Roll5);
+           //     Roll.setText("" + Roll5);
+                Roll = String.valueOf(Integer.valueOf(Roll5));
                 break;
         }
     }
@@ -95,10 +100,10 @@ public class LoginActivity extends AppCompatActivity implements AdapterView.OnIt
 
     public void userLogin(View view) {
 
-        Anvandarnamn = userNameField.getText().toString();
-        Losenord = passwordField.getText().toString();
-        Role = Roll.getText().toString();
-
+            Anvandarnamn = userNameField.getText().toString();
+            Losenord = passwordField.getText().toString();
+            // Role = Roll.getText().toString();
+            Role = Roll;
         String method = "login";
         LoginActivity.CheckLoginActivity CheckLoginActivity = new LoginActivity.CheckLoginActivity(this);
         CheckLoginActivity.execute(method, Anvandarnamn, Losenord, Role);
@@ -177,7 +182,7 @@ public class LoginActivity extends AppCompatActivity implements AdapterView.OnIt
 
         @Override
         protected void onPostExecute(String result) {
-            Lösenord.setText(result);
+           // Lösenord.setText(result);
 
             if (Integer.parseInt(result) == 1) {
                 if (Objects.equals(Role, "1")) {
