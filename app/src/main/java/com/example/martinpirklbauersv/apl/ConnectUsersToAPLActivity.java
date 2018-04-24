@@ -27,11 +27,30 @@ import java.net.MalformedURLException;
 import java.net.URL;
 import java.net.URLEncoder;
 
+/*
+
+Beskriving:
+Här har vi en funktion för att koppla ihop Elever med en APl-Period.
+
+Klasser:
+KopplaElevMedAPLPeriodActivity
+IN:
+I denna klass matas Elevers Id, Dag, APL-period och Arbetsplats in i Databasen.
+
+UT:
+man får inte tilbaka ngn data.
+
+indata:
+Admin kan skriva in en användares ID, Vilken dag, APL-period och Arbetsplats.
+
+utdata:
+Admins Användarnamn och Roll Bekräftelse skriv ut på skärmen.
+
+*/
 
 public class ConnectUsersToAPLActivity extends AppCompatActivity {
 
     private DrawerLayout myDrawerLayout;
-
     private EditText AnvandarID, DagarID, PeriodID, ArbetsplatsID;
     String sNarvarande, sAnvandarID, sDagarID, sPeriodID, sArbetsplatsID;
 
@@ -99,12 +118,10 @@ public class ConnectUsersToAPLActivity extends AppCompatActivity {
                             }
                         });
 
-
         AnvandarID = (EditText) findViewById(R.id.AnvandarID);
         DagarID = (EditText) findViewById(R.id.DagarID);
         PeriodID = (EditText) findViewById(R.id.PeriodID);
         ArbetsplatsID = (EditText) findViewById(R.id.ArbetsplatsID);
-
     }
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
@@ -113,7 +130,6 @@ public class ConnectUsersToAPLActivity extends AppCompatActivity {
                 myDrawerLayout.openDrawer(GravityCompat.START);
                 return true;
         }
-
         return super.onOptionsItemSelected(item);
     }
     public void onClickClose(View view) {
@@ -127,23 +143,19 @@ public class ConnectUsersToAPLActivity extends AppCompatActivity {
         sPeriodID = PeriodID.getText().toString();
         sArbetsplatsID = ArbetsplatsID.getText().toString();
 
-
-
-        String method = "mataInData";
-        ConnectUsersToAPLActivity.GetDataActivity GetDataActivity = new ConnectUsersToAPLActivity.GetDataActivity(this);
-        GetDataActivity.execute(method, sAnvandarID, sDagarID, sPeriodID, sArbetsplatsID);
+        String method = "KopplaElevMedAPLPeriod";
+        ConnectUsersToAPLActivity.KopplaElevMedAPLPeriodActivity KopplaElevMedAPLPeriodActivity = new ConnectUsersToAPLActivity.KopplaElevMedAPLPeriodActivity(this);
+        KopplaElevMedAPLPeriodActivity.execute(method, sAnvandarID, sDagarID, sPeriodID, sArbetsplatsID);
     }
 
-
-
-    private class GetDataActivity extends AsyncTask<String, Void, String> {
+    private class KopplaElevMedAPLPeriodActivity extends AsyncTask<String, Void, String> {
 
 
         AlertDialog alertDialog;
         Context ctx;
         View v;
 
-        GetDataActivity(Context ctx)
+        KopplaElevMedAPLPeriodActivity(Context ctx)
 
         {
             this.ctx = ctx;
@@ -166,7 +178,7 @@ public class ConnectUsersToAPLActivity extends AppCompatActivity {
             String sPeriodID = params[3];
             String sArbetsplatsID = params[4];
 
-            if (method.equals("mataInData")) {
+            if (method.equals("KopplaElevMedAPLPeriod")) {
 
                 try {
                     URL url = new URL(reg_url);
@@ -193,9 +205,6 @@ public class ConnectUsersToAPLActivity extends AppCompatActivity {
                     }
                     bufferedReader.close();
                     IS.close();
-
-
-
                     //httpURLConnection.connect();
                     httpURLConnection.disconnect();
                     return response;
@@ -213,5 +222,4 @@ public class ConnectUsersToAPLActivity extends AppCompatActivity {
 
         }
     }
-
 }

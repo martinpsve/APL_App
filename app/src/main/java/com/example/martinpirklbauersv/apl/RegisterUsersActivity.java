@@ -38,6 +38,36 @@ import java.net.URLEncoder;
 import java.util.ArrayList;
 import java.util.Objects;
 
+/*
+
+Beskriving:
+Här har vi en funktion för att registrera användare och skapa användarnamn som matas in i databasen.
+
+Klasser:
+
+GetAnvandareActivity
+IN:
+ingen data matas in:
+
+UT:
+data som man får tillbaka är användares användarnamn
+
+CreateUsersActivity
+
+IN:
+förnamn, efternamn, lösenord, telefonnummer, mailadress matas in till databasen.
+
+UT:
+ingen utdata kommer tillbaka
+
+indata:
+Admin kan mata in förnamn, efternamn, lösenord, telefonnummer, mailadress
+
+utdata:
+Admins Användarnamn och Roll Bekräftelse skriv ut på skärmen.
+
+*/
+
 public class RegisterUsersActivity extends AppCompatActivity implements AdapterView.OnItemSelectedListener {
 
     private DrawerLayout myDrawerLayout;
@@ -105,14 +135,10 @@ public class RegisterUsersActivity extends AppCompatActivity implements AdapterV
 
 
                                 menuItem.setChecked(true);
-
                                 myDrawerLayout.closeDrawers();
-
                                 return true;
                             }
                         });
-
-
 
         FnamnField = (EditText) findViewById(R.id.FnamnField);
         EnamnField = (EditText) findViewById(R.id.EnamnField);
@@ -131,11 +157,9 @@ public class RegisterUsersActivity extends AppCompatActivity implements AdapterV
         adapter.setDropDownViewResource(android.R.layout.simple_spin‌​ner_dropdown_item);
         s.setAdapter(adapter);
 
-
         String method = "hämtaAnvändaredata";
         RegisterUsersActivity.GetAnvandareActivity GetAnvandareActivity = new RegisterUsersActivity.GetAnvandareActivity(this);
         GetAnvandareActivity.execute(method);
-
     }
 
     @Override
@@ -145,14 +169,11 @@ public class RegisterUsersActivity extends AppCompatActivity implements AdapterV
                 myDrawerLayout.openDrawer(GravityCompat.START);
                 return true;
         }
-
         return super.onOptionsItemSelected(item);
     }
 
     public void onItemSelected(AdapterView<?> parent, View v,
                                int pos, long id) {
-
-
 
         str = (String ) parent.getItemAtPosition(pos);
 
@@ -173,7 +194,6 @@ public class RegisterUsersActivity extends AppCompatActivity implements AdapterV
 
         Användarnamn = Fnamn.substring(0,3) + Enamn.substring(0,3);
 
-
         while (AList.contains(Användarnamn)) {
 
             i++;
@@ -181,18 +201,17 @@ public class RegisterUsersActivity extends AppCompatActivity implements AdapterV
 
         }
 
-
         lösenord = LösenordField.getText().toString();
         Telefonnummer = TelefonnummerField.getText().toString();
         Email = MailadressField.getText().toString();
         Role = str;
+        /*
         Toast toast = Toast.makeText(this, "" + Användarnamn, Toast.LENGTH_LONG);
         toast.show();
-
-        String method = "mataInData";
+*/
+        String method = "MataInUser";
         RegisterUsersActivity.CreateUsersActivity CreateUsersActivity = new RegisterUsersActivity.CreateUsersActivity(this);
         CreateUsersActivity.execute(method, Fnamn, Enamn, Användarnamn, lösenord, Telefonnummer, Email, Role);
-
     }
     @Override
     public void onRestart(){
@@ -206,7 +225,6 @@ public class RegisterUsersActivity extends AppCompatActivity implements AdapterV
 
     private class GetAnvandareActivity extends AsyncTask<String, Void, String> {
 
-
         AlertDialog alertDialog;
         Context ctx;
         View v;
@@ -218,13 +236,10 @@ public class RegisterUsersActivity extends AppCompatActivity implements AdapterV
             this.v = v;
         }
 
-
         @Override
         protected void onPreExecute() {
-
             //   alertDialog = new AlertDialog.Builder(ctx).create();
             // alertDialog.setTitle("Login Information....");
-
         }
 
         @Override
@@ -264,15 +279,12 @@ public class RegisterUsersActivity extends AppCompatActivity implements AdapterV
                     e.printStackTrace();
                 }
             }
-
             return null;
-
         }
 
         @Override
         protected void onProgressUpdate(Void... values) {
             super.onProgressUpdate(values);
-
         }
 
         @Override
@@ -284,7 +296,6 @@ public class RegisterUsersActivity extends AppCompatActivity implements AdapterV
             } catch (JSONException e) {
                 e.printStackTrace();
             }
-
 
             for (int i = 0; i < jsonarray.length(); i++) {
                 JSONObject obj = null;
@@ -301,14 +312,11 @@ public class RegisterUsersActivity extends AppCompatActivity implements AdapterV
                 } catch (JSONException e) {
                     e.printStackTrace();
                 }
-            Log.d("asd", "1" + sAnvandarNamn);
-
             }
         }
     }
 
     private class CreateUsersActivity extends AsyncTask<String, Void, String> {
-
 
         AlertDialog alertDialog;
         Context ctx;
@@ -340,8 +348,7 @@ public class RegisterUsersActivity extends AppCompatActivity implements AdapterV
             String Email = params[6];
             String Role = params[7];
 
-
-            if (method.equals("mataInData")) {
+            if (method.equals("MataInUser")) {
 
                 try {
                     URL url = new URL(reg_url);
@@ -363,8 +370,6 @@ public class RegisterUsersActivity extends AppCompatActivity implements AdapterV
                     bufferedWriter.close();
                     OS.close();
                     InputStream IS = httpURLConnection.getInputStream();
-
-
                     BufferedReader bufferedReader = new BufferedReader(new InputStreamReader(IS, "iso-8859-1"));
                     String response = "";
                     String line = "";
@@ -373,9 +378,6 @@ public class RegisterUsersActivity extends AppCompatActivity implements AdapterV
                     }
                     bufferedReader.close();
                     IS.close();
-
-
-
                     //httpURLConnection.connect();
                     httpURLConnection.disconnect();
                     return response;

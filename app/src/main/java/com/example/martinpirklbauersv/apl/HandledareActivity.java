@@ -2,28 +2,16 @@ package com.example.martinpirklbauersv.apl;
 
 import android.app.AlertDialog;
 import android.content.Context;
-import android.content.Intent;
 import android.graphics.Color;
-import android.media.Image;
 import android.os.AsyncTask;
-import android.provider.ContactsContract;
-import android.support.design.widget.NavigationView;
-import android.support.v4.view.GravityCompat;
-import android.support.v4.widget.DrawerLayout;
-import android.support.v7.app.ActionBar;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
-import android.support.v7.widget.Toolbar;
 import android.util.Log;
-import android.view.Gravity;
-import android.view.MenuItem;
 import android.view.View;
-import android.widget.Adapter;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.ImageView;
 import android.widget.Spinner;
-import android.widget.SpinnerAdapter;
 import android.widget.TextView;
 
 import org.json.JSONArray;
@@ -41,12 +29,78 @@ import java.net.HttpURLConnection;
 import java.net.MalformedURLException;
 import java.net.URL;
 import java.net.URLEncoder;
-import java.text.DateFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
-import java.util.Date;
 import java.util.GregorianCalendar;
 import java.util.Objects;
+
+/*
+
+Beskriving:
+Här har vi en funktion för handledaren att sätta närvaro på elever.
+
+Klasser:
+
+GetUsersWithLoginInfoActivity
+
+IN:
+användarnamn från den som loggade in
+
+UT:
+för och efternamn.
+
+GetNuvarandeYearMonthDayActivity
+
+IN:
+ingen indata.
+
+UT:
+Nuvarande år månad och dag
+
+GetUsersFromIDActivity
+
+IN:
+ingen indata
+
+UT:
+användarID på alla användare
+
+GetAPLWeeksActivity
+
+IN:
+användarID på den valda person från spinner
+
+UT:
+APL veckor som personen är registrerad på
+
+GetDaysFromWeekActivity
+
+IN;
+användarID på den valda person från spinner och vecka från antigen nuvarande vecka eller från valt item från spinner
+
+UT:
+datum på de olika veckodagarna.
+närvarocheck på de olika veckodagarna beroende på användareID
+närvaroID på de olika veckodagarna beroende på användareID
+
+SendDataActivity
+
+IN:
+
+ stMonN status på närvaro om man är närvarande eller frånvarande och vilken veckodag
+ NarvaroRaknare beroende vilken dag
+ sEnamn: namn på personen som är vald från spinner
+
+UT:
+ingen utdata
+
+indata:
+
+
+utdata:
+
+
+*/
 
 public class HandledareActivity extends AppCompatActivity implements AdapterView.OnItemSelectedListener {
 
@@ -54,10 +108,15 @@ public class HandledareActivity extends AppCompatActivity implements AdapterView
     private TextView TWMåndag, TWTisdag, TWOnsdag, TWTorsdag, TWFredag;
     String sMåndag, sTisdag, sOnsdag, sTorsdag, sFredag;
     private TextView tRole, tUserID;
-    private ImageView iMåndagEjNärvarande, iTisdagEjNärvarande, iOnsdagEjNärvarande, iTorsdagEjNärvarande, iFredagEjNärvarande;
-    private ImageView iGreenChecked, iGreenUnChecked, iRedChecked, iRedUnChecked;
+
+    private ImageView iMonGreenChecked, iMonGreenUnChecked, iMonRedChecked, iMonRedUnChecked;
+    private ImageView iTisGreenChecked, iTisGreenUnChecked, iTisRedChecked, iTisRedUnChecked;
+    private ImageView iOnsGreenChecked, iOnsGreenUnChecked, iOnsRedChecked, iOnsRedUnChecked;
+    private ImageView iTorGreenChecked, iTorGreenUnChecked, iTorRedChecked, iTorRedUnChecked;
+    private ImageView iFreGreenChecked, iFreGreenUnChecked, iFreRedChecked, iFreRedUnChecked;
+
     private TextView CurrentTime;
-    private ImageView iMåndagNärvarande, iTisdagNärvarande, iOnsdagNärvarande, iTorsdagNärvarande, iFredagNärvarande;
+
     String stWeek, stMonN, stTisN, stOnsN, stTorN, stFreN;
     String Narvarande, Datum, NarvaroRaknare;
     String Fnamn, Enamn, AnvandarID;
@@ -67,14 +126,16 @@ public class HandledareActivity extends AppCompatActivity implements AdapterView
     String CurrentDatum;
     String startDag, slutdag;
     String sAnvandarID;
+
     int UserID;
+
     Spinner U, s;
+
     ArrayAdapter<String> adapter;
     ArrayAdapter<String> adapter7;
     ArrayList<Integer> IDList = new ArrayList<Integer>();
     ArrayList<String> fList = new ArrayList<String>();
     ArrayList<String> eList = new ArrayList<String>();
-
     ArrayList<String> antallist = new ArrayList<String>();
 
 
@@ -90,7 +151,6 @@ public class HandledareActivity extends AppCompatActivity implements AdapterView
 
         String sUserID = getIntent().getStringExtra("AnvandarID");
         String sUserRole = getIntent().getStringExtra("Role");
-
 
         TWMåndag = (TextView) findViewById(R.id.textView32);
         TWTisdag = (TextView) findViewById(R.id.textView31);
@@ -137,45 +197,61 @@ public class HandledareActivity extends AppCompatActivity implements AdapterView
         HandledareActivity.GetNuvarandeYearMonthDayActivity GetNuvarandeYearMonthDayActivity = new HandledareActivity.GetNuvarandeYearMonthDayActivity(this);
         GetNuvarandeYearMonthDayActivity.execute(method);
 
-        iMåndagEjNärvarande = (ImageView) findViewById(R.id.MåndagEjNärvarandeView);
-        iMåndagNärvarande = (ImageView) findViewById(R.id.måndagNärvarandeView);
-        iTisdagEjNärvarande = (ImageView) findViewById(R.id.TisdagEjNärvarandeView);
-        iTisdagNärvarande = (ImageView) findViewById(R.id.tisdagNärvarandeView);
-        iOnsdagEjNärvarande = (ImageView) findViewById(R.id.OnsdagEjNärvarandeView);
-        iOnsdagNärvarande = (ImageView) findViewById(R.id.onsdagNärvarandeView);
-        iTorsdagEjNärvarande = (ImageView) findViewById(R.id.TorsdagEjNärvarandeView);
-        iTorsdagNärvarande = (ImageView) findViewById(R.id.torsdagNärvarandeView);
-        iFredagEjNärvarande = (ImageView) findViewById(R.id.FredagEjNärvarandeView);
-        iFredagNärvarande = (ImageView) findViewById(R.id.FredagNärvarandeView);
+        iMonGreenChecked = (ImageView) findViewById(R.id.MGreenChecked);
+        iMonGreenUnChecked = (ImageView) findViewById(R.id.MGreenUnChecked);
+        iMonRedChecked = (ImageView) findViewById(R.id.MRedChecked);
+        iMonRedUnChecked = (ImageView) findViewById(R.id.MRedUnChecked);
 
-        iGreenChecked = (ImageView) findViewById(R.id.GreenChecked);
-        iGreenUnChecked = (ImageView) findViewById(R.id.GreenUnChecked);
-        iRedChecked = (ImageView) findViewById(R.id.RedChecked);
-        iRedUnChecked = (ImageView) findViewById(R.id.RedUnChecked);
+        iTisGreenChecked = (ImageView) findViewById(R.id.TGreenChecked);
+        iTisGreenUnChecked = (ImageView) findViewById(R.id.TGreenUnChecked);
+        iTisRedChecked = (ImageView) findViewById(R.id.TRedChecked);
+        iTisRedUnChecked = (ImageView) findViewById(R.id.TRedUnChecked);
 
-        iMåndagEjNärvarande.setEnabled(false);
-        iMåndagNärvarande.setEnabled(false);
-        iTisdagEjNärvarande.setEnabled(false);
-        iTisdagNärvarande.setEnabled(false);
-        iOnsdagEjNärvarande.setEnabled(false);
-        iOnsdagNärvarande.setEnabled(false);
-        iTorsdagEjNärvarande.setEnabled(false);
-        iTorsdagNärvarande.setEnabled(false);
-        iFredagEjNärvarande.setEnabled(false);
-        iFredagNärvarande.setEnabled(false);
+        iOnsGreenChecked = (ImageView) findViewById(R.id.OGreenChecked);
+        iOnsGreenUnChecked = (ImageView) findViewById(R.id.OGreenUnChecked);
+        iOnsRedChecked = (ImageView) findViewById(R.id.ORedChecked);
+        iOnsRedUnChecked = (ImageView) findViewById(R.id.ORedUnChecked);
 
-        iGreenChecked.setEnabled(false);
-        iGreenUnChecked.setEnabled(false);
-        iRedChecked.setEnabled(false);
-        iRedUnChecked.setEnabled(false);
+        iTorGreenChecked = (ImageView) findViewById(R.id.ToGreenChecked);
+        iTorGreenUnChecked = (ImageView) findViewById(R.id.ToGreenUnChecked);
+        iTorRedChecked = (ImageView) findViewById(R.id.ToRedChecked);
+        iTorRedUnChecked = (ImageView) findViewById(R.id.ToRedUnChecked);
+
+        iFreGreenChecked = (ImageView) findViewById(R.id.FGreenChecked);
+        iFreGreenUnChecked = (ImageView) findViewById(R.id.FGreenUnChecked);
+        iFreRedChecked = (ImageView) findViewById(R.id.FRedChecked);
+        iFreRedUnChecked = (ImageView) findViewById(R.id.FRedUnChecked);
+
+        iMonGreenChecked.setEnabled(false);
+        iMonGreenUnChecked.setEnabled(false);
+        iMonRedChecked.setEnabled(false);
+        iMonRedUnChecked.setEnabled(false);
+
+        iTisGreenChecked.setEnabled(false);
+        iTisGreenUnChecked.setEnabled(false);
+        iTisRedChecked.setEnabled(false);
+        iTisRedUnChecked.setEnabled(false);
+
+        iOnsGreenChecked.setEnabled(false);
+        iOnsGreenUnChecked.setEnabled(false);
+        iOnsRedChecked.setEnabled(false);
+        iOnsRedUnChecked.setEnabled(false);
+
+        iTorGreenChecked.setEnabled(false);
+        iTorGreenUnChecked.setEnabled(false);
+        iTorRedChecked.setEnabled(false);
+        iTorRedUnChecked.setEnabled(false);
+
+        iFreGreenChecked.setEnabled(false);
+        iFreGreenUnChecked.setEnabled(false);
+        iFreRedChecked.setEnabled(false);
+        iFreRedUnChecked.setEnabled(false);
     }
 
     public void onItemSelected(AdapterView<?> parent, View v,
                                int pos, long id) {
 
-
         if (parent.getId() == R.id.UserSpinner) {
-
 
             sEnamn = (String) parent.getItemAtPosition(pos);
 
@@ -195,32 +271,37 @@ public class HandledareActivity extends AppCompatActivity implements AdapterView
             } catch (Exception e) {
 
             }
-
         }
 
         if (parent.getId() == R.id.spinner2) {
             stWeek = (String) parent.getItemAtPosition(pos);
 
-Log.d("veckospinner", "1" + stWeek);
             if (!stWeek.equals("Veckor")) {
 
-                iMåndagEjNärvarande.setEnabled(true);
-                iMåndagNärvarande.setEnabled(true);
-                iTisdagEjNärvarande.setEnabled(true);
-                iTisdagNärvarande.setEnabled(true);
-                iOnsdagEjNärvarande.setEnabled(true);
-                iOnsdagNärvarande.setEnabled(true);
-                iTorsdagEjNärvarande.setEnabled(true);
-                iTorsdagNärvarande.setEnabled(true);
-                iFredagEjNärvarande.setEnabled(true);
-                iFredagNärvarande.setEnabled(true);
+                iMonGreenUnChecked.setEnabled(true);
+                iMonRedUnChecked.setEnabled(true);
+                iMonRedChecked.setVisibility(View.INVISIBLE);
+                iMonGreenChecked.setVisibility(View.INVISIBLE);
 
+                iTisGreenUnChecked.setEnabled(true);
+                iTisRedUnChecked.setEnabled(true);
+                iTisRedChecked.setVisibility(View.INVISIBLE);
+                iTisGreenChecked.setVisibility(View.INVISIBLE);
 
-                iGreenUnChecked.setEnabled(true);
-                iRedUnChecked.setEnabled(true);
-                iRedChecked.setVisibility(View.INVISIBLE);
-                iGreenChecked.setVisibility(View.INVISIBLE);
+                iOnsGreenUnChecked.setEnabled(true);
+                iOnsRedUnChecked.setEnabled(true);
+                iOnsRedChecked.setVisibility(View.INVISIBLE);
+                iOnsGreenChecked.setVisibility(View.INVISIBLE);
 
+                iTorGreenUnChecked.setEnabled(true);
+                iTorRedUnChecked.setEnabled(true);
+                iTorRedChecked.setVisibility(View.INVISIBLE);
+                iTorGreenChecked.setVisibility(View.INVISIBLE);
+
+                iFreGreenUnChecked.setEnabled(true);
+                iFreRedUnChecked.setEnabled(true);
+                iFreRedChecked.setVisibility(View.INVISIBLE);
+                iFreGreenChecked.setVisibility(View.INVISIBLE);
             }
 
             try {
@@ -230,28 +311,19 @@ Log.d("veckospinner", "1" + stWeek);
             } catch (Exception e) {
 
             }
-
         }
-
     }
-/*
-    @Override
-    public void onRestart(){
 
-        super.onRestart();
-
-    }
-*/
     public void onNothingSelected(AdapterView<?> arg0) {
 
     }
 
     public void  clickEventMåndagGreenChecked(View v)
     {
-        iGreenChecked.setVisibility(View.VISIBLE);
-        iGreenUnChecked.setVisibility(View.INVISIBLE);
-        iRedChecked.setVisibility(View.INVISIBLE);
-        iRedUnChecked.setVisibility(View.VISIBLE);
+        iMonGreenChecked.setVisibility(View.VISIBLE);
+        iMonGreenUnChecked.setVisibility(View.INVISIBLE);
+        iMonRedChecked.setVisibility(View.INVISIBLE);
+        iMonRedUnChecked.setVisibility(View.VISIBLE);
 
         String NarvaroRaknare = sMåndag;
         stMonN = "Närvarande";
@@ -259,70 +331,30 @@ Log.d("veckospinner", "1" + stWeek);
         String method = "mataInData";
         HandledareActivity.SendDataActivity SendDataActivity = new HandledareActivity.SendDataActivity(this);
         SendDataActivity.execute(method, stMonN, NarvaroRaknare, sEnamn);
-
     }
 
     public void clickEventMåndagRedChecked(View v)
     {
 
-        iRedChecked.setVisibility(View.VISIBLE);
-        iRedUnChecked.setVisibility(View.INVISIBLE);
-        iGreenChecked.setVisibility(View.INVISIBLE);
-        iGreenUnChecked.setVisibility(View.VISIBLE);
+        iMonRedChecked.setVisibility(View.VISIBLE);
+        iMonRedUnChecked.setVisibility(View.INVISIBLE);
+        iMonGreenChecked.setVisibility(View.INVISIBLE);
+        iMonGreenUnChecked.setVisibility(View.VISIBLE);
         String NarvaroRaknare = sMåndag;
         stMonN = "EjNärvarande";
 
         String method = "mataInData";
         HandledareActivity.SendDataActivity SendDataActivity = new HandledareActivity.SendDataActivity(this);
         SendDataActivity.execute(method, stMonN, NarvaroRaknare, sEnamn);
-
     }
 
-    public void clickEventMondagEjNärvarande(View v)
+    public void  clickEventTisdagGreenChecked(View v)
     {
-        iMåndagEjNärvarande.setBackgroundColor(Color.RED);
-        iMåndagNärvarande.setBackgroundColor(Color.GRAY);
+        iTisGreenChecked.setVisibility(View.VISIBLE);
+        iTisGreenUnChecked.setVisibility(View.INVISIBLE);
+        iTisRedChecked.setVisibility(View.INVISIBLE);
+        iTisRedUnChecked.setVisibility(View.VISIBLE);
 
-
-        String NarvaroRaknare = sMåndag;
-        stMonN = "EjNärvarande";
-
-        String method = "mataInData";
-        HandledareActivity.SendDataActivity SendDataActivity = new HandledareActivity.SendDataActivity(this);
-        SendDataActivity.execute(method, stMonN, NarvaroRaknare, sEnamn);
-
-    }
-
-    public void clickEventMondagNärvarande (View v)
-    {
-        iMåndagNärvarande.setBackgroundColor(Color.GREEN);
-        iMåndagEjNärvarande.setBackgroundColor(Color.GRAY);
-        String NarvaroRaknare = sMåndag;
-        stMonN = "Närvarande";
-
-        String method = "mataInData";
-        HandledareActivity.SendDataActivity SendDataActivity = new HandledareActivity.SendDataActivity(this);
-        SendDataActivity.execute(method, stMonN, NarvaroRaknare, sEnamn);
-    }
-
-    public void clickEventTisdagEjNärvarande(View v)
-    {
-        iTisdagEjNärvarande.setBackgroundColor(Color.RED);
-        iTisdagNärvarande.setBackgroundColor(Color.GRAY);
-
-        String NarvaroRaknare = sTisdag;
-        stTisN = "EjNärvarande";
-
-        String method = "mataInData";
-        HandledareActivity.SendDataActivity SendDataActivity = new HandledareActivity.SendDataActivity(this);
-        SendDataActivity.execute(method, stTisN, NarvaroRaknare, sEnamn);
-
-    }
-
-    public void clickEventTisdagNärvarande (View v)
-    {
-        iTisdagNärvarande.setBackgroundColor(Color.GREEN);
-        iTisdagEjNärvarande.setBackgroundColor(Color.GRAY);
         String NarvaroRaknare = sTisdag;
         stTisN = "Närvarande";
 
@@ -331,24 +363,28 @@ Log.d("veckospinner", "1" + stWeek);
         SendDataActivity.execute(method, stTisN, NarvaroRaknare, sEnamn);
     }
 
-    public void clickEventOnsdagEjNärvarande(View v)
+    public void clickEventTisdagRedChecked(View v)
     {
-        iOnsdagEjNärvarande.setBackgroundColor(Color.RED);
-        iOnsdagNärvarande.setBackgroundColor(Color.GRAY);
 
-        String NarvaroRaknare = sOnsdag;
-        stOnsN = "EjNärvarande";
+        iTisRedChecked.setVisibility(View.VISIBLE);
+        iTisRedUnChecked.setVisibility(View.INVISIBLE);
+        iTisGreenChecked.setVisibility(View.INVISIBLE);
+        iTisGreenUnChecked.setVisibility(View.VISIBLE);
+        String NarvaroRaknare = sTisdag;
+        stTisN = "EjNärvarande";
 
         String method = "mataInData";
         HandledareActivity.SendDataActivity SendDataActivity = new HandledareActivity.SendDataActivity(this);
-        SendDataActivity.execute(method, stOnsN, NarvaroRaknare, sEnamn);
-
+        SendDataActivity.execute(method, stTisN, NarvaroRaknare, sEnamn);
     }
 
-    public void clickEventOnsdagNärvarande (View v)
+    public void  clickEventOnsdagGreenChecked(View v)
     {
-        iOnsdagNärvarande.setBackgroundColor(Color.GREEN);
-        iOnsdagEjNärvarande.setBackgroundColor(Color.GRAY);
+        iOnsGreenChecked.setVisibility(View.VISIBLE);
+        iOnsGreenUnChecked.setVisibility(View.INVISIBLE);
+        iOnsRedChecked.setVisibility(View.INVISIBLE);
+        iOnsRedUnChecked.setVisibility(View.VISIBLE);
+
         String NarvaroRaknare = sOnsdag;
         stOnsN = "Närvarande";
 
@@ -357,24 +393,29 @@ Log.d("veckospinner", "1" + stWeek);
         SendDataActivity.execute(method, stOnsN, NarvaroRaknare, sEnamn);
     }
 
-    public void clickEventTorsdagEjNärvarande(View v)
+    public void clickEventOnsdagRedChecked(View v)
     {
-        iTorsdagEjNärvarande.setBackgroundColor(Color.RED);
-        iTorsdagNärvarande.setBackgroundColor(Color.GRAY);
 
-        String NarvaroRaknare = sTorsdag;
-        stTorN = "EjNärvarande";
+        iOnsRedChecked.setVisibility(View.VISIBLE);
+        iOnsRedUnChecked.setVisibility(View.INVISIBLE);
+        iOnsGreenChecked.setVisibility(View.INVISIBLE);
+        iOnsGreenUnChecked.setVisibility(View.VISIBLE);
+
+        String NarvaroRaknare = sOnsdag;
+        stOnsN = "EjNärvarande";
 
         String method = "mataInData";
         HandledareActivity.SendDataActivity SendDataActivity = new HandledareActivity.SendDataActivity(this);
-        SendDataActivity.execute(method, stTorN, NarvaroRaknare, sEnamn);
-
+        SendDataActivity.execute(method, stOnsN, NarvaroRaknare, sEnamn);
     }
 
-    public void clickEventTorsdagNärvarande (View v)
+    public void  clickEventTorsdagGreenChecked(View v)
     {
-        iTorsdagNärvarande.setBackgroundColor(Color.GREEN);
-        iTorsdagEjNärvarande.setBackgroundColor(Color.GRAY);
+        iTorGreenChecked.setVisibility(View.VISIBLE);
+        iTorGreenUnChecked.setVisibility(View.INVISIBLE);
+        iTorRedChecked.setVisibility(View.INVISIBLE);
+        iTorRedUnChecked.setVisibility(View.VISIBLE);
+
         String NarvaroRaknare = sTorsdag;
         stTorN = "Närvarande";
 
@@ -383,26 +424,47 @@ Log.d("veckospinner", "1" + stWeek);
         SendDataActivity.execute(method, stTorN, NarvaroRaknare, sEnamn);
     }
 
-    public void clickEventFredagEjNärvarande(View v)
+    public void clickEventTorsdagRedChecked(View v)
     {
-        iFredagEjNärvarande.setBackgroundColor(Color.RED);
-        iFredagNärvarande.setBackgroundColor(Color.GRAY);
+
+        iTorRedChecked.setVisibility(View.VISIBLE);
+        iTorRedUnChecked.setVisibility(View.INVISIBLE);
+        iTorGreenChecked.setVisibility(View.INVISIBLE);
+        iTorGreenUnChecked.setVisibility(View.VISIBLE);
+
+        String NarvaroRaknare = sTorsdag;
+        stTorN = "EjNärvarande";
+
+        String method = "mataInData";
+        HandledareActivity.SendDataActivity SendDataActivity = new HandledareActivity.SendDataActivity(this);
+        SendDataActivity.execute(method, stTorN, NarvaroRaknare, sEnamn);
+    }
+
+    public void  clickEventFredagGreenChecked(View v)
+    {
+        iFreGreenChecked.setVisibility(View.VISIBLE);
+        iFreGreenUnChecked.setVisibility(View.INVISIBLE);
+        iFreRedChecked.setVisibility(View.INVISIBLE);
+        iFreRedUnChecked.setVisibility(View.VISIBLE);
 
         String NarvaroRaknare = sFredag;
-        stFreN = "EjNärvarande";
+        stFreN = "Närvarande";
 
         String method = "mataInData";
         HandledareActivity.SendDataActivity SendDataActivity = new HandledareActivity.SendDataActivity(this);
         SendDataActivity.execute(method, stFreN, NarvaroRaknare, sEnamn);
-
     }
 
-    public void clickEventFredagNärvarande (View v)
+    public void clickEventFredagRedChecked(View v)
     {
-        iFredagNärvarande.setBackgroundColor(Color.GREEN);
-        iFredagEjNärvarande.setBackgroundColor(Color.GRAY);
+
+        iFreRedChecked.setVisibility(View.VISIBLE);
+        iFreRedUnChecked.setVisibility(View.INVISIBLE);
+        iFreGreenChecked.setVisibility(View.INVISIBLE);
+        iFreGreenUnChecked.setVisibility(View.VISIBLE);
+
         String NarvaroRaknare = sFredag;
-        stFreN = "Närvarande";
+        stFreN = "EjNärvarande";
 
         String method = "mataInData";
         HandledareActivity.SendDataActivity SendDataActivity = new HandledareActivity.SendDataActivity(this);
@@ -420,7 +482,6 @@ Log.d("veckospinner", "1" + stWeek);
 
     private class GetNuvarandeYearMonthDayActivity extends AsyncTask<String, Void, String> {
 
-
         AlertDialog alertDialog;
         Context ctx;
         View v;
@@ -432,13 +493,11 @@ Log.d("veckospinner", "1" + stWeek);
             this.v = v;
         }
 
-
         @Override
         protected void onPreExecute() {
 
-            //   alertDialog = new AlertDialog.Builder(ctx).create();
+            // alertDialog = new AlertDialog.Builder(ctx).create();
             // alertDialog.setTitle("Login Information....");
-
         }
 
         @Override
@@ -479,13 +538,11 @@ Log.d("veckospinner", "1" + stWeek);
                 }
             }
             return null;
-
         }
 
         @Override
         protected void onProgressUpdate(Void... values) {
             super.onProgressUpdate(values);
-
         }
 
         @Override
@@ -499,7 +556,6 @@ Log.d("veckospinner", "1" + stWeek);
                 e.printStackTrace();
             }
 
-
             for (int i = 0; i < jsonarray.length(); i++) {
                 JSONObject obj = null;
                 try {
@@ -511,22 +567,15 @@ Log.d("veckospinner", "1" + stWeek);
                 CurrentDatum = null;
                 try {
                     CurrentDatum = obj.getString("Datum");
-                    Log.d("hämtatime", "1" + CurrentDatum );
                 } catch (JSONException e) {
                     e.printStackTrace();
                 }
-
             }
-
             CurrentTime.setText("" + CurrentDatum);
-
-
-
         }
     }
 
     private class GetAPLWeeksActivity extends AsyncTask<String, Void, String> {
-
 
         AlertDialog alertDialog;
         Context ctx;
@@ -539,13 +588,11 @@ Log.d("veckospinner", "1" + stWeek);
             this.v = v;
         }
 
-
         @Override
         protected void onPreExecute() {
 
             //   alertDialog = new AlertDialog.Builder(ctx).create();
             // alertDialog.setTitle("Login Information....");
-
         }
 
         @Override
@@ -587,18 +634,15 @@ Log.d("veckospinner", "1" + stWeek);
                 }
             }
             return null;
-
         }
 
         @Override
         protected void onProgressUpdate(Void... values) {
             super.onProgressUpdate(values);
-
         }
 
         @Override
         protected void onPostExecute(String result) {
-
 
             JSONArray jsonarray = null;
             try {
@@ -631,21 +675,17 @@ Log.d("veckospinner", "1" + stWeek);
                     } catch (JSONException e) {
                         e.printStackTrace();
                     }
-
                 }
 
                 int start = Integer.parseInt(startDag);
                 int slut = Integer.parseInt(slutdag);
 
-
                 antallist.clear();
                 antallist.add("Veckor");
-
 
                 for (int vecka = start, i = 0; vecka < slut+1; vecka++, i++) {
                     antallist.add(String.valueOf(vecka));
                 }
-
 
             int j = 0;
 
@@ -658,13 +698,11 @@ Log.d("veckospinner", "1" + stWeek);
                   j++;
             }
             }catch (Exception w){
-
             }
         }
     }
 
     private class GetDaysFromWeekActivity extends AsyncTask<String, Void, String> {
-
 
         AlertDialog alertDialog;
         Context ctx;
@@ -704,7 +742,6 @@ Log.d("veckospinner", "1" + stWeek);
                     BufferedWriter bufferedWriter = new BufferedWriter(new OutputStreamWriter(outputStream, "UTF-8"));
                     String data = URLEncoder.encode("week", "UTF-8") + "=" + URLEncoder.encode(stWeek, "UTF-8") + "&" +
                             URLEncoder.encode("AnvandarID", "UTF-8") + "=" + URLEncoder.encode(UserID, "UTF-8");
-                    Log.d("veckocheck","1" + stWeek);
                     bufferedWriter.write(data);
                     bufferedWriter.flush();
                     bufferedWriter.close();
@@ -727,18 +764,15 @@ Log.d("veckospinner", "1" + stWeek);
                 }
             }
             return null;
-
         }
 
         @Override
         protected void onProgressUpdate(Void... values) {
             super.onProgressUpdate(values);
-
         }
 
         @Override
         protected void onPostExecute(String result) {
-
 
             JSONArray jsonarray = null;
             try {
@@ -755,43 +789,51 @@ Log.d("veckospinner", "1" + stWeek);
                 tTorsdag.setText("Torsdag ");
                 tFredag.setText("Fredag ");
 
-
                 tMåndag.setBackgroundColor(Color.WHITE);
                 tTisdag.setBackgroundColor(Color.WHITE);
                 tOnsdag.setBackgroundColor(Color.WHITE);
                 tTorsdag.setBackgroundColor(Color.WHITE);
                 tFredag.setBackgroundColor(Color.WHITE);
 
+                iMonGreenUnChecked.setVisibility(View.VISIBLE);
+                iMonRedUnChecked.setVisibility(View.VISIBLE);
 
-                iMåndagNärvarande.setBackgroundColor(Color.GRAY);
-                iMåndagEjNärvarande.setBackgroundColor(Color.GRAY);
+                iMonRedChecked.setVisibility(View.INVISIBLE);
+                iMonRedUnChecked.setVisibility(View.INVISIBLE);
+                iMonGreenChecked.setVisibility(View.INVISIBLE);
+                iMonGreenUnChecked.setVisibility(View.INVISIBLE);
 
-                iTisdagNärvarande.setBackgroundColor(Color.GRAY);
-                iTisdagEjNärvarande.setBackgroundColor(Color.GRAY);
+                iTisGreenUnChecked.setVisibility(View.VISIBLE);
+                iTisRedUnChecked.setVisibility(View.VISIBLE);
 
-                iOnsdagNärvarande.setBackgroundColor(Color.GRAY);
-                iOnsdagEjNärvarande.setBackgroundColor(Color.GRAY);
+                iTisRedChecked.setVisibility(View.INVISIBLE);
+                iTisRedUnChecked.setVisibility(View.INVISIBLE);
+                iTisGreenChecked.setVisibility(View.INVISIBLE);
+                iTisGreenUnChecked.setVisibility(View.INVISIBLE);
 
-                iTorsdagNärvarande.setBackgroundColor(Color.GRAY);
-                iTorsdagEjNärvarande.setBackgroundColor(Color.GRAY);
+                iOnsGreenUnChecked.setVisibility(View.VISIBLE);
+                iOnsRedUnChecked.setVisibility(View.VISIBLE);
 
-                iFredagNärvarande.setBackgroundColor(Color.GRAY);
-                iFredagEjNärvarande.setBackgroundColor(Color.GRAY);
+                iOnsRedChecked.setVisibility(View.INVISIBLE);
+                iOnsRedUnChecked.setVisibility(View.INVISIBLE);
+                iOnsGreenChecked.setVisibility(View.INVISIBLE);
+                iOnsGreenUnChecked.setVisibility(View.INVISIBLE);
 
-                iMåndagNärvarande.setBackgroundColor(View.INVISIBLE);
-                iMåndagEjNärvarande.setBackgroundColor(View.INVISIBLE);
+                iTorGreenUnChecked.setVisibility(View.VISIBLE);
+                iTorRedUnChecked.setVisibility(View.VISIBLE);
 
-                iTisdagNärvarande.setBackgroundColor(View.INVISIBLE);
-                iTisdagEjNärvarande.setBackgroundColor(View.INVISIBLE);
+                iTorRedChecked.setVisibility(View.INVISIBLE);
+                iTorRedUnChecked.setVisibility(View.INVISIBLE);
+                iTorGreenChecked.setVisibility(View.INVISIBLE);
+                iTorGreenUnChecked.setVisibility(View.INVISIBLE);
 
-                iOnsdagNärvarande.setBackgroundColor(View.INVISIBLE);
-                iOnsdagEjNärvarande.setBackgroundColor(View.INVISIBLE);
+                iFreGreenUnChecked.setVisibility(View.VISIBLE);
+                iFreRedUnChecked.setVisibility(View.VISIBLE);
 
-                iTorsdagNärvarande.setBackgroundColor(View.INVISIBLE);
-                iTorsdagEjNärvarande.setBackgroundColor(View.INVISIBLE);
-
-                iFredagNärvarande.setBackgroundColor(View.INVISIBLE);
-                iFredagEjNärvarande.setBackgroundColor(View.INVISIBLE);
+                iFreRedChecked.setVisibility(View.INVISIBLE);
+                iFreRedUnChecked.setVisibility(View.INVISIBLE);
+                iFreGreenChecked.setVisibility(View.INVISIBLE);
+                iFreGreenUnChecked.setVisibility(View.INVISIBLE);
 
                 TWMåndag.setText("Ingen Närvaro Krävs");
                 TWTisdag.setText("Ingen Närvaro Krävs");
@@ -828,34 +870,38 @@ Log.d("veckospinner", "1" + stWeek);
                         e.printStackTrace();
                     }
 
-
                     if (i == 0) {
 
                         tMåndag.setText("Måndag " + Datum);
                         sMåndag = NarvaroRaknare;
                         TWMåndag.setText("");
 
-
                         if (Objects.equals(CurrentDatum, Datum )) {
 
                             tMåndag.setBackgroundColor(Color.GREEN);
-
                         }
 
                         if (Objects.equals(Narvarande, "1")) {
-                            iMåndagNärvarande.setBackgroundColor(Color.GREEN);
-                            iMåndagEjNärvarande.setBackgroundColor(Color.GRAY);
+
+                            iMonGreenChecked.setVisibility(View.VISIBLE);
+                            iMonGreenUnChecked.setVisibility(View.INVISIBLE);
+                            iMonRedChecked.setVisibility(View.INVISIBLE);
+                            iMonRedUnChecked.setVisibility(View.VISIBLE);
                         }
                         if (Objects.equals(Narvarande, "0")) {
-                            iMåndagEjNärvarande.setBackgroundColor(Color.RED);
-                            iMåndagNärvarande.setBackgroundColor(Color.GRAY);
+
+                            iMonGreenChecked.setVisibility(View.INVISIBLE);
+                            iMonGreenUnChecked.setVisibility(View.VISIBLE);
+                            iMonRedChecked.setVisibility(View.VISIBLE);
+                            iMonRedUnChecked.setVisibility(View.INVISIBLE);
                         }
                         if (Objects.equals(Narvarande, "null")) {
-                            iMåndagNärvarande.setBackgroundColor(Color.GRAY);
-                            iMåndagEjNärvarande.setBackgroundColor(Color.GRAY);
+
+                            iMonGreenChecked.setVisibility(View.INVISIBLE);
+                            iMonGreenUnChecked.setVisibility(View.VISIBLE);
+                            iMonRedChecked.setVisibility(View.INVISIBLE);
+                            iMonRedUnChecked.setVisibility(View.VISIBLE);
                         }
-
-
                     }
                     if (i == 1) {
                         tTisdag.setText("Tisdag " + Datum);
@@ -865,20 +911,28 @@ Log.d("veckospinner", "1" + stWeek);
                         if (Objects.equals(CurrentDatum, Datum )) {
 
                             tTisdag.setBackgroundColor(Color.GREEN);
-
                         }
 
                         if (Objects.equals(Narvarande, "1")) {
-                            iTisdagNärvarande.setBackgroundColor(Color.GREEN);
-                            iTisdagEjNärvarande.setBackgroundColor(Color.GRAY);
+
+                            iTisGreenChecked.setVisibility(View.VISIBLE);
+                            iTisGreenUnChecked.setVisibility(View.INVISIBLE);
+                            iTisRedChecked.setVisibility(View.INVISIBLE);
+                            iTisRedUnChecked.setVisibility(View.VISIBLE);
                         }
                         if (Objects.equals(Narvarande, "0")) {
-                            iTisdagEjNärvarande.setBackgroundColor(Color.RED);
-                            iTisdagNärvarande.setBackgroundColor(Color.GRAY);
+
+                            iTisGreenChecked.setVisibility(View.INVISIBLE);
+                            iTisGreenUnChecked.setVisibility(View.VISIBLE);
+                            iTisRedChecked.setVisibility(View.VISIBLE);
+                            iTisRedUnChecked.setVisibility(View.INVISIBLE);
                         }
                         if (Objects.equals(Narvarande, "null")) {
-                            iTisdagNärvarande.setBackgroundColor(Color.GRAY);
-                            iTisdagEjNärvarande.setBackgroundColor(Color.GRAY);
+
+                            iTisGreenChecked.setVisibility(View.INVISIBLE);
+                            iTisGreenUnChecked.setVisibility(View.VISIBLE);
+                            iTisRedChecked.setVisibility(View.INVISIBLE);
+                            iTisRedUnChecked.setVisibility(View.VISIBLE);
                         }
                     }
                     if (i == 2) {
@@ -889,20 +943,28 @@ Log.d("veckospinner", "1" + stWeek);
                         if (Objects.equals(CurrentDatum, Datum )) {
 
                             tOnsdag.setBackgroundColor(Color.GREEN);
-
                         }
 
                         if (Objects.equals(Narvarande, "1")) {
-                            iOnsdagNärvarande.setBackgroundColor(Color.GREEN);
-                            iOnsdagEjNärvarande.setBackgroundColor(Color.GRAY);
+
+                            iOnsGreenChecked.setVisibility(View.VISIBLE);
+                            iOnsGreenUnChecked.setVisibility(View.INVISIBLE);
+                            iOnsRedChecked.setVisibility(View.INVISIBLE);
+                            iOnsRedUnChecked.setVisibility(View.VISIBLE);
                         }
                         if (Objects.equals(Narvarande, "0")) {
-                            iOnsdagEjNärvarande.setBackgroundColor(Color.RED);
-                            iOnsdagNärvarande.setBackgroundColor(Color.GRAY);
+
+                            iOnsGreenChecked.setVisibility(View.INVISIBLE);
+                            iOnsGreenUnChecked.setVisibility(View.VISIBLE);
+                            iOnsRedChecked.setVisibility(View.VISIBLE);
+                            iOnsRedUnChecked.setVisibility(View.INVISIBLE);
                         }
                         if (Objects.equals(Narvarande, "null")) {
-                            iOnsdagNärvarande.setBackgroundColor(Color.GRAY);
-                            iOnsdagEjNärvarande.setBackgroundColor(Color.GRAY);
+
+                            iOnsGreenChecked.setVisibility(View.INVISIBLE);
+                            iOnsGreenUnChecked.setVisibility(View.VISIBLE);
+                            iOnsRedChecked.setVisibility(View.INVISIBLE);
+                            iOnsRedUnChecked.setVisibility(View.VISIBLE);
                         }
                     }
                     if (i == 3) {
@@ -913,20 +975,28 @@ Log.d("veckospinner", "1" + stWeek);
                         if (Objects.equals(CurrentDatum, Datum )) {
 
                             tTorsdag.setBackgroundColor(Color.GREEN);
-
                         }
 
                         if (Objects.equals(Narvarande, "1")) {
-                            iTorsdagNärvarande.setBackgroundColor(Color.GREEN);
-                            iTorsdagEjNärvarande.setBackgroundColor(Color.GRAY);
+
+                            iTorGreenChecked.setVisibility(View.VISIBLE);
+                            iTorGreenUnChecked.setVisibility(View.INVISIBLE);
+                            iTorRedChecked.setVisibility(View.INVISIBLE);
+                            iTorRedUnChecked.setVisibility(View.VISIBLE);
                         }
                         if (Objects.equals(Narvarande, "0")) {
-                            iTorsdagEjNärvarande.setBackgroundColor(Color.RED);
-                            iTorsdagNärvarande.setBackgroundColor(Color.GRAY);
+
+                            iTorGreenChecked.setVisibility(View.INVISIBLE);
+                            iTorGreenUnChecked.setVisibility(View.VISIBLE);
+                            iTorRedChecked.setVisibility(View.VISIBLE);
+                            iTorRedUnChecked.setVisibility(View.INVISIBLE);
                         }
                         if (Objects.equals(Narvarande, "null")) {
-                            iTorsdagNärvarande.setBackgroundColor(Color.GRAY);
-                            iTorsdagEjNärvarande.setBackgroundColor(Color.GRAY);
+
+                            iTorGreenChecked.setVisibility(View.INVISIBLE);
+                            iTorGreenUnChecked.setVisibility(View.VISIBLE);
+                            iTorRedChecked.setVisibility(View.INVISIBLE);
+                            iTorRedUnChecked.setVisibility(View.VISIBLE);
                         }
                     }
                     if (i == 4) {
@@ -937,40 +1007,38 @@ Log.d("veckospinner", "1" + stWeek);
                         if (Objects.equals(CurrentDatum, Datum )) {
 
                             tFredag.setBackgroundColor(Color.GREEN);
-
                         }
 
                         if (Objects.equals(Narvarande, "1")) {
-                            iFredagNärvarande.setBackgroundColor(Color.GREEN);
-                            iFredagEjNärvarande.setBackgroundColor(Color.GRAY);
+
+                            iFreGreenChecked.setVisibility(View.VISIBLE);
+                            iFreGreenUnChecked.setVisibility(View.INVISIBLE);
+                            iFreRedChecked.setVisibility(View.INVISIBLE);
+                            iFreRedUnChecked.setVisibility(View.VISIBLE);
                         }
                         if (Objects.equals(Narvarande, "0")) {
-                            iFredagEjNärvarande.setBackgroundColor(Color.RED);
-                            iFredagNärvarande.setBackgroundColor(Color.GRAY);
+
+                            iFreGreenChecked.setVisibility(View.INVISIBLE);
+                            iFreGreenUnChecked.setVisibility(View.VISIBLE);
+                            iFreRedChecked.setVisibility(View.VISIBLE);
+                            iFreRedUnChecked.setVisibility(View.INVISIBLE);
                         }
                         if (Objects.equals(Narvarande, "null")) {
 
-                            iFredagNärvarande.setBackgroundColor(Color.GRAY);
-                            iFredagEjNärvarande.setBackgroundColor(Color.GRAY);
+                            iFreGreenChecked.setVisibility(View.INVISIBLE);
+                            iFreGreenUnChecked.setVisibility(View.VISIBLE);
+                            iFreRedChecked.setVisibility(View.INVISIBLE);
+                            iFreRedUnChecked.setVisibility(View.VISIBLE);
                         }
                     }
-
-
-
                 }
             }
             catch (Exception r){
-
             }
-
-
-
-
         }
     }
 
     private class GetUsersFromIDActivity extends AsyncTask<String, Void, String> {
-
 
         AlertDialog alertDialog;
         Context ctx;
@@ -983,13 +1051,11 @@ Log.d("veckospinner", "1" + stWeek);
             this.v = v;
         }
 
-
         @Override
         protected void onPreExecute() {
 
             //   alertDialog = new AlertDialog.Builder(ctx).create();
             // alertDialog.setTitle("Login Information....");
-
         }
 
         @Override
@@ -1029,15 +1095,12 @@ Log.d("veckospinner", "1" + stWeek);
                     e.printStackTrace();
                 }
             }
-
             return null;
-
         }
 
         @Override
         protected void onProgressUpdate(Void... values) {
             super.onProgressUpdate(values);
-
         }
 
         @Override
@@ -1059,7 +1122,6 @@ Log.d("veckospinner", "1" + stWeek);
                         e.printStackTrace();
                     }
 
-
                     sAnvandarID = null;
                     try {
                         sAnvandarID = obj.getString("AnvandarID");
@@ -1069,17 +1131,13 @@ Log.d("veckospinner", "1" + stWeek);
                     } catch (JSONException e) {
                         e.printStackTrace();
                     }
-
                 }
             }catch (Exception k) {
-
             }
-
         }
     }
 
     private class GetUsersWithNarvaroActivity extends AsyncTask<String, Void, String> {
-
 
         AlertDialog alertDialog;
         GetUsersFromIDActivity ctx;
@@ -1092,13 +1150,11 @@ Log.d("veckospinner", "1" + stWeek);
             this.v = v;
         }
 
-
         @Override
         protected void onPreExecute() {
 
             //   alertDialog = new AlertDialog.Builder(ctx).create();
             // alertDialog.setTitle("Login Information....");
-
         }
 
         @Override
@@ -1139,15 +1195,12 @@ Log.d("veckospinner", "1" + stWeek);
                     e.printStackTrace();
                 }
             }
-
             return null;
-
         }
 
         @Override
         protected void onProgressUpdate(Void... values) {
             super.onProgressUpdate(values);
-
         }
 
         @Override
@@ -1191,7 +1244,6 @@ Log.d("veckospinner", "1" + stWeek);
                     } catch (JSONException e) {
                         e.printStackTrace();
                     }
-
                 }
             }catch (Exception k) {
 
@@ -1199,31 +1251,26 @@ Log.d("veckospinner", "1" + stWeek);
             Spinner U = (Spinner)findViewById(R.id.UserSpinner);
             U.invalidate();
             U.setSelection(1);
-
         }
     }
 
     private class GetUsersWithLoginInfoActivity extends AsyncTask<String, Void, String> {
-
 
         AlertDialog alertDialog;
         Context ctx;
         View v;
 
         GetUsersWithLoginInfoActivity(Context ctx)
-
         {
             this.ctx = ctx;
             this.v = v;
         }
-
 
         @Override
         protected void onPreExecute() {
 
             //   alertDialog = new AlertDialog.Builder(ctx).create();
             // alertDialog.setTitle("Login Information....");
-
         }
 
         @Override
@@ -1264,15 +1311,12 @@ Log.d("veckospinner", "1" + stWeek);
                     e.printStackTrace();
                 }
             }
-
             return null;
-
         }
 
         @Override
         protected void onProgressUpdate(Void... values) {
             super.onProgressUpdate(values);
-
         }
 
         @Override
@@ -1303,28 +1347,23 @@ Log.d("veckospinner", "1" + stWeek);
                     Fnamn = null;
                     try {
                         Fnamn = obj.getString("Fnamn");
-                        Log.d("asd", "1" + Fnamn);
                     } catch (JSONException e) {
                         e.printStackTrace();
                     }
-
                 }
             }catch (Exception k) {
             }
             tUserID.setText("" + Fnamn + " " + Enamn);
-
         }
     }
 
     private class SendDataActivity extends AsyncTask<String, Void, String> {
-
 
         AlertDialog alertDialog;
         Context ctx;
         View v;
 
         SendDataActivity(Context ctx)
-
         {
             this.ctx = ctx;
             this.v = v;
@@ -1372,7 +1411,6 @@ Log.d("veckospinner", "1" + stWeek);
                     }
                     bufferedReader.close();
                     IS.close();
-
                     //httpURLConnection.connect();
                     httpURLConnection.disconnect();
                     return response;
@@ -1387,10 +1425,6 @@ Log.d("veckospinner", "1" + stWeek);
         }
         @Override
         protected void onPostExecute(String result) {
-
-
-
         }
     }
-
 }

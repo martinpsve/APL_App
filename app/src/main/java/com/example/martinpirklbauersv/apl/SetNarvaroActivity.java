@@ -41,10 +41,62 @@ import java.net.URLEncoder;
 import java.util.ArrayList;
 import java.util.Objects;
 
+/*
+
+Beskriving:
+Här har vi en funktion för Administratören att sätta närvaro på elever.
+
+Klasser:
+
+
+GetUsersFromIDActivity
+
+IN:
+ingen indata
+
+UT:
+användarID på alla användare
+
+GetAPLWeeksActivity
+
+IN:
+användarID på den valda person från spinner
+
+UT:
+APL veckor som personen är registrerad på
+
+GetDaysFromWeekActivity
+
+IN;
+användarID på den valda person från spinner och vecka från antigen nuvarande vecka eller från valt item från spinner
+
+UT:
+datum på de olika veckodagarna.
+närvarocheck på de olika veckodagarna beroende på användareID
+närvaroID på de olika veckodagarna beroende på användareID
+
+SendDataActivity
+
+IN:
+
+ stMonN status på närvaro om man är närvarande eller frånvarande och vilken veckodag
+ NarvaroRaknare beroende vilken dag
+ sEnamn: namn på personen som är vald från spinner
+
+UT:
+ingen utdata
+
+indata:
+
+
+utdata:
+
+
+*/
+
 public class SetNarvaroActivity extends AppCompatActivity implements AdapterView.OnItemSelectedListener {
 
     private DrawerLayout myDrawerLayout;
-
 
     private TextView Tstartdag;
     private TextView Tslutdag;
@@ -71,10 +123,7 @@ public class SetNarvaroActivity extends AppCompatActivity implements AdapterView
     ArrayAdapter<String> adapter10;
     ArrayList<Integer> klassIDlist = new ArrayList<Integer>();
     ArrayList<String> KList = new ArrayList<String>();
-
-
     ArrayList<String> antallist = new ArrayList<String>();
-
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -132,7 +181,6 @@ public class SetNarvaroActivity extends AppCompatActivity implements AdapterView
                                         break;
                                 }
 
-
                                 menuItem.setChecked(true);
 
                                 myDrawerLayout.closeDrawers();
@@ -140,7 +188,6 @@ public class SetNarvaroActivity extends AppCompatActivity implements AdapterView
                                 return true;
                             }
                         });
-
 
         Tstartdag = (TextView) findViewById(R.id.textView10);
         Tslutdag = (TextView) findViewById(R.id.textView11);
@@ -160,7 +207,6 @@ public class SetNarvaroActivity extends AppCompatActivity implements AdapterView
         K.setAdapter(adapter10);
         K.setOnItemSelectedListener(this);
 
-
         U = (Spinner) findViewById(R.id.UserSpinner);
 
         adapter7 = new ArrayAdapter<String>(this,
@@ -172,7 +218,6 @@ public class SetNarvaroActivity extends AppCompatActivity implements AdapterView
 
         s = (Spinner) findViewById(R.id.spinner2);
 
-
         ArrayAdapter<String> adapter = new ArrayAdapter<String>(this,
                 android.R.layout.simple_spinner_item, antallist);
         adapter.setDropDownViewResource(android.R.layout.simple_spin‌​ner_dropdown_item);
@@ -181,11 +226,9 @@ public class SetNarvaroActivity extends AppCompatActivity implements AdapterView
         s.setAdapter(adapter);
         s.setOnItemSelectedListener(this);
 
-
         method = "hämtaKlassdata";
         SetNarvaroActivity.GetClassActivity GetClassActivity = new SetNarvaroActivity.GetClassActivity(this);
         GetClassActivity.execute(method);
-
 
         iMåndagEjNärvarande = (ImageView) findViewById(R.id.MåndagEjNärvarandeView);
         iMåndagNärvarande = (ImageView) findViewById(R.id.måndagNärvarandeView);
@@ -198,7 +241,6 @@ public class SetNarvaroActivity extends AppCompatActivity implements AdapterView
         iFredagEjNärvarande = (ImageView) findViewById(R.id.FredagEjNärvarandeView);
         iFredagNärvarande = (ImageView) findViewById(R.id.FredagNärvarandeView);
 
-
         iMåndagEjNärvarande.setEnabled(false);
         iMåndagNärvarande.setEnabled(false);
         iTisdagEjNärvarande.setEnabled(false);
@@ -209,8 +251,6 @@ public class SetNarvaroActivity extends AppCompatActivity implements AdapterView
         iTorsdagNärvarande.setEnabled(false);
         iFredagEjNärvarande.setEnabled(false);
         iFredagNärvarande.setEnabled(false);
-
-
     }
 
     @Override
@@ -223,7 +263,6 @@ public class SetNarvaroActivity extends AppCompatActivity implements AdapterView
 
         return super.onOptionsItemSelected(item);
     }
-
 
     public void onItemSelected(AdapterView<?> parent, View v,
                                int pos, long id) {
@@ -241,12 +280,10 @@ public class SetNarvaroActivity extends AppCompatActivity implements AdapterView
             method = "hämtadata";
             SetNarvaroActivity.GetAPLWeeksActivity GetAPLWeeksActivity = new SetNarvaroActivity.GetAPLWeeksActivity(this);
             GetAPLWeeksActivity.execute(method, "" + UserID);
-
-        }
+    }
 
         if (parent.getId() == R.id.spinner2) {
             stWeek = (String) parent.getItemAtPosition(pos);
-
 
             if (!stWeek.equals("Veckor")) {
 
@@ -260,7 +297,6 @@ public class SetNarvaroActivity extends AppCompatActivity implements AdapterView
                 iTorsdagNärvarande.setEnabled(true);
                 iFredagEjNärvarande.setEnabled(true);
                 iFredagNärvarande.setEnabled(true);
-
             }
 
             try {
@@ -270,7 +306,6 @@ public class SetNarvaroActivity extends AppCompatActivity implements AdapterView
             } catch (Exception e) {
 
             }
-
         }
 
         if (parent.getId() == R.id.spinner3) {
@@ -285,9 +320,7 @@ public class SetNarvaroActivity extends AppCompatActivity implements AdapterView
             method = "hämtaUserdata";
             SetNarvaroActivity.GetUsersWithNarvaroActivity GetUsersWithNarvaroActivity = new SetNarvaroActivity.GetUsersWithNarvaroActivity(this);
             GetUsersWithNarvaroActivity.execute(method, "" + KlassID);
-
         }
-
     }
 
     @Override
@@ -295,13 +328,11 @@ public class SetNarvaroActivity extends AppCompatActivity implements AdapterView
 
         super.onRestart();
 
-
         try {
             method = "hämtadata";
             SetNarvaroActivity.GetDaysFromWeekActivity GetDaysFromWeekActivity = new SetNarvaroActivity.GetDaysFromWeekActivity(this);
             GetDaysFromWeekActivity.execute(method, stWeek, "" + UserID);
         } catch (Exception e) {
-
         }
     }
 
@@ -314,14 +345,12 @@ public class SetNarvaroActivity extends AppCompatActivity implements AdapterView
         iMåndagEjNärvarande.setBackgroundColor(Color.RED);
         iMåndagNärvarande.setBackgroundColor(Color.rgb(40,75,17));
 
-
         String NarvaroRaknare = sMåndag;
         stMonN = "EjNärvarande";
 
         String method = "mataInData";
         SetNarvaroActivity.SendDataActivity SendDataActivity = new SetNarvaroActivity.SendDataActivity(this);
         SendDataActivity.execute(method, stMonN, NarvaroRaknare, sFnamn);
-
     }
 
     public void clickEventMondagNärvarande (View v)
@@ -347,7 +376,6 @@ public class SetNarvaroActivity extends AppCompatActivity implements AdapterView
         String method = "mataInData";
         SetNarvaroActivity.SendDataActivity SendDataActivity = new SetNarvaroActivity.SendDataActivity(this);
         SendDataActivity.execute(method, stTisN, NarvaroRaknare, sFnamn);
-
     }
 
     public void clickEventTisdagNärvarande (View v)
@@ -399,7 +427,6 @@ public class SetNarvaroActivity extends AppCompatActivity implements AdapterView
         String method = "mataInData";
         SetNarvaroActivity.SendDataActivity SendDataActivity = new SetNarvaroActivity.SendDataActivity(this);
         SendDataActivity.execute(method, stTorN, NarvaroRaknare, sFnamn);
-
     }
 
     public void clickEventTorsdagNärvarande (View v)
@@ -425,7 +452,6 @@ public class SetNarvaroActivity extends AppCompatActivity implements AdapterView
         String method = "mataInData";
         SetNarvaroActivity.SendDataActivity SendDataActivity = new SetNarvaroActivity.SendDataActivity(this);
         SendDataActivity.execute(method, stFreN, NarvaroRaknare, sFnamn);
-
     }
 
     public void clickEventFredagNärvarande (View v)
@@ -440,14 +466,11 @@ public class SetNarvaroActivity extends AppCompatActivity implements AdapterView
         SendDataActivity.execute(method, stFreN, NarvaroRaknare, sFnamn);
     }
 
-
     public void onClickClose(View view) {
         finish();
     }
 
-
     private class GetAPLWeeksActivity extends AsyncTask<String, Void, String> {
-
 
         AlertDialog alertDialog;
         Context ctx;
@@ -460,13 +483,10 @@ public class SetNarvaroActivity extends AppCompatActivity implements AdapterView
             this.v = v;
         }
 
-
         @Override
         protected void onPreExecute() {
-
             //   alertDialog = new AlertDialog.Builder(ctx).create();
             // alertDialog.setTitle("Login Information....");
-
         }
 
         @Override
@@ -508,18 +528,15 @@ public class SetNarvaroActivity extends AppCompatActivity implements AdapterView
                 }
             }
             return null;
-
         }
 
         @Override
         protected void onProgressUpdate(Void... values) {
             super.onProgressUpdate(values);
-
         }
 
         @Override
         protected void onPostExecute(String result) {
-
 
             JSONArray jsonarray = null;
             try {
@@ -560,18 +577,15 @@ public class SetNarvaroActivity extends AppCompatActivity implements AdapterView
 
            // int antal = (slut - start) + 1;
 
-
             for (int vecka = start, i = 0; vecka < slut+1; vecka++, i++) {
                 antallist.add(String.valueOf(vecka));
               //  arraySpinner1[i] = "" + vecka;
             }
             }catch (Exception w){
-
             }
         }
     }
     private class GetDaysFromWeekActivity extends AsyncTask<String, Void, String> {
-
 
         AlertDialog alertDialog;
         Context ctx;
@@ -584,15 +598,12 @@ public class SetNarvaroActivity extends AppCompatActivity implements AdapterView
             this.v = v;
         }
 
-
         @Override
         protected void onPreExecute() {
 
             //   alertDialog = new AlertDialog.Builder(ctx).create();
             // alertDialog.setTitle("Login Information....");
-
         }
-
         @Override
         protected String doInBackground(String... params) {
 
@@ -634,13 +645,11 @@ public class SetNarvaroActivity extends AppCompatActivity implements AdapterView
                 }
             }
             return null;
-
         }
 
         @Override
         protected void onProgressUpdate(Void... values) {
             super.onProgressUpdate(values);
-
         }
 
         @Override
@@ -684,7 +693,6 @@ public class SetNarvaroActivity extends AppCompatActivity implements AdapterView
                     } catch (JSONException e) {
                         e.printStackTrace();
                     }
-
 
                     if (i == 0) {
                         tMåndag.setText("Måndag" + Datum);
@@ -770,19 +778,14 @@ public class SetNarvaroActivity extends AppCompatActivity implements AdapterView
                             iFredagEjNärvarande.setBackgroundColor(Color.GRAY);
                         }
                     }
-
-
                 }
             }
             catch (Exception r){
-
             }
-
         }
     }
 
     private class GetUsersWithNarvaroActivity extends AsyncTask<String, Void, String> {
-
 
         AlertDialog alertDialog;
         Context ctx;
@@ -795,13 +798,10 @@ public class SetNarvaroActivity extends AppCompatActivity implements AdapterView
             this.v = v;
         }
 
-
         @Override
         protected void onPreExecute() {
-
             //   alertDialog = new AlertDialog.Builder(ctx).create();
             // alertDialog.setTitle("Login Information....");
-
         }
 
         @Override
@@ -844,7 +844,6 @@ public class SetNarvaroActivity extends AppCompatActivity implements AdapterView
             }
 
             return null;
-
         }
 
         @Override
@@ -862,7 +861,6 @@ public class SetNarvaroActivity extends AppCompatActivity implements AdapterView
             } catch (JSONException e) {
                 e.printStackTrace();
             }
-
 try{
             for (int i = 0; i < jsonarray.length(); i++) {
                 JSONObject obj = null;
@@ -902,13 +900,10 @@ try{
             Spinner U = (Spinner)findViewById(R.id.UserSpinner);
             U.invalidate();
             U.setSelection(0);
-
-
         }
     }
 
     private class GetClassActivity extends AsyncTask<String, Void, String> {
-
 
         AlertDialog alertDialog;
         Context ctx;
@@ -921,13 +916,10 @@ try{
             this.v = v;
         }
 
-
         @Override
         protected void onPreExecute() {
-
             //   alertDialog = new AlertDialog.Builder(ctx).create();
             // alertDialog.setTitle("Login Information....");
-
         }
 
         @Override
@@ -969,13 +961,11 @@ try{
             }
 
             return null;
-
         }
 
         @Override
         protected void onProgressUpdate(Void... values) {
             super.onProgressUpdate(values);
-
         }
 
         @Override
@@ -987,7 +977,6 @@ try{
             } catch (JSONException e) {
                 e.printStackTrace();
             }
-
 
             for (int i = 0; i < jsonarray.length(); i++) {
                 JSONObject obj = null;
@@ -1013,18 +1002,14 @@ try{
                 } catch (JSONException e) {
                     e.printStackTrace();
                 }
-                Log.d("test","aa" + klassID);
             }
             Spinner K = (Spinner)findViewById(R.id.spinner3);
             K.invalidate();
             K.setSelection(0);
-
         }
     }
 
-
     private class SendDataActivity extends AsyncTask<String, Void, String> {
-
 
         AlertDialog alertDialog;
         Context ctx;
@@ -1069,8 +1054,6 @@ try{
                     bufferedWriter.close();
                     OS.close();
                     InputStream IS = httpURLConnection.getInputStream();
-
-
                     BufferedReader bufferedReader = new BufferedReader(new InputStreamReader(IS, "iso-8859-1"));
                     String response = "";
                     String line = "";
@@ -1094,11 +1077,7 @@ try{
         }
         @Override
         protected void onPostExecute(String result) {
-
-
-
         }
     }
-
 }
 

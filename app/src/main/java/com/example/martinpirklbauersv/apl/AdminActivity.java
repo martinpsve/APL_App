@@ -12,13 +12,27 @@ import android.view.MenuItem;
 import android.view.View;
 import android.widget.TextView;
 
+
+/*
+
+Beskriving:
+Här har vi Admins startsida där hen kommer åt de olika funktionerna via
+en Drawer.
+
+indata:
+ingen indata möjlig.
+
+utdata:
+Admins Användarnamn och Roll Bekräftelse skriv ut på skärmen.
+
+*/
+
 public class AdminActivity extends AppCompatActivity {
 
     private DrawerLayout myDrawerLayout;
 
-    private TextView AnvandarID;
-    private TextView RoleID;
-    private TextView AnvändarnID, AnvändarRoll;
+    private TextView AnvändarID, AnvändarRoll;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -72,32 +86,21 @@ public class AdminActivity extends AppCompatActivity {
                             startActivity( MainActivity);
                             break;
                     }
-
-
                                 menuItem.setChecked(true);
-
                                 myDrawerLayout.closeDrawers();
-
                                 return true;
                             }
                         });
 
-      /*  Menu menuItem = navView.getMenu();
-        menuItem.findItem(R.id.nav_startpage).setVisible(false);
-*/
-        AnvandarID = (TextView) findViewById(R.id.användarID);
-        String s = getIntent().getStringExtra("AnvandarID");
-        AnvandarID.setText(s);
 
-        RoleID = (TextView) findViewById(R.id.text2);
+        String s = getIntent().getStringExtra("AnvandarID");
         String r = getIntent().getStringExtra("Role");
-        RoleID.setText(r);
 
         //ANVÄNDARNAMN OCH ROLL I DRAWERN
         View nameView = navView.getHeaderView(0);
 
-        AnvändarnID = (TextView) nameView.findViewById(R.id.userName);
-        AnvändarnID.setText(s);
+        AnvändarID = (TextView) nameView.findViewById(R.id.userName);
+        AnvändarID.setText(s);
 
         AnvändarRoll = (TextView) nameView.findViewById(R.id.userRoll);
         AnvändarRoll.setText(r);
@@ -110,16 +113,12 @@ public class AdminActivity extends AppCompatActivity {
                 myDrawerLayout.openDrawer(GravityCompat.START);
                 return true;
         }
-
         return super.onOptionsItemSelected(item);
     }
-
 
     @Override
     public void onRestart(){
 
         super.onRestart();
-
     }
-
 }

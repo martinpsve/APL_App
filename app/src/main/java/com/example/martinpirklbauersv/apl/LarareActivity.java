@@ -3,6 +3,27 @@ package com.example.martinpirklbauersv.apl;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 
+/*
+
+Beskriving:
+Här har vi Lärarens startsida där hen ska kunna se Närvaro och annat material.
+
+Klasser:
+KopplaElevMedAPLPeriodActivity
+IN:
+Finns ingen data.
+
+UT:
+Finns ingen data.
+
+indata:
+man kan inte skriva in någon data.
+
+utdata:
+Ingen utdata finns.
+
+*/
+
 public class LarareActivity extends AppCompatActivity {
 
     @Override
