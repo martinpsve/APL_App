@@ -6,6 +6,7 @@ import android.content.Intent;
 import android.os.AsyncTask;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
@@ -26,14 +27,37 @@ import java.net.URL;
 import java.net.URLEncoder;
 import java.util.Objects;
 
+/*
+
+Beskriving:
+Här har vi en funktion för att logga in.
+
+Klasser:
+CheckLoginActivity
+IN:
+I denna klass matas användarens användarnamn. lösenord och roll in.
+
+UT:
+data som man får tillbaka är antingen en 1a eller 0a.
+
+indata:
+Användaren skriver in användarnamn och lösenord och vilken roll hen har.
+
+utdata:
+användarens ID och roll skickas vidare till olika intent beroende på roll.
+
+*/
+
 public class LoginActivity extends AppCompatActivity implements AdapterView.OnItemSelectedListener {
 
     private EditText userNameField, passwordField;
-    private TextView Roll;
-    private TextView Namn;
-    private TextView Lösenord;
     String Anvandarnamn, Losenord, Role;
-
+    String Roll;
+    int Roll1 = 1;
+    int Roll2 = 2;
+    int Roll3 = 3;
+    int Roll4 = 4;
+    int Roll5 = 5;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -41,10 +65,7 @@ public class LoginActivity extends AppCompatActivity implements AdapterView.OnIt
         setContentView(R.layout.activity_login);
 
         userNameField = (EditText) findViewById(R.id.userName);
-        passwordField = (EditText) findViewById(R.id.password);
-
-        Namn = (TextView) findViewById(R.id.statusMessage);
-        Lösenord = (TextView) findViewById(R.id.statusMessage2);
+        passwordField = (EditText) findViewById(R.id.Password);
 
         Spinner s = (Spinner) findViewById(R.id.spinner);
         s.setOnItemSelectedListener(this);
@@ -56,35 +77,28 @@ public class LoginActivity extends AppCompatActivity implements AdapterView.OnIt
                 android.R.layout.simple_spinner_item, arraySpinner);
         adapter.setDropDownViewResource(android.R.layout.simple_spin‌​ner_dropdown_item);
         s.setAdapter(adapter);
+        s.setSelection(1);
 
     }
-
-    int Roll1 = 1;
-    int Roll2 = 2;
-    int Roll3 = 3;
-    int Roll4 = 4;
-    int Roll5 = 5;
 
     public void onItemSelected(AdapterView<?> parent, View v,
                                int pos, long id) {
 
-        Roll = (TextView) findViewById(R.id.textView6);
-
         switch (pos) {
             case 0:
-                Roll.setText("" + Roll1);
+                Roll = String.valueOf(Integer.valueOf(Roll1));
                 break;
             case 1:
-                Roll.setText("" + Roll2);
+                Roll = String.valueOf(Integer.valueOf(Roll2));
                 break;
             case 2:
-                Roll.setText("" + Roll3);
+                Roll = String.valueOf(Integer.valueOf(Roll3));
                 break;
             case 3:
-                Roll.setText("" + Roll4);
+                Roll = String.valueOf(Integer.valueOf(Roll4));
                 break;
             case 4:
-                Roll.setText("" + Roll5);
+                Roll = String.valueOf(Integer.valueOf(Roll5));
                 break;
         }
     }
@@ -95,16 +109,14 @@ public class LoginActivity extends AppCompatActivity implements AdapterView.OnIt
 
     public void userLogin(View view) {
 
-        Anvandarnamn = userNameField.getText().toString();
-        Losenord = passwordField.getText().toString();
-        Role = Roll.getText().toString();
-
+            Anvandarnamn = userNameField.getText().toString();
+            Losenord = passwordField.getText().toString();
+            Role = Roll;
         String method = "login";
         LoginActivity.CheckLoginActivity CheckLoginActivity = new LoginActivity.CheckLoginActivity(this);
         CheckLoginActivity.execute(method, Anvandarnamn, Losenord, Role);
 
     }
-
 
     private class CheckLoginActivity extends AsyncTask<String, Void, String> {
 
@@ -144,7 +156,8 @@ public class LoginActivity extends AppCompatActivity implements AdapterView.OnIt
                     OutputStream outputStream = httpURLConnection.getOutputStream();
                     BufferedWriter bufferedWriter = new BufferedWriter(new OutputStreamWriter(outputStream, "UTF-8"));
                     String data = URLEncoder.encode("Anvandarnamn", "UTF-8") + "=" + URLEncoder.encode(Anvandarnamn, "UTF-8") + "&" +
-                            URLEncoder.encode("Losenord", "UTF-8") + "=" + URLEncoder.encode(Losenord, "UTF-8") + "&" + URLEncoder.encode("Role", "UTF-8") + "=" + URLEncoder.encode(Role, "UTF-8");
+                            URLEncoder.encode("Losenord", "UTF-8") + "=" + URLEncoder.encode(Losenord, "UTF-8") + "&" +
+                            URLEncoder.encode("Role", "UTF-8") + "=" + URLEncoder.encode(Role, "UTF-8");
                     bufferedWriter.write(data);
                     bufferedWriter.flush();
                     bufferedWriter.close();
@@ -172,14 +185,15 @@ public class LoginActivity extends AppCompatActivity implements AdapterView.OnIt
         @Override
         protected void onProgressUpdate(Void... values) {
             super.onProgressUpdate(values);
-
         }
 
         @Override
         protected void onPostExecute(String result) {
-            Lösenord.setText(result);
+
+            result = result.substring(0,1);
 
             if (Integer.parseInt(result) == 1) {
+
                 if (Objects.equals(Role, "1")) {
                     Intent intent = new Intent(ctx, AdminActivity.class);
                     intent.putExtra("AnvandarID", Anvandarnamn);
@@ -214,12 +228,10 @@ public class LoginActivity extends AppCompatActivity implements AdapterView.OnIt
                     intent.putExtra("Role", Role);
                     startActivity(intent);
                 }
+            }
                 else {
 
                 }
-            }
-            //   alertDialog.setMessage(result);
-            //  alertDialog.show();
         }
     }
 }

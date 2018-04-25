@@ -2,18 +2,11 @@ package com.example.martinpirklbauersv.apl;
 
 import android.app.AlertDialog;
 import android.content.Context;
-import android.content.Intent;
 import android.graphics.Color;
 import android.os.AsyncTask;
-import android.support.design.widget.NavigationView;
-import android.support.v4.view.GravityCompat;
-import android.support.v4.widget.DrawerLayout;
-import android.support.v7.app.ActionBar;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
-import android.support.v7.widget.Toolbar;
 import android.util.Log;
-import android.view.MenuItem;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
@@ -37,82 +30,152 @@ import java.net.MalformedURLException;
 import java.net.URL;
 import java.net.URLEncoder;
 import java.util.ArrayList;
+import java.util.Calendar;
+import java.util.GregorianCalendar;
+import java.util.Objects;
+
+/*
+
+Beskriving:
+Här har vi en funktion för handledaren att sätta närvaro på elever.
+
+Klasser:
+
+GetUsersWithLoginInfoActivity
+
+IN:
+användarnamn från den som loggade in
+
+UT:
+för och efternamn.
+
+GetNuvarandeYearMonthDayActivity
+
+IN:
+ingen indata.
+
+UT:
+Nuvarande år månad och dag
+
+GetUsersFromIDActivity
+
+IN:
+ingen indata
+
+UT:
+användarID på alla användare
+
+GetAPLWeeksActivity
+
+IN:
+användarID på den valda person från spinner
+
+UT:
+APL veckor som personen är registrerad på
+
+GetDaysFromWeekActivity
+
+IN;
+användarID på den valda person från spinner och vecka från antigen nuvarande vecka eller från valt item från spinner
+
+UT:
+datum på de olika veckodagarna.
+närvarocheck på de olika veckodagarna beroende på användareID
+närvaroID på de olika veckodagarna beroende på användareID
+
+SendDataActivity
+
+IN:
+
+ stMonN status på närvaro om man är närvarande eller frånvarande och vilken veckodag
+ NarvaroRaknare beroende vilken dag
+ sEnamn: namn på personen som är vald från spinner
+
+UT:
+ingen utdata
+
+indata:
+
+
+utdata:
+
+
+*/
 
 public class HandledareActivity extends AppCompatActivity implements AdapterView.OnItemSelectedListener {
 
-    private TextView Tstartdag;
-    private TextView Tslutdag;
-    private TextView dMåndag, dTisdag, dOnsdag, dTorsdag, dFredag;
     private TextView tMåndag, tTisdag, tOnsdag, tTorsdag, tFredag;
+    private TextView TWMåndag, TWTisdag, TWOnsdag, TWTorsdag, TWFredag;
+    String sMåndag, sTisdag, sOnsdag, sTorsdag, sFredag;
     private TextView tRole, tUserID;
-    private ImageView iMåndagEjNärvarande, iTisdagEjNärvarande, iOnsdagEjNärvarande, iTorsdagEjNärvarande, iFredagEjNärvarande;
-    private ImageView iMåndagNärvarande, iTisdagNärvarande, iOnsdagNärvarande, iTorsdagNärvarande, iFredagNärvarande;
+
+    private ImageView iMonGreenChecked, iMonGreenUnChecked, iMonRedChecked, iMonRedUnChecked;
+    private ImageView iTisGreenChecked, iTisGreenUnChecked, iTisRedChecked, iTisRedUnChecked;
+    private ImageView iOnsGreenChecked, iOnsGreenUnChecked, iOnsRedChecked, iOnsRedUnChecked;
+    private ImageView iTorGreenChecked, iTorGreenUnChecked, iTorRedChecked, iTorRedUnChecked;
+    private ImageView iFreGreenChecked, iFreGreenUnChecked, iFreRedChecked, iFreRedUnChecked;
+
+    private TextView CurrentTime;
+
     String stWeek, stMonN, stTisN, stOnsN, stTorN, stFreN;
-    String Datum, NarvaroRaknare;
+    String Narvarande, Datum, NarvaroRaknare;
     String Fnamn, Enamn, AnvandarID;
-    String sFnamn, sEnman;
+    String sFnamn, sEnamn;
     String method;
+    String vecka;
+    String CurrentDatum;
     String startDag, slutdag;
     String sAnvandarID;
+
     int UserID;
+
     Spinner U, s;
 
+    ArrayAdapter<String> adapter;
     ArrayAdapter<String> adapter7;
     ArrayList<Integer> IDList = new ArrayList<Integer>();
     ArrayList<String> fList = new ArrayList<String>();
     ArrayList<String> eList = new ArrayList<String>();
-
     ArrayList<String> antallist = new ArrayList<String>();
 
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        fList.add("Användare");
+        eList.add("Användare");
         antallist.add("Veckor");
         setContentView(R.layout.activity_handledare);
 
         tUserID = (TextView) findViewById(R.id.tUserID);
-        tRole = (TextView) findViewById(R.id.tRole);
+       // tRole = (TextView) findViewById(R.id.tRole);
 
         String sUserID = getIntent().getStringExtra("AnvandarID");
         String sUserRole = getIntent().getStringExtra("Role");
-        Log.d("asd1" , "1" + sUserRole);
 
-        if (sUserRole == "2"){
+        TWMåndag = (TextView) findViewById(R.id.textView32);
+        TWTisdag = (TextView) findViewById(R.id.textView31);
+        TWOnsdag = (TextView) findViewById(R.id.textView30);
+        TWTorsdag = (TextView) findViewById(R.id.textView29);
+        TWFredag = (TextView) findViewById(R.id.textView28);
 
-            tRole.setText("Handledare");
-        }
-
-        Tstartdag = (TextView) findViewById(R.id.textView10);
-        Tslutdag = (TextView) findViewById(R.id.textView11);
-
+        CurrentTime = (TextView) findViewById(R.id.CurrentTime);
         tMåndag = (TextView) findViewById(R.id.textView12);
         tTisdag = (TextView) findViewById(R.id.textView13);
         tOnsdag = (TextView) findViewById(R.id.textView14);
         tTorsdag = (TextView) findViewById(R.id.textView16);
         tFredag = (TextView) findViewById(R.id.textView15);
 
-        dMåndag = (TextView) findViewById(R.id.textView9);
-        dTisdag = (TextView) findViewById(R.id.textView18);
-        dOnsdag = (TextView) findViewById(R.id.textView19);
-        dTorsdag = (TextView) findViewById(R.id.textView17);
-        dFredag = (TextView) findViewById(R.id.textView20);
-
-
         U = (Spinner) findViewById(R.id.UserSpinner);
 
         adapter7 = new ArrayAdapter<String>(this,
-                android.R.layout.simple_spinner_item, fList);
+                android.R.layout.simple_spinner_item, eList);
         adapter7.setDropDownViewResource(android.R.layout.simple_spin‌​ner_dropdown_item);
-        //U.setEnabled(false);
         U.setAdapter(adapter7);
         U.setOnItemSelectedListener(this);
 
-
         s = (Spinner) findViewById(R.id.spinner2);
 
-        ArrayAdapter<String> adapter = new ArrayAdapter<String>(this,
+        adapter = new ArrayAdapter<String>(this,
                 android.R.layout.simple_spinner_item, antallist);
         adapter.setDropDownViewResource(android.R.layout.simple_spin‌​ner_dropdown_item);
         s.setEnabled(false);
@@ -127,65 +190,118 @@ public class HandledareActivity extends AppCompatActivity implements AdapterView
         HandledareActivity.GetUsersFromIDActivity GetUsersFromIDActivity = new HandledareActivity.GetUsersFromIDActivity(this);
         GetUsersFromIDActivity.execute(method);
 
-        iMåndagEjNärvarande = (ImageView) findViewById(R.id.MåndagEjNärvarandeView);
-        iMåndagNärvarande = (ImageView) findViewById(R.id.måndagNärvarandeView);
-        iTisdagEjNärvarande = (ImageView) findViewById(R.id.TisdagEjNärvarandeView);
-        iTisdagNärvarande = (ImageView) findViewById(R.id.tisdagNärvarandeView);
-        iOnsdagEjNärvarande = (ImageView) findViewById(R.id.OnsdagEjNärvarandeView);
-        iOnsdagNärvarande = (ImageView) findViewById(R.id.onsdagNärvarandeView);
-        iTorsdagEjNärvarande = (ImageView) findViewById(R.id.TorsdagEjNärvarandeView);
-        iTorsdagNärvarande = (ImageView) findViewById(R.id.torsdagNärvarandeView);
-        iFredagEjNärvarande = (ImageView) findViewById(R.id.FredagEjNärvarandeView);
-        iFredagNärvarande = (ImageView) findViewById(R.id.FredagNärvarandeView);
+        GregorianCalendar gr =new GregorianCalendar();
+        vecka = String.valueOf(gr.get(Calendar.WEEK_OF_YEAR));
 
-        iMåndagEjNärvarande.setEnabled(false);
-        iMåndagNärvarande.setEnabled(false);
-        iTisdagEjNärvarande.setEnabled(false);
-        iTisdagNärvarande.setEnabled(false);
-        iOnsdagEjNärvarande.setEnabled(false);
-        iOnsdagNärvarande.setEnabled(false);
-        iTorsdagEjNärvarande.setEnabled(false);
-        iTorsdagNärvarande.setEnabled(false);
-        iFredagEjNärvarande.setEnabled(false);
-        iFredagNärvarande.setEnabled(false);
+        method = "hämtaNuvarandeÅrMånadDag";
+        HandledareActivity.GetNuvarandeYearMonthDayActivity GetNuvarandeYearMonthDayActivity = new HandledareActivity.GetNuvarandeYearMonthDayActivity(this);
+        GetNuvarandeYearMonthDayActivity.execute(method);
+
+        iMonGreenChecked = (ImageView) findViewById(R.id.MGreenChecked);
+        iMonGreenUnChecked = (ImageView) findViewById(R.id.MGreenUnChecked);
+        iMonRedChecked = (ImageView) findViewById(R.id.MRedChecked);
+        iMonRedUnChecked = (ImageView) findViewById(R.id.MRedUnChecked);
+
+        iTisGreenChecked = (ImageView) findViewById(R.id.TGreenChecked);
+        iTisGreenUnChecked = (ImageView) findViewById(R.id.TGreenUnChecked);
+        iTisRedChecked = (ImageView) findViewById(R.id.TRedChecked);
+        iTisRedUnChecked = (ImageView) findViewById(R.id.TRedUnChecked);
+
+        iOnsGreenChecked = (ImageView) findViewById(R.id.OGreenChecked);
+        iOnsGreenUnChecked = (ImageView) findViewById(R.id.OGreenUnChecked);
+        iOnsRedChecked = (ImageView) findViewById(R.id.ORedChecked);
+        iOnsRedUnChecked = (ImageView) findViewById(R.id.ORedUnChecked);
+
+        iTorGreenChecked = (ImageView) findViewById(R.id.ToGreenChecked);
+        iTorGreenUnChecked = (ImageView) findViewById(R.id.ToGreenUnChecked);
+        iTorRedChecked = (ImageView) findViewById(R.id.ToRedChecked);
+        iTorRedUnChecked = (ImageView) findViewById(R.id.ToRedUnChecked);
+
+        iFreGreenChecked = (ImageView) findViewById(R.id.FGreenChecked);
+        iFreGreenUnChecked = (ImageView) findViewById(R.id.FGreenUnChecked);
+        iFreRedChecked = (ImageView) findViewById(R.id.FRedChecked);
+        iFreRedUnChecked = (ImageView) findViewById(R.id.FRedUnChecked);
+
+        iMonGreenChecked.setEnabled(false);
+        iMonGreenUnChecked.setEnabled(false);
+        iMonRedChecked.setEnabled(false);
+        iMonRedUnChecked.setEnabled(false);
+
+        iTisGreenChecked.setEnabled(false);
+        iTisGreenUnChecked.setEnabled(false);
+        iTisRedChecked.setEnabled(false);
+        iTisRedUnChecked.setEnabled(false);
+
+        iOnsGreenChecked.setEnabled(false);
+        iOnsGreenUnChecked.setEnabled(false);
+        iOnsRedChecked.setEnabled(false);
+        iOnsRedUnChecked.setEnabled(false);
+
+        iTorGreenChecked.setEnabled(false);
+        iTorGreenUnChecked.setEnabled(false);
+        iTorRedChecked.setEnabled(false);
+        iTorRedUnChecked.setEnabled(false);
+
+        iFreGreenChecked.setEnabled(false);
+        iFreGreenUnChecked.setEnabled(false);
+        iFreRedChecked.setEnabled(false);
+        iFreRedUnChecked.setEnabled(false);
     }
 
     public void onItemSelected(AdapterView<?> parent, View v,
                                int pos, long id) {
 
-
         if (parent.getId() == R.id.UserSpinner) {
 
-            sFnamn = (String) parent.getItemAtPosition(pos);
-            //s.setEnabled(true);
-            if (!sFnamn.equals("Användare")) {
-                UserID = IDList.get(pos - 1);
-                s.setEnabled(true);
+            sEnamn = (String) parent.getItemAtPosition(pos);
+
+                if (!sEnamn.equals("Användare")) {
+                    UserID = IDList.get(pos - 1);
+                    s.setEnabled(true);
             }
 
             method = "hämtadata";
             HandledareActivity.GetAPLWeeksActivity GetAPLWeeksActivity = new HandledareActivity.GetAPLWeeksActivity(this);
             GetAPLWeeksActivity.execute(method, "" + UserID);
 
+            try {
+                method = "hämtadata";
+                HandledareActivity.GetDaysFromWeekActivity GetDaysFromWeekActivity = new HandledareActivity.GetDaysFromWeekActivity(this);
+                GetDaysFromWeekActivity.execute(method, vecka, "" + UserID);
+            } catch (Exception e) {
+
+            }
         }
 
         if (parent.getId() == R.id.spinner2) {
             stWeek = (String) parent.getItemAtPosition(pos);
 
-
             if (!stWeek.equals("Veckor")) {
 
-                iMåndagEjNärvarande.setEnabled(true);
-                iMåndagNärvarande.setEnabled(true);
-                iTisdagEjNärvarande.setEnabled(true);
-                iTisdagNärvarande.setEnabled(true);
-                iOnsdagEjNärvarande.setEnabled(true);
-                iOnsdagNärvarande.setEnabled(true);
-                iTorsdagEjNärvarande.setEnabled(true);
-                iTorsdagNärvarande.setEnabled(true);
-                iFredagEjNärvarande.setEnabled(true);
-                iFredagNärvarande.setEnabled(true);
+                iMonGreenUnChecked.setEnabled(true);
+                iMonRedUnChecked.setEnabled(true);
+                iMonRedChecked.setVisibility(View.INVISIBLE);
+                iMonGreenChecked.setVisibility(View.INVISIBLE);
 
+                iTisGreenUnChecked.setEnabled(true);
+                iTisRedUnChecked.setEnabled(true);
+                iTisRedChecked.setVisibility(View.INVISIBLE);
+                iTisGreenChecked.setVisibility(View.INVISIBLE);
+
+                iOnsGreenUnChecked.setEnabled(true);
+                iOnsRedUnChecked.setEnabled(true);
+                iOnsRedChecked.setVisibility(View.INVISIBLE);
+                iOnsGreenChecked.setVisibility(View.INVISIBLE);
+
+                iTorGreenUnChecked.setEnabled(true);
+                iTorRedUnChecked.setEnabled(true);
+                iTorRedChecked.setVisibility(View.INVISIBLE);
+                iTorGreenChecked.setVisibility(View.INVISIBLE);
+
+                iFreGreenUnChecked.setEnabled(true);
+                iFreRedUnChecked.setEnabled(true);
+                iFreRedChecked.setVisibility(View.INVISIBLE);
+                iFreGreenChecked.setVisibility(View.INVISIBLE);
             }
 
             try {
@@ -195,147 +311,165 @@ public class HandledareActivity extends AppCompatActivity implements AdapterView
             } catch (Exception e) {
 
             }
-
         }
-
     }
 
     public void onNothingSelected(AdapterView<?> arg0) {
 
     }
 
-    public void clickEventMondagEjNärvarande(View v)
+    public void  clickEventMåndagGreenChecked(View v)
     {
-        iMåndagEjNärvarande.setBackgroundColor(Color.RED);
-        iMåndagNärvarande.setBackgroundColor(Color.rgb(40,75,17));
+        iMonGreenChecked.setVisibility(View.VISIBLE);
+        iMonGreenUnChecked.setVisibility(View.INVISIBLE);
+        iMonRedChecked.setVisibility(View.INVISIBLE);
+        iMonRedUnChecked.setVisibility(View.VISIBLE);
 
-
-        String NarvaroRaknare = dMåndag.getText().toString();
-        stMonN = "EjNärvarande";
-
-        String method = "mataInData";
-        HandledareActivity.SendDataActivity SendDataActivity = new HandledareActivity.SendDataActivity(this);
-        SendDataActivity.execute(method, stMonN, NarvaroRaknare, sFnamn);
-
-    }
-
-    public void clickEventMondagNärvarande (View v)
-    {
-        iMåndagNärvarande.setBackgroundColor(Color.GREEN);
-        iMåndagEjNärvarande.setBackgroundColor(Color.rgb(156,5,17));
-        String NarvaroRaknare = dMåndag.getText().toString();
+        String NarvaroRaknare = sMåndag;
         stMonN = "Närvarande";
 
         String method = "mataInData";
         HandledareActivity.SendDataActivity SendDataActivity = new HandledareActivity.SendDataActivity(this);
-        SendDataActivity.execute(method, stMonN, NarvaroRaknare, sFnamn);
+        SendDataActivity.execute(method, stMonN, NarvaroRaknare, sEnamn);
     }
 
-    public void clickEventTisdagEjNärvarande(View v)
+    public void clickEventMåndagRedChecked(View v)
     {
-        iTisdagEjNärvarande.setBackgroundColor(Color.RED);
-        iTisdagNärvarande.setBackgroundColor(Color.GRAY);
 
-        String NarvaroRaknare = dTisdag.getText().toString();
-        stTisN = "EjNärvarande";
+        iMonRedChecked.setVisibility(View.VISIBLE);
+        iMonRedUnChecked.setVisibility(View.INVISIBLE);
+        iMonGreenChecked.setVisibility(View.INVISIBLE);
+        iMonGreenUnChecked.setVisibility(View.VISIBLE);
+        String NarvaroRaknare = sMåndag;
+        stMonN = "EjNärvarande";
 
         String method = "mataInData";
         HandledareActivity.SendDataActivity SendDataActivity = new HandledareActivity.SendDataActivity(this);
-        SendDataActivity.execute(method, stTisN, NarvaroRaknare, sFnamn);
-
+        SendDataActivity.execute(method, stMonN, NarvaroRaknare, sEnamn);
     }
 
-    public void clickEventTisdagNärvarande (View v)
+    public void  clickEventTisdagGreenChecked(View v)
     {
-        iTisdagNärvarande.setBackgroundColor(Color.GREEN);
-        iTisdagEjNärvarande.setBackgroundColor(Color.GRAY);
-        String NarvaroRaknare = dTisdag.getText().toString();
+        iTisGreenChecked.setVisibility(View.VISIBLE);
+        iTisGreenUnChecked.setVisibility(View.INVISIBLE);
+        iTisRedChecked.setVisibility(View.INVISIBLE);
+        iTisRedUnChecked.setVisibility(View.VISIBLE);
+
+        String NarvaroRaknare = sTisdag;
         stTisN = "Närvarande";
 
         String method = "mataInData";
         HandledareActivity.SendDataActivity SendDataActivity = new HandledareActivity.SendDataActivity(this);
-        SendDataActivity.execute(method, stTisN, NarvaroRaknare, sFnamn);
+        SendDataActivity.execute(method, stTisN, NarvaroRaknare, sEnamn);
     }
 
-    public void clickEventOnsdagEjNärvarande(View v)
+    public void clickEventTisdagRedChecked(View v)
     {
-        iOnsdagEjNärvarande.setBackgroundColor(Color.RED);
-        iOnsdagNärvarande.setBackgroundColor(Color.GRAY);
 
-        String NarvaroRaknare = dOnsdag.getText().toString();
-        stOnsN = "EjNärvarande";
+        iTisRedChecked.setVisibility(View.VISIBLE);
+        iTisRedUnChecked.setVisibility(View.INVISIBLE);
+        iTisGreenChecked.setVisibility(View.INVISIBLE);
+        iTisGreenUnChecked.setVisibility(View.VISIBLE);
+        String NarvaroRaknare = sTisdag;
+        stTisN = "EjNärvarande";
 
         String method = "mataInData";
         HandledareActivity.SendDataActivity SendDataActivity = new HandledareActivity.SendDataActivity(this);
-        SendDataActivity.execute(method, stOnsN, NarvaroRaknare, sFnamn);
-
+        SendDataActivity.execute(method, stTisN, NarvaroRaknare, sEnamn);
     }
 
-    public void clickEventOnsdagNärvarande (View v)
+    public void  clickEventOnsdagGreenChecked(View v)
     {
-        iOnsdagNärvarande.setBackgroundColor(Color.GREEN);
-        iOnsdagEjNärvarande.setBackgroundColor(Color.GRAY);
-        String NarvaroRaknare = dOnsdag.getText().toString();
+        iOnsGreenChecked.setVisibility(View.VISIBLE);
+        iOnsGreenUnChecked.setVisibility(View.INVISIBLE);
+        iOnsRedChecked.setVisibility(View.INVISIBLE);
+        iOnsRedUnChecked.setVisibility(View.VISIBLE);
+
+        String NarvaroRaknare = sOnsdag;
         stOnsN = "Närvarande";
 
         String method = "mataInData";
         HandledareActivity.SendDataActivity SendDataActivity = new HandledareActivity.SendDataActivity(this);
-        SendDataActivity.execute(method, stOnsN, NarvaroRaknare, sFnamn);
+        SendDataActivity.execute(method, stOnsN, NarvaroRaknare, sEnamn);
     }
 
-    public void clickEventTorsdagEjNärvarande(View v)
+    public void clickEventOnsdagRedChecked(View v)
     {
-        iTorsdagEjNärvarande.setBackgroundColor(Color.RED);
-        iTorsdagNärvarande.setBackgroundColor(Color.GRAY);
 
-        String NarvaroRaknare = dTorsdag.getText().toString();
-        stTorN = "EjNärvarande";
+        iOnsRedChecked.setVisibility(View.VISIBLE);
+        iOnsRedUnChecked.setVisibility(View.INVISIBLE);
+        iOnsGreenChecked.setVisibility(View.INVISIBLE);
+        iOnsGreenUnChecked.setVisibility(View.VISIBLE);
+
+        String NarvaroRaknare = sOnsdag;
+        stOnsN = "EjNärvarande";
 
         String method = "mataInData";
         HandledareActivity.SendDataActivity SendDataActivity = new HandledareActivity.SendDataActivity(this);
-        SendDataActivity.execute(method, stTorN, NarvaroRaknare, sFnamn);
-
+        SendDataActivity.execute(method, stOnsN, NarvaroRaknare, sEnamn);
     }
 
-    public void clickEventTorsdagNärvarande (View v)
+    public void  clickEventTorsdagGreenChecked(View v)
     {
-        iTorsdagNärvarande.setBackgroundColor(Color.GREEN);
-        iTorsdagEjNärvarande.setBackgroundColor(Color.GRAY);
-        String NarvaroRaknare = dTorsdag.getText().toString();
+        iTorGreenChecked.setVisibility(View.VISIBLE);
+        iTorGreenUnChecked.setVisibility(View.INVISIBLE);
+        iTorRedChecked.setVisibility(View.INVISIBLE);
+        iTorRedUnChecked.setVisibility(View.VISIBLE);
+
+        String NarvaroRaknare = sTorsdag;
         stTorN = "Närvarande";
 
         String method = "mataInData";
         HandledareActivity.SendDataActivity SendDataActivity = new HandledareActivity.SendDataActivity(this);
-        SendDataActivity.execute(method, stTorN, NarvaroRaknare, sFnamn);
+        SendDataActivity.execute(method, stTorN, NarvaroRaknare, sEnamn);
     }
 
-    public void clickEventFredagEjNärvarande(View v)
+    public void clickEventTorsdagRedChecked(View v)
     {
-        iFredagEjNärvarande.setBackgroundColor(Color.RED);
-        iFredagNärvarande.setBackgroundColor(Color.GRAY);
 
-        String NarvaroRaknare = dFredag.getText().toString();
-        stFreN = "EjNärvarande";
+        iTorRedChecked.setVisibility(View.VISIBLE);
+        iTorRedUnChecked.setVisibility(View.INVISIBLE);
+        iTorGreenChecked.setVisibility(View.INVISIBLE);
+        iTorGreenUnChecked.setVisibility(View.VISIBLE);
+
+        String NarvaroRaknare = sTorsdag;
+        stTorN = "EjNärvarande";
 
         String method = "mataInData";
         HandledareActivity.SendDataActivity SendDataActivity = new HandledareActivity.SendDataActivity(this);
-        SendDataActivity.execute(method, stFreN, NarvaroRaknare, sFnamn);
-
+        SendDataActivity.execute(method, stTorN, NarvaroRaknare, sEnamn);
     }
 
-    public void clickEventFredagNärvarande (View v)
+    public void  clickEventFredagGreenChecked(View v)
     {
-        iFredagNärvarande.setBackgroundColor(Color.GREEN);
-        iFredagEjNärvarande.setBackgroundColor(Color.GRAY);
-        String NarvaroRaknare = dFredag.getText().toString();
+        iFreGreenChecked.setVisibility(View.VISIBLE);
+        iFreGreenUnChecked.setVisibility(View.INVISIBLE);
+        iFreRedChecked.setVisibility(View.INVISIBLE);
+        iFreRedUnChecked.setVisibility(View.VISIBLE);
+
+        String NarvaroRaknare = sFredag;
         stFreN = "Närvarande";
 
         String method = "mataInData";
         HandledareActivity.SendDataActivity SendDataActivity = new HandledareActivity.SendDataActivity(this);
-        SendDataActivity.execute(method, stFreN, NarvaroRaknare, sFnamn);
+        SendDataActivity.execute(method, stFreN, NarvaroRaknare, sEnamn);
     }
 
+    public void clickEventFredagRedChecked(View v)
+    {
 
+        iFreRedChecked.setVisibility(View.VISIBLE);
+        iFreRedUnChecked.setVisibility(View.INVISIBLE);
+        iFreGreenChecked.setVisibility(View.INVISIBLE);
+        iFreGreenUnChecked.setVisibility(View.VISIBLE);
+
+        String NarvaroRaknare = sFredag;
+        stFreN = "EjNärvarande";
+
+        String method = "mataInData";
+        HandledareActivity.SendDataActivity SendDataActivity = new HandledareActivity.SendDataActivity(this);
+        SendDataActivity.execute(method, stFreN, NarvaroRaknare, sEnamn);
+    }
 
     public void onClickClose(View view) {
         finish();
@@ -346,9 +480,102 @@ public class HandledareActivity extends AppCompatActivity implements AdapterView
 
     }
 
+    private class GetNuvarandeYearMonthDayActivity extends AsyncTask<String, Void, String> {
+
+        AlertDialog alertDialog;
+        Context ctx;
+        View v;
+
+        GetNuvarandeYearMonthDayActivity(Context ctx)
+
+        {
+            this.ctx = ctx;
+            this.v = v;
+        }
+
+        @Override
+        protected void onPreExecute() {
+
+            // alertDialog = new AlertDialog.Builder(ctx).create();
+            // alertDialog.setTitle("Login Information....");
+        }
+
+        @Override
+        protected String doInBackground(String... params) {
+
+            String login_url = "http://"+getResources().getString(R.string.ip) +"/APL-APP/APL_PHP/APL_GETCurrentYearMonthDay.php";
+            String method = params[0];
+            if (method.equals("hämtaNuvarandeÅrMånadDag")) {
+
+                try {
+                    URL url = new URL(login_url);
+                    HttpURLConnection httpURLConnection = (HttpURLConnection) url.openConnection();
+                    httpURLConnection.setRequestMethod("POST");
+                    httpURLConnection.setDoOutput(true);
+                    httpURLConnection.setDoInput(true);
+                    OutputStream outputStream = httpURLConnection.getOutputStream();
+                    BufferedWriter bufferedWriter = new BufferedWriter(new OutputStreamWriter(outputStream, "UTF-8"));
+                    //String data = URLEncoder.encode("AnvandarID", "UTF-8") + "=" + URLEncoder.encode(UserID, "UTF-8");
+                    //bufferedWriter.write(data);
+                    bufferedWriter.flush();
+                    bufferedWriter.close();
+                    outputStream.close();
+                    InputStream inputStream = httpURLConnection.getInputStream();
+                    BufferedReader bufferedReader = new BufferedReader(new InputStreamReader(inputStream, "iso-8859-1"));
+                    String response = "";
+                    String line = "";
+                    while ((line = bufferedReader.readLine()) != null) {
+                        response += line;
+                    }
+                    bufferedReader.close();
+                    inputStream.close();
+                    httpURLConnection.disconnect();
+                    return response;
+                } catch (MalformedURLException e) {
+                    e.printStackTrace();
+                } catch (IOException e) {
+                    e.printStackTrace();
+                }
+            }
+            return null;
+        }
+
+        @Override
+        protected void onProgressUpdate(Void... values) {
+            super.onProgressUpdate(values);
+        }
+
+        @Override
+        protected void onPostExecute(String result) {
+
+
+            JSONArray jsonarray = null;
+            try {
+                jsonarray = new JSONArray(result);
+            } catch (JSONException e) {
+                e.printStackTrace();
+            }
+
+            for (int i = 0; i < jsonarray.length(); i++) {
+                JSONObject obj = null;
+                try {
+                    obj = jsonarray.getJSONObject(i);
+                } catch (JSONException e) {
+                    e.printStackTrace();
+                }
+
+                CurrentDatum = null;
+                try {
+                    CurrentDatum = obj.getString("Datum");
+                } catch (JSONException e) {
+                    e.printStackTrace();
+                }
+            }
+            CurrentTime.setText("" + CurrentDatum);
+        }
+    }
 
     private class GetAPLWeeksActivity extends AsyncTask<String, Void, String> {
-
 
         AlertDialog alertDialog;
         Context ctx;
@@ -361,13 +588,11 @@ public class HandledareActivity extends AppCompatActivity implements AdapterView
             this.v = v;
         }
 
-
         @Override
         protected void onPreExecute() {
 
             //   alertDialog = new AlertDialog.Builder(ctx).create();
             // alertDialog.setTitle("Login Information....");
-
         }
 
         @Override
@@ -409,18 +634,15 @@ public class HandledareActivity extends AppCompatActivity implements AdapterView
                 }
             }
             return null;
-
         }
 
         @Override
         protected void onProgressUpdate(Void... values) {
             super.onProgressUpdate(values);
-
         }
 
         @Override
         protected void onPostExecute(String result) {
-
 
             JSONArray jsonarray = null;
             try {
@@ -440,39 +662,47 @@ public class HandledareActivity extends AppCompatActivity implements AdapterView
 
                     startDag = null;
                     try {
-                        startDag = obj.getString("Week(startdag)");
+                        startDag = obj.getString("Week(startdag, 3)");
+                        Log.d("startvecka", "1" + startDag);
                     } catch (JSONException e) {
                         e.printStackTrace();
                     }
 
                     slutdag = null;
                     try {
-                        slutdag = obj.getString("Week(slutdag)");
+                        slutdag = obj.getString("Week(slutdag, 3)");
+                        Log.d("startvecka", "2" + slutdag);
                     } catch (JSONException e) {
                         e.printStackTrace();
                     }
-
-                    Tstartdag.setText(startDag);
-                    Tslutdag.setText(slutdag);
                 }
 
                 int start = Integer.parseInt(startDag);
                 int slut = Integer.parseInt(slutdag);
 
-                // int antal = (slut - start) + 1;
-
+                antallist.clear();
+                antallist.add("Veckor");
 
                 for (int vecka = start, i = 0; vecka < slut+1; vecka++, i++) {
                     antallist.add(String.valueOf(vecka));
-                    //  arraySpinner1[i] = "" + vecka;
                 }
-            }catch (Exception w){
 
+            int j = 0;
+
+              while (j < antallist.size()){
+
+                  if (Objects.equals(antallist.get(j), vecka)) {
+                    s.setSelection(j);
+                    break;
+                }
+                  j++;
+            }
+            }catch (Exception w){
             }
         }
     }
-    private class GetDaysFromWeekActivity extends AsyncTask<String, Void, String> {
 
+    private class GetDaysFromWeekActivity extends AsyncTask<String, Void, String> {
 
         AlertDialog alertDialog;
         Context ctx;
@@ -484,7 +714,6 @@ public class HandledareActivity extends AppCompatActivity implements AdapterView
             this.ctx = ctx;
             this.v = v;
         }
-
 
         @Override
         protected void onPreExecute() {
@@ -535,18 +764,15 @@ public class HandledareActivity extends AppCompatActivity implements AdapterView
                 }
             }
             return null;
-
         }
 
         @Override
         protected void onProgressUpdate(Void... values) {
             super.onProgressUpdate(values);
-
         }
 
         @Override
         protected void onPostExecute(String result) {
-
 
             JSONArray jsonarray = null;
             try {
@@ -556,6 +782,65 @@ public class HandledareActivity extends AppCompatActivity implements AdapterView
             }
 
             try {
+
+                tMåndag.setText("Måndag ");
+                tTisdag.setText("Tisdag ");
+                tOnsdag.setText("Onsdag ");
+                tTorsdag.setText("Torsdag ");
+                tFredag.setText("Fredag ");
+
+                tMåndag.setBackgroundColor(Color.WHITE);
+                tTisdag.setBackgroundColor(Color.WHITE);
+                tOnsdag.setBackgroundColor(Color.WHITE);
+                tTorsdag.setBackgroundColor(Color.WHITE);
+                tFredag.setBackgroundColor(Color.WHITE);
+
+                iMonGreenUnChecked.setVisibility(View.VISIBLE);
+                iMonRedUnChecked.setVisibility(View.VISIBLE);
+
+                iMonRedChecked.setVisibility(View.INVISIBLE);
+                iMonRedUnChecked.setVisibility(View.INVISIBLE);
+                iMonGreenChecked.setVisibility(View.INVISIBLE);
+                iMonGreenUnChecked.setVisibility(View.INVISIBLE);
+
+                iTisGreenUnChecked.setVisibility(View.VISIBLE);
+                iTisRedUnChecked.setVisibility(View.VISIBLE);
+
+                iTisRedChecked.setVisibility(View.INVISIBLE);
+                iTisRedUnChecked.setVisibility(View.INVISIBLE);
+                iTisGreenChecked.setVisibility(View.INVISIBLE);
+                iTisGreenUnChecked.setVisibility(View.INVISIBLE);
+
+                iOnsGreenUnChecked.setVisibility(View.VISIBLE);
+                iOnsRedUnChecked.setVisibility(View.VISIBLE);
+
+                iOnsRedChecked.setVisibility(View.INVISIBLE);
+                iOnsRedUnChecked.setVisibility(View.INVISIBLE);
+                iOnsGreenChecked.setVisibility(View.INVISIBLE);
+                iOnsGreenUnChecked.setVisibility(View.INVISIBLE);
+
+                iTorGreenUnChecked.setVisibility(View.VISIBLE);
+                iTorRedUnChecked.setVisibility(View.VISIBLE);
+
+                iTorRedChecked.setVisibility(View.INVISIBLE);
+                iTorRedUnChecked.setVisibility(View.INVISIBLE);
+                iTorGreenChecked.setVisibility(View.INVISIBLE);
+                iTorGreenUnChecked.setVisibility(View.INVISIBLE);
+
+                iFreGreenUnChecked.setVisibility(View.VISIBLE);
+                iFreRedUnChecked.setVisibility(View.VISIBLE);
+
+                iFreRedChecked.setVisibility(View.INVISIBLE);
+                iFreRedUnChecked.setVisibility(View.INVISIBLE);
+                iFreGreenChecked.setVisibility(View.INVISIBLE);
+                iFreGreenUnChecked.setVisibility(View.INVISIBLE);
+
+                TWMåndag.setText("Ingen Närvaro Krävs");
+                TWTisdag.setText("Ingen Närvaro Krävs");
+                TWOnsdag.setText("Ingen Närvaro Krävs");
+                TWTorsdag.setText("Ingen Närvaro Krävs");
+                TWFredag.setText("Ingen Närvaro Krävs");
+
                 for (int i = 0; i < jsonarray.length(); i++) {
                     JSONObject obj = null;
                     try {
@@ -573,46 +858,187 @@ public class HandledareActivity extends AppCompatActivity implements AdapterView
 
                     Datum = null;
                     try {
-                        Datum = obj.getString("Datum");
+                        Datum = obj.getString("Datumm");
                     } catch (JSONException e) {
                         e.printStackTrace();
                     }
 
+                    Narvarande = null;
+                    try {
+                        Narvarande = obj.getString("Narvarande");
+                    } catch (JSONException e) {
+                        e.printStackTrace();
+                    }
 
                     if (i == 0) {
-                        tMåndag.setText("Måndag" + Datum);
-                        dMåndag.setText("" + NarvaroRaknare);
 
+                        tMåndag.setText("Måndag " + Datum);
+                        sMåndag = NarvaroRaknare;
+                        TWMåndag.setText("");
+
+                        if (Objects.equals(CurrentDatum, Datum )) {
+
+                            tMåndag.setBackgroundColor(Color.GREEN);
+                        }
+
+                        if (Objects.equals(Narvarande, "1")) {
+
+                            iMonGreenChecked.setVisibility(View.VISIBLE);
+                            iMonGreenUnChecked.setVisibility(View.INVISIBLE);
+                            iMonRedChecked.setVisibility(View.INVISIBLE);
+                            iMonRedUnChecked.setVisibility(View.VISIBLE);
+                        }
+                        if (Objects.equals(Narvarande, "0")) {
+
+                            iMonGreenChecked.setVisibility(View.INVISIBLE);
+                            iMonGreenUnChecked.setVisibility(View.VISIBLE);
+                            iMonRedChecked.setVisibility(View.VISIBLE);
+                            iMonRedUnChecked.setVisibility(View.INVISIBLE);
+                        }
+                        if (Objects.equals(Narvarande, "null")) {
+
+                            iMonGreenChecked.setVisibility(View.INVISIBLE);
+                            iMonGreenUnChecked.setVisibility(View.VISIBLE);
+                            iMonRedChecked.setVisibility(View.INVISIBLE);
+                            iMonRedUnChecked.setVisibility(View.VISIBLE);
+                        }
                     }
                     if (i == 1) {
-                        tTisdag.setText("Tisdag" + Datum);
-                        dTisdag.setText("" + NarvaroRaknare);
+                        tTisdag.setText("Tisdag " + Datum);
+                        sTisdag = NarvaroRaknare;
+                        TWTisdag.setText("");
+
+                        if (Objects.equals(CurrentDatum, Datum )) {
+
+                            tTisdag.setBackgroundColor(Color.GREEN);
+                        }
+
+                        if (Objects.equals(Narvarande, "1")) {
+
+                            iTisGreenChecked.setVisibility(View.VISIBLE);
+                            iTisGreenUnChecked.setVisibility(View.INVISIBLE);
+                            iTisRedChecked.setVisibility(View.INVISIBLE);
+                            iTisRedUnChecked.setVisibility(View.VISIBLE);
+                        }
+                        if (Objects.equals(Narvarande, "0")) {
+
+                            iTisGreenChecked.setVisibility(View.INVISIBLE);
+                            iTisGreenUnChecked.setVisibility(View.VISIBLE);
+                            iTisRedChecked.setVisibility(View.VISIBLE);
+                            iTisRedUnChecked.setVisibility(View.INVISIBLE);
+                        }
+                        if (Objects.equals(Narvarande, "null")) {
+
+                            iTisGreenChecked.setVisibility(View.INVISIBLE);
+                            iTisGreenUnChecked.setVisibility(View.VISIBLE);
+                            iTisRedChecked.setVisibility(View.INVISIBLE);
+                            iTisRedUnChecked.setVisibility(View.VISIBLE);
+                        }
                     }
                     if (i == 2) {
-                        tOnsdag.setText("Onsdag" + Datum);
-                        dOnsdag.setText("" + NarvaroRaknare);
+                        tOnsdag.setText("Onsdag " + Datum);
+                        sOnsdag = NarvaroRaknare;
+                        TWOnsdag.setText("");
+
+                        if (Objects.equals(CurrentDatum, Datum )) {
+
+                            tOnsdag.setBackgroundColor(Color.GREEN);
+                        }
+
+                        if (Objects.equals(Narvarande, "1")) {
+
+                            iOnsGreenChecked.setVisibility(View.VISIBLE);
+                            iOnsGreenUnChecked.setVisibility(View.INVISIBLE);
+                            iOnsRedChecked.setVisibility(View.INVISIBLE);
+                            iOnsRedUnChecked.setVisibility(View.VISIBLE);
+                        }
+                        if (Objects.equals(Narvarande, "0")) {
+
+                            iOnsGreenChecked.setVisibility(View.INVISIBLE);
+                            iOnsGreenUnChecked.setVisibility(View.VISIBLE);
+                            iOnsRedChecked.setVisibility(View.VISIBLE);
+                            iOnsRedUnChecked.setVisibility(View.INVISIBLE);
+                        }
+                        if (Objects.equals(Narvarande, "null")) {
+
+                            iOnsGreenChecked.setVisibility(View.INVISIBLE);
+                            iOnsGreenUnChecked.setVisibility(View.VISIBLE);
+                            iOnsRedChecked.setVisibility(View.INVISIBLE);
+                            iOnsRedUnChecked.setVisibility(View.VISIBLE);
+                        }
                     }
                     if (i == 3) {
-                        tTorsdag.setText("Torsdag" + Datum);
-                        dTorsdag.setText("" + NarvaroRaknare);
+                        tTorsdag.setText("Torsdag " + Datum);
+                        sTorsdag = NarvaroRaknare;
+                        TWTorsdag.setText("");
+
+                        if (Objects.equals(CurrentDatum, Datum )) {
+
+                            tTorsdag.setBackgroundColor(Color.GREEN);
+                        }
+
+                        if (Objects.equals(Narvarande, "1")) {
+
+                            iTorGreenChecked.setVisibility(View.VISIBLE);
+                            iTorGreenUnChecked.setVisibility(View.INVISIBLE);
+                            iTorRedChecked.setVisibility(View.INVISIBLE);
+                            iTorRedUnChecked.setVisibility(View.VISIBLE);
+                        }
+                        if (Objects.equals(Narvarande, "0")) {
+
+                            iTorGreenChecked.setVisibility(View.INVISIBLE);
+                            iTorGreenUnChecked.setVisibility(View.VISIBLE);
+                            iTorRedChecked.setVisibility(View.VISIBLE);
+                            iTorRedUnChecked.setVisibility(View.INVISIBLE);
+                        }
+                        if (Objects.equals(Narvarande, "null")) {
+
+                            iTorGreenChecked.setVisibility(View.INVISIBLE);
+                            iTorGreenUnChecked.setVisibility(View.VISIBLE);
+                            iTorRedChecked.setVisibility(View.INVISIBLE);
+                            iTorRedUnChecked.setVisibility(View.VISIBLE);
+                        }
                     }
                     if (i == 4) {
-                        tFredag.setText("Fredag" + Datum);
-                        dFredag.setText("" + NarvaroRaknare);
+                        tFredag.setText("Fredag " + Datum);
+                        sFredag = NarvaroRaknare;
+                        TWFredag.setText("");
+
+                        if (Objects.equals(CurrentDatum, Datum )) {
+
+                            tFredag.setBackgroundColor(Color.GREEN);
+                        }
+
+                        if (Objects.equals(Narvarande, "1")) {
+
+                            iFreGreenChecked.setVisibility(View.VISIBLE);
+                            iFreGreenUnChecked.setVisibility(View.INVISIBLE);
+                            iFreRedChecked.setVisibility(View.INVISIBLE);
+                            iFreRedUnChecked.setVisibility(View.VISIBLE);
+                        }
+                        if (Objects.equals(Narvarande, "0")) {
+
+                            iFreGreenChecked.setVisibility(View.INVISIBLE);
+                            iFreGreenUnChecked.setVisibility(View.VISIBLE);
+                            iFreRedChecked.setVisibility(View.VISIBLE);
+                            iFreRedUnChecked.setVisibility(View.INVISIBLE);
+                        }
+                        if (Objects.equals(Narvarande, "null")) {
+
+                            iFreGreenChecked.setVisibility(View.INVISIBLE);
+                            iFreGreenUnChecked.setVisibility(View.VISIBLE);
+                            iFreRedChecked.setVisibility(View.INVISIBLE);
+                            iFreRedUnChecked.setVisibility(View.VISIBLE);
+                        }
                     }
-
-
                 }
             }
             catch (Exception r){
-
             }
-
         }
     }
 
     private class GetUsersFromIDActivity extends AsyncTask<String, Void, String> {
-
 
         AlertDialog alertDialog;
         Context ctx;
@@ -625,13 +1051,11 @@ public class HandledareActivity extends AppCompatActivity implements AdapterView
             this.v = v;
         }
 
-
         @Override
         protected void onPreExecute() {
 
             //   alertDialog = new AlertDialog.Builder(ctx).create();
             // alertDialog.setTitle("Login Information....");
-
         }
 
         @Override
@@ -671,15 +1095,12 @@ public class HandledareActivity extends AppCompatActivity implements AdapterView
                     e.printStackTrace();
                 }
             }
-
             return null;
-
         }
 
         @Override
         protected void onProgressUpdate(Void... values) {
             super.onProgressUpdate(values);
-
         }
 
         @Override
@@ -701,7 +1122,6 @@ public class HandledareActivity extends AppCompatActivity implements AdapterView
                         e.printStackTrace();
                     }
 
-
                     sAnvandarID = null;
                     try {
                         sAnvandarID = obj.getString("AnvandarID");
@@ -711,17 +1131,13 @@ public class HandledareActivity extends AppCompatActivity implements AdapterView
                     } catch (JSONException e) {
                         e.printStackTrace();
                     }
-
                 }
             }catch (Exception k) {
-
             }
-
         }
     }
 
     private class GetUsersWithNarvaroActivity extends AsyncTask<String, Void, String> {
-
 
         AlertDialog alertDialog;
         GetUsersFromIDActivity ctx;
@@ -734,13 +1150,11 @@ public class HandledareActivity extends AppCompatActivity implements AdapterView
             this.v = v;
         }
 
-
         @Override
         protected void onPreExecute() {
 
             //   alertDialog = new AlertDialog.Builder(ctx).create();
             // alertDialog.setTitle("Login Information....");
-
         }
 
         @Override
@@ -781,15 +1195,12 @@ public class HandledareActivity extends AppCompatActivity implements AdapterView
                     e.printStackTrace();
                 }
             }
-
             return null;
-
         }
 
         @Override
         protected void onProgressUpdate(Void... values) {
             super.onProgressUpdate(values);
-
         }
 
         @Override
@@ -833,40 +1244,33 @@ public class HandledareActivity extends AppCompatActivity implements AdapterView
                     } catch (JSONException e) {
                         e.printStackTrace();
                     }
-
                 }
             }catch (Exception k) {
 
             }
             Spinner U = (Spinner)findViewById(R.id.UserSpinner);
             U.invalidate();
-            U.setSelection(0);
-
-
+            U.setSelection(1);
         }
     }
 
     private class GetUsersWithLoginInfoActivity extends AsyncTask<String, Void, String> {
-
 
         AlertDialog alertDialog;
         Context ctx;
         View v;
 
         GetUsersWithLoginInfoActivity(Context ctx)
-
         {
             this.ctx = ctx;
             this.v = v;
         }
-
 
         @Override
         protected void onPreExecute() {
 
             //   alertDialog = new AlertDialog.Builder(ctx).create();
             // alertDialog.setTitle("Login Information....");
-
         }
 
         @Override
@@ -907,15 +1311,12 @@ public class HandledareActivity extends AppCompatActivity implements AdapterView
                     e.printStackTrace();
                 }
             }
-
             return null;
-
         }
 
         @Override
         protected void onProgressUpdate(Void... values) {
             super.onProgressUpdate(values);
-
         }
 
         @Override
@@ -946,28 +1347,23 @@ public class HandledareActivity extends AppCompatActivity implements AdapterView
                     Fnamn = null;
                     try {
                         Fnamn = obj.getString("Fnamn");
-                        Log.d("asd", "1" + Fnamn);
                     } catch (JSONException e) {
                         e.printStackTrace();
                     }
-
                 }
             }catch (Exception k) {
             }
             tUserID.setText("" + Fnamn + " " + Enamn);
-
         }
     }
 
     private class SendDataActivity extends AsyncTask<String, Void, String> {
-
 
         AlertDialog alertDialog;
         Context ctx;
         View v;
 
         SendDataActivity(Context ctx)
-
         {
             this.ctx = ctx;
             this.v = v;
@@ -1015,7 +1411,6 @@ public class HandledareActivity extends AppCompatActivity implements AdapterView
                     }
                     bufferedReader.close();
                     IS.close();
-
                     //httpURLConnection.connect();
                     httpURLConnection.disconnect();
                     return response;
@@ -1030,10 +1425,6 @@ public class HandledareActivity extends AppCompatActivity implements AdapterView
         }
         @Override
         protected void onPostExecute(String result) {
-
-
-
         }
     }
-
 }

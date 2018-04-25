@@ -35,19 +35,17 @@ public class ListNarvaroActivity extends AppCompatActivity implements AdapterVie
         String Fnamn, Enamn, AnvandarID, Narvarande, Datum;
         String sFnamn;
         String method;
-    private LinearLayout test;
+        private LinearLayout test;
         private TextView närvarolista;
         private TextView tMåndag, tTisdag, tOnsdag, tTorsdag, tFredag,testingNarvaro;
 
         int UserID;
-
 
         ArrayAdapter<String> adapter1;
         ArrayList<Integer> IDList = new ArrayList<Integer>();
         ArrayList<String> fList = new ArrayList<String>();
         ArrayList<String> eList = new ArrayList<String>();
         ArrayList<Integer> NList = new ArrayList<Integer>();
-
 
         @Override
         protected void onCreate(Bundle savedInstanceState) {
@@ -61,7 +59,6 @@ public class ListNarvaroActivity extends AppCompatActivity implements AdapterVie
 
             testingNarvaro = (TextView) findViewById(R.id.textView27);
 
-
             Spinner N = (Spinner)findViewById(R.id.spinner4);
 
             adapter1 = new ArrayAdapter<String>(this,
@@ -70,12 +67,9 @@ public class ListNarvaroActivity extends AppCompatActivity implements AdapterVie
             N.setAdapter(adapter1);
             N.setOnItemSelectedListener(this);
 
-
             method = "hämtaUserdata";
             ListNarvaroActivity.GetUsersFromNarvaroActivity GetUsersFromNarvaroActivity = new ListNarvaroActivity.GetUsersFromNarvaroActivity(this);
             GetUsersFromNarvaroActivity.execute(method);
-
-
         }
 
         public void onItemSelected(AdapterView<?> parent, View v,
@@ -86,7 +80,6 @@ public class ListNarvaroActivity extends AppCompatActivity implements AdapterVie
 
                 sFnamn = (String) parent.getItemAtPosition(pos);
 
-
                 if (!sFnamn.equals("Användare")) {
                     UserID = IDList.get(pos - 1);
                     Toast toast = Toast.makeText(this, "" + UserID, Toast.LENGTH_LONG);
@@ -94,23 +87,17 @@ public class ListNarvaroActivity extends AppCompatActivity implements AdapterVie
 
                 }
 
-
                 method = "hämtaNärvarodata";
                 ListNarvaroActivity.GetUsersNarvaroActivity GetUsersNarvaroActivity = new ListNarvaroActivity.GetUsersNarvaroActivity(this);
                 GetUsersNarvaroActivity.execute(method, "" + UserID);
 
-
-
             }
-
-
         }
         public void onNothingSelected(AdapterView<?> arg0) {
 
         }
 
         private class GetUsersFromNarvaroActivity extends AsyncTask<String, Void, String> {
-
 
             AlertDialog alertDialog;
             Context ctx;
@@ -123,13 +110,11 @@ public class ListNarvaroActivity extends AppCompatActivity implements AdapterVie
                 this.v = v;
             }
 
-
             @Override
             protected void onPreExecute() {
 
                 //   alertDialog = new AlertDialog.Builder(ctx).create();
                 // alertDialog.setTitle("Login Information....");
-
             }
 
             @Override
@@ -169,15 +154,12 @@ public class ListNarvaroActivity extends AppCompatActivity implements AdapterVie
                         e.printStackTrace();
                     }
                 }
-
                 return null;
-
             }
 
             @Override
             protected void onProgressUpdate(Void... values) {
                 super.onProgressUpdate(values);
-
             }
 
             @Override
@@ -190,7 +172,6 @@ public class ListNarvaroActivity extends AppCompatActivity implements AdapterVie
                     e.printStackTrace();
                 }
 
-
                 for (int i = 0; i < jsonarray.length(); i++) {
                     JSONObject obj = null;
                     try {
@@ -198,7 +179,6 @@ public class ListNarvaroActivity extends AppCompatActivity implements AdapterVie
                     } catch (JSONException e) {
                         e.printStackTrace();
                     }
-
                     Enamn = null;
                     try {
                         Enamn = obj.getString("Enamn");
@@ -213,7 +193,6 @@ public class ListNarvaroActivity extends AppCompatActivity implements AdapterVie
                     } catch (JSONException e) {
                         e.printStackTrace();
                     }
-
                     AnvandarID = null;
                     try {
                         AnvandarID = obj.getString("AnvandarID");
@@ -221,17 +200,14 @@ public class ListNarvaroActivity extends AppCompatActivity implements AdapterVie
                     } catch (JSONException e) {
                         e.printStackTrace();
                     }
-
                 }
                 Spinner N = (Spinner)findViewById(R.id.spinner4);
                 N.invalidate();
                 N.setSelection(0);
-
             }
         }
 
     private class GetUsersNarvaroActivity extends AsyncTask<String, Void, String> {
-
 
         AlertDialog alertDialog;
         Context ctx;
@@ -244,13 +220,11 @@ public class ListNarvaroActivity extends AppCompatActivity implements AdapterVie
             this.v = v;
         }
 
-
         @Override
         protected void onPreExecute() {
 
             //   alertDialog = new AlertDialog.Builder(ctx).create();
             // alertDialog.setTitle("Login Information....");
-
         }
 
         @Override
@@ -291,15 +265,12 @@ public class ListNarvaroActivity extends AppCompatActivity implements AdapterVie
                     e.printStackTrace();
                 }
             }
-
             return null;
-
         }
 
         @Override
         protected void onProgressUpdate(Void... values) {
             super.onProgressUpdate(values);
-
         }
 
         @Override
@@ -311,43 +282,42 @@ public class ListNarvaroActivity extends AppCompatActivity implements AdapterVie
             } catch (JSONException e) {
                 e.printStackTrace();
             }
+                try {
+                    for (int i = 0; i < jsonarray.length(); i++) {
+                        JSONObject obj = null;
+                        try {
+                            obj = jsonarray.getJSONObject(i);
+                        } catch (JSONException e) {
+                            e.printStackTrace();
+                        }
 
-try {
-    for (int i = 0; i < jsonarray.length(); i++) {
-        JSONObject obj = null;
-        try {
-            obj = jsonarray.getJSONObject(i);
-        } catch (JSONException e) {
-            e.printStackTrace();
+                        Narvarande = null;
+                        try {
+                            Narvarande = obj.getString("Narvarande");
+                            NList.add(Integer.valueOf(Narvarande));
+                        } catch (JSONException e) {
+                            e.printStackTrace();
+                        }
+
+                        Datum = null;
+                        try {
+                            Datum = obj.getString("Datum");
+                        } catch (JSONException e) {
+                            e.printStackTrace();
+                        }
+
+
+                        if (i == 1) {
+                            tMåndag.setText("Måndag" + Datum);
+                            testingNarvaro.setText("måndag" + Narvarande);
+
+                        }
+
+                    }
+                }  catch (Exception r){
+
+                }
+                            närvarolista.setText("oj" + NList);
         }
-
-        Narvarande = null;
-        try {
-            Narvarande = obj.getString("Narvarande");
-            NList.add(Integer.valueOf(Narvarande));
-        } catch (JSONException e) {
-            e.printStackTrace();
-        }
-
-        Datum = null;
-        try {
-            Datum = obj.getString("Datum");
-        } catch (JSONException e) {
-            e.printStackTrace();
-        }
-
-
-        if (i == 1) {
-            tMåndag.setText("Måndag" + Datum);
-            testingNarvaro.setText("måndag" + Narvarande);
-
-        }
-
     }
-}  catch (Exception r){
-
 }
-            närvarolista.setText("oj" + NList);
-        }
-    }
-    }

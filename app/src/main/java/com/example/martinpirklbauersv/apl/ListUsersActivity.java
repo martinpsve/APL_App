@@ -39,14 +39,36 @@ import java.net.MalformedURLException;
 import java.net.URL;
 import java.net.URLEncoder;
 
+/*
+
+Beskriving:
+Här har vi en funktion för att lista Användare utifrån deras olika roller.
+
+Klasser:
+GetUsersActivity
+IN:
+I denna klass matas Användares roll in i PHP fil.
+
+UT:
+data som man får tillbaka är användares ID och Efternamn.
+
+indata:
+Admin kan välja vilka användare han vill se utifrån roll via en spinner.
+
+utdata:
+Admins Användarnamn och Roll Bekräftelse skriv ut på skärmen.
+Användares ID och Efternamn skrivs ut på skärmen
+
+*/
+
     public class ListUsersActivity extends AppCompatActivity implements AdapterView.OnItemSelectedListener {
 
         private DrawerLayout myDrawerLayout;
 
-        private TextView AnvandarID, RoleID;
+        private TextView AnvändarID, AnvändarRoll;
         private LinearLayout RmButlayout, IDButLayout;
-        private TextView AnvändarnID, AnvändarRoll;
         String Roller;
+
         @Override
         protected void onCreate(Bundle savedInstanceState) {
             super.onCreate(savedInstanceState);
@@ -110,26 +132,20 @@ import java.net.URLEncoder;
                                 }
                             });
 
-            AnvandarID = (TextView) findViewById(R.id.användarID);
             String s = getIntent().getStringExtra("AnvandarID");
-            AnvandarID.setText(s);
-
-            RoleID = (TextView) findViewById(R.id.text2);
             String r = getIntent().getStringExtra("Role");
-            RoleID.setText(r);
 
             //ANVÄNDARNAMN OCH ROLL I DRAWERN
             View nameView = navView.getHeaderView(0);
 
-            AnvändarnID = (TextView) nameView.findViewById(R.id.userName);
-            AnvändarnID.setText(s);
+            AnvändarID = (TextView) nameView.findViewById(R.id.userName);
+            AnvändarID.setText(s);
 
             AnvändarRoll = (TextView) nameView.findViewById(R.id.userRoll);
             AnvändarRoll.setText(r);
 
             RmButlayout = (LinearLayout) findViewById(R.id.RMLL);
             IDButLayout = (LinearLayout) findViewById(R.id.IDLL);
-
 
             Spinner roller = (Spinner)findViewById(R.id.spinner);
             String[] arraySpinner1 = new String[] {
@@ -150,7 +166,6 @@ import java.net.URLEncoder;
                     myDrawerLayout.openDrawer(GravityCompat.START);
                     return true;
             }
-
             return super.onOptionsItemSelected(item);
         }
 
@@ -166,9 +181,7 @@ import java.net.URLEncoder;
                 ListUsersActivity.GetUsersActivity GetUsersActivity = new ListUsersActivity.GetUsersActivity(this);
                 GetUsersActivity.execute(method, Roller);
             }
-
         }
-
         public void onNothingSelected(AdapterView<?> arg0) {
 
         }
@@ -187,7 +200,6 @@ import java.net.URLEncoder;
 
         private class GetUsersActivity extends AsyncTask<String, Void, String> {
 
-
             AlertDialog alertDialog;
             Context ctx;
             View v;
@@ -201,7 +213,6 @@ import java.net.URLEncoder;
 
             @Override
             protected void onPreExecute() {
-
                 // alertDialog = new AlertDialog.Builder(ctx).create();
                 // alertDialog.setTitle("Login Information....");
             }
@@ -244,9 +255,7 @@ import java.net.URLEncoder;
                         e.printStackTrace();
                     }
                 }
-
                 return null;
-
             }
 
             @Override
@@ -300,7 +309,6 @@ import java.net.URLEncoder;
                             startActivity(intent);
                         }
                     });
-
 
                     Button IDButton = new Button(ListUsersActivity.this);
                     IDButton.setTextSize(10);

@@ -38,22 +38,59 @@ import java.net.URL;
 import java.net.URLEncoder;
 import java.util.Objects;
 
+/*
+
+Beskriving:
+Här har vi en funktion för att uppdatera användare i databasen.
+
+Klasser:
+
+GetUserDataActivity
+
+IN:
+användarID på den valda användaren matas in
+
+UT:
+data om den valda användaren hämtas. förnamn, efternamn, lösenord, telefonnummer, mailadress och roll.
+önskan, matchning, KlassID på elever.
+UndervisarID på läraren.
+ArbetsplatsID på Handledare.
+
+SendUpdateUserActivity
+IN:
+förnamn, efternamn, lösenord, telefonnummer, mailadress, roll, önskan, UndervisarID och ArbetsplatsID skickas till databasen.
+
+UT
+ingen utdata hämtas
+
+indata:
+Admin kan mata in förnamn, efternamn, lösenord, telefonnummer, mailadress och roll på alla användare.
+önskan, matchning, KlassID på elever.
+UndervisarID på läraren.
+ArbetsplatsID på Handledare.
+
+
+utdata:
+Admins Användarnamn och Roll Bekräftelse skriv ut på skärmen.
+
+*/
+
 public class UppdateUsersActivity extends AppCompatActivity implements AdapterView.OnItemSelectedListener {
 
     private DrawerLayout myDrawerLayout;
 
-    private TextView AnvandarID;
+    private TextView AnvandarID, AnvandarNamn;
     private LinearLayout IDButLayout;
     private EditText FnamnField, EnamnField, LösenordField, TelefonnummerField, MailadressField;
     private EditText EOnskan, Ematchning, EKlassID;
     private EditText EArbetsplatsID;
     private EditText EUndervisar;
-    String UserID, Fnamn, Enamn, lösenord, Telefonnummer, Email, Role, str;
+    String UserID, Fnamn, Enamn, lösenord, Telefonnummer, Email, Role, stRoll;
     String Onskan, Matchning, KlassID;
     String ArbetsplatsID;
     String Undervisar;
     String sAnvandarnamn;
-    private TextView AnvandarNamn;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -76,7 +113,6 @@ public class UppdateUsersActivity extends AppCompatActivity implements AdapterVi
                             public boolean onNavigationItemSelected(MenuItem menuItem)
                             {
                                 switch (menuItem.getItemId()){
-
 
                                     case R.id. nav_setNarvaro:
                                         Intent CalenderActivity = new Intent(UppdateUsersActivity.this,SetNarvaroActivity.class);
@@ -108,7 +144,6 @@ public class UppdateUsersActivity extends AppCompatActivity implements AdapterVi
                                         startActivity( MainActivity);
                                         break;
                                 }
-
 
                                 menuItem.setChecked(true);
 
@@ -145,11 +180,9 @@ public class UppdateUsersActivity extends AppCompatActivity implements AdapterVi
 
         UserID = AnvandarID.getText().toString();
 
-        String method = "hämtadata";
-        UppdateUsersActivity.GetDataActivity GetDataActivity = new UppdateUsersActivity.GetDataActivity(this);
-        GetDataActivity.execute(method, UserID);
-
-
+        String method = "hämtaUserdata";
+        UppdateUsersActivity.GetUserDataActivity GetUserDataActivity = new UppdateUsersActivity.GetUserDataActivity(this);
+        GetUserDataActivity.execute(method, UserID);
     }
 
     @Override
@@ -166,7 +199,7 @@ public class UppdateUsersActivity extends AppCompatActivity implements AdapterVi
     public void onItemSelected(AdapterView<?> parent, View v,
                                int pos, long id) {
 
-        str = (String ) parent.getItemAtPosition(pos);
+        stRoll = (String ) parent.getItemAtPosition(pos);
 
     }
 
@@ -216,18 +249,12 @@ public class UppdateUsersActivity extends AppCompatActivity implements AdapterVi
             ArbetsplatsID = "";
         }
 
-
-        Role = str;
-
-
-
         String method = "mataInData";
         UppdateUsersActivity.SendUpdateUserActivity SendUpdateUserActivity = new UppdateUsersActivity.SendUpdateUserActivity(this);
-        SendUpdateUserActivity.execute(method, UserID, Fnamn, Enamn, lösenord, Telefonnummer, Email, Onskan, Matchning, KlassID, Undervisar, ArbetsplatsID, Role);
+        SendUpdateUserActivity.execute(method, UserID, Fnamn, Enamn, lösenord, Telefonnummer, Email, Onskan, Matchning, KlassID, Undervisar, ArbetsplatsID, stRoll);
     }
 
     private class SendUpdateUserActivity extends AsyncTask<String, Void, String> {
-
 
         AlertDialog alertDialog;
         Context ctx;
@@ -264,7 +291,6 @@ public class UppdateUsersActivity extends AppCompatActivity implements AdapterVi
             String ArbetsplatsID = params[11];
             String Role = params[12];
 
-
             if (method.equals("mataInData")) {
 
                 try {
@@ -294,7 +320,6 @@ public class UppdateUsersActivity extends AppCompatActivity implements AdapterVi
                     OS.close();
                     InputStream IS = httpURLConnection.getInputStream();
 
-
                     BufferedReader bufferedReader = new BufferedReader(new InputStreamReader(IS, "iso-8859-1"));
                     String response = "";
                     String line = "";
@@ -307,7 +332,7 @@ public class UppdateUsersActivity extends AppCompatActivity implements AdapterVi
                     //httpURLConnection.connect();
                     httpURLConnection.disconnect();
                     return response;
-                    // return "Registration Success...";
+                    // return "";
                 } catch (MalformedURLException e) {
                     e.printStackTrace();
                 } catch (IOException e) {
@@ -319,18 +344,16 @@ public class UppdateUsersActivity extends AppCompatActivity implements AdapterVi
         @Override
         protected void onPostExecute(String result) {
 
-
-
         }
     }
 
-    private class GetDataActivity extends AsyncTask<String, Void, String> {
+    private class GetUserDataActivity extends AsyncTask<String, Void, String> {
 
         AlertDialog alertDialog;
         Context ctx;
         View v;
 
-        GetDataActivity(Context ctx)
+        GetUserDataActivity(Context ctx)
 
         {
             this.ctx = ctx;
@@ -349,7 +372,7 @@ public class UppdateUsersActivity extends AppCompatActivity implements AdapterVi
             String login_url = "http://"+getResources().getString(R.string.ip) +"/APL-APP/APL_PHP/APL_AdminListUsersUpdate.php";
             String method = params[0];
             String UserID = params[1];
-            if (method.equals("hämtadata")) {
+            if (method.equals("hämtaUserdata")) {
 
                 try {
                     URL url = new URL(login_url);
@@ -392,8 +415,6 @@ public class UppdateUsersActivity extends AppCompatActivity implements AdapterVi
 
         @Override
         protected void onPostExecute(String result) {
-
-
 
             JSONArray jsonarray = null;
             try {
@@ -578,10 +599,7 @@ public class UppdateUsersActivity extends AppCompatActivity implements AdapterVi
                 LösenordField.setText(sLosenord);
                 TelefonnummerField.setText(sTelefonnummer);
                 MailadressField.setText(sEmail);
-
             }
-
         }
     }
-
 }

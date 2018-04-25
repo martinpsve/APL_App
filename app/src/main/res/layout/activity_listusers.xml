@@ -54,30 +54,6 @@
 
             </LinearLayout>
 
-            <LinearLayout
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginLeft="120dp"
-                android:orientation="vertical">
-
-                <TextView
-                    android:id="@+id/användarID"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:text="användarID"
-                    tools:layout_editor_absoluteX="288dp"
-                    tools:layout_editor_absoluteY="216dp" />
-
-                <TextView
-                    android:id="@+id/text2"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:text="Roll"
-                    tools:layout_editor_absoluteX="334dp"
-                    tools:layout_editor_absoluteY="261dp" />
-
-            </LinearLayout>
-
         </LinearLayout>
 
     </ScrollView>
