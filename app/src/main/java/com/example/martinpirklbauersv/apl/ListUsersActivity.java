@@ -42,7 +42,7 @@ import java.net.URLEncoder;
 /*
 
 Beskriving:
-Här har vi en funktion för att lista Användare utifrån deras olika roller.
+Här har vi en funktion för att lista Användare utifrån deras olika roller, denna funktion ska användas av elever, lärare och kanslisten.
 
 Klasser:
 GetUsersActivity

@@ -94,12 +94,6 @@ IN:
 UT:
 ingen utdata
 
-indata:
-
-
-utdata:
-
-
 */
 
 public class HandledareActivity extends AppCompatActivity implements AdapterView.OnItemSelectedListener {

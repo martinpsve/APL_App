@@ -35,13 +35,17 @@ Här har vi en funktion för att logga in.
 Klasser:
 CheckLoginActivity
 IN:
-I denna klass matas användarens användarnamn. lösenord och roll in.
+I denna klass matas användarens användarnamn. lösenord in.
+roll väljs via en spinner med de olika rollerna.
 
 UT:
 data som man får tillbaka är antingen en 1a eller 0a.
+blir det en 1a loggas man in.
+blir det en 0a händer inget.
 
 indata:
-Användaren skriver in användarnamn och lösenord och vilken roll hen har.
+Användaren skriver in användarnamn och lösenord hen har.
+Användaren väljer vilken roll hen har via en spinner.
 
 utdata:
 användarens ID och roll skickas vidare till olika intent beroende på roll.
