@@ -8,14 +8,6 @@ import android.os.Bundle;
 Beskriving:
 Här har vi Lärarens startsida där hen ska kunna se Närvaro och annat material.
 
-Klasser:
-KopplaElevMedAPLPeriodActivity
-IN:
-Finns ingen data.
-
-UT:
-Finns ingen data.
-
 indata:
 man kan inte skriva in någon data.
 

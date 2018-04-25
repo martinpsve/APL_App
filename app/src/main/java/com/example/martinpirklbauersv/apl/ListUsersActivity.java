@@ -46,6 +46,9 @@ Här har vi en funktion för att lista Användare utifrån deras olika roller, d
 
 Klasser:
 GetUsersActivity
+Beskrivning:
+Här hämtas användarnas efternamn och läggs in i en lista
+
 IN:
 I denna klass matas Användares roll in i PHP fil.
 

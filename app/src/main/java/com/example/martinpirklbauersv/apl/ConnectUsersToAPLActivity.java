@@ -34,6 +34,9 @@ Här har vi en funktion för att koppla ihop Elever med en APl-Period.
 
 Klasser:
 KopplaElevMedAPLPeriodActivity
+Beskrivning:
+Här kopplar man ihop vald elev med vald apl-period
+
 IN:
 I denna klass matas Elevers Id, Dag, APL-period och Arbetsplats in i Databasen.
 

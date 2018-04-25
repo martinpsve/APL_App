@@ -39,9 +39,15 @@ import java.util.Objects;
 Beskriving:
 Här har vi en funktion för handledaren att sätta närvaro på elever.
 
+all indata tas emot som jsonsträngar som jag lägger in i arrayer.
+all utdata skickas som strängar
+
 Klasser:
 
 GetUsersWithLoginInfoActivity
+
+Beskrivning:
+hämtar information om användaren som loggade in
 
 IN:
 användarnamn från den som loggade in
@@ -50,6 +56,8 @@ UT:
 för och efternamn.
 
 GetNuvarandeYearMonthDayActivity
+Beskrivning:
+hämtar nuvarande år, månad och dag
 
 IN:
 ingen indata.
@@ -58,6 +66,8 @@ UT:
 Nuvarande år månad och dag
 
 GetUsersFromIDActivity
+Beskrivning:
+hämtar alla användare som har närvaro på samma arbetsplats som deras handledare
 
 IN:
 ingen indata
@@ -66,6 +76,8 @@ UT:
 användarID på alla användare
 
 GetAPLWeeksActivity
+Beskrivning:
+hämtar veckorna som ingår i ens apl-period
 
 IN:
 användarID på den valda person från spinner
@@ -74,9 +86,11 @@ UT:
 APL veckor som personen är registrerad på
 
 GetDaysFromWeekActivity
+Beskrivning:
+hämtar dagarna från vald vecka och elev
 
 IN;
-användarID på den valda person från spinner och vecka från antigen nuvarande vecka eller från valt item från spinner
+användarID på den valda eleven från spinner och vecka från antigen nuvarande vecka eller från valt item från spinner
 
 UT:
 datum på de olika veckodagarna.
@@ -84,15 +98,17 @@ närvarocheck på de olika veckodagarna beroende på användareID
 närvaroID på de olika veckodagarna beroende på användareID
 
 SendDataActivity
+Beskrivning:
+skickar närvaro status om vald elev och dag
 
 IN:
-
  stMonN status på närvaro om man är närvarande eller frånvarande och vilken veckodag
  NarvaroRaknare beroende vilken dag
  sEnamn: namn på personen som är vald från spinner
 
 UT:
 ingen utdata
+
 
 */
 
