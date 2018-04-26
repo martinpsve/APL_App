@@ -44,7 +44,6 @@
             android:name=".UppdateUsersActivity"
             android:label="UppdateUsersActivity"
             android:theme="@style/AppTheme.NoActionBar" />
-        <activity android:name=".RemoveUsersActivity" />
         <activity
             android:name=".SetNarvaroActivity"
             android:label="Sätta Nävaro"

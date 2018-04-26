@@ -42,14 +42,18 @@ import java.util.ArrayList;
 import java.util.Objects;
 
 /*
-
+xml fil för denna aktivitet är "activity_setnarvaro"
 Beskriving:
 Här har vi en funktion för Administratören att sätta närvaro på elever.
 
 Klasser:
-
+alla klasser använder ip ifrån "strings.xml"
+all indata tas emot som jsonsträngar som jag lägger in i arrayer.
+all utdata skickas som strängar
 
 GetUsersFromIDActivity
+Beskrivning:
+hämtar alla användare som har närvaro på samma arbetsplats som deras handledare
 
 IN:
 ingen indata
@@ -58,6 +62,8 @@ UT:
 användarID på alla användare
 
 GetAPLWeeksActivity
+Beskrivning:
+hämtar veckorna som ingår i ens apl-period
 
 IN:
 användarID på den valda person från spinner
@@ -66,6 +72,8 @@ UT:
 APL veckor som personen är registrerad på
 
 GetDaysFromWeekActivity
+Beskrivning:
+hämtar dagarna från vald vecka och elev
 
 IN;
 användarID på den valda person från spinner och vecka från antigen nuvarande vecka eller från valt item från spinner
@@ -76,6 +84,8 @@ närvarocheck på de olika veckodagarna beroende på användareID
 närvaroID på de olika veckodagarna beroende på användareID
 
 SendDataActivity
+Beskrivning:
+skickar närvaro status om vald elev och dag
 
 IN:
 

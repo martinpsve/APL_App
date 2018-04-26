@@ -39,13 +39,21 @@ import java.util.ArrayList;
 import java.util.Objects;
 
 /*
-
+xml fil för denna aktivitet är "activity_registerusers"
 Beskriving:
-Här har vi en funktion för att registrera användare och skapa användarnamn som matas in i databasen.
+Hit kommer Administratören efter han klickar in på "registrera användare som ligger i sido drawern".
+Här får administratören möjlighetet att skapa en användare med förnamn, efternamn, lösenord, mailaddress och telefonnummer.
+
 
 Klasser:
+alla klasser använder ip ifrån "strings.xml"
+all indata tas emot som jsonsträngar som jag lägger in i arrayer.
+all utdata skickas som strängar
 
 GetAnvandareActivity
+Beskrivning:
+här hämtas användarnamn på alla användare för att kontrollera så att användarnamn blir unika
+
 IN:
 ingen data matas in:
 
@@ -53,6 +61,8 @@ UT:
 data som man får tillbaka är användares användarnamn
 
 CreateUsersActivity
+Beskrivning:
+Här skickas den nya användaren in i databasen.
 
 IN:
 förnamn, efternamn, lösenord, telefonnummer, mailadress matas in till databasen.

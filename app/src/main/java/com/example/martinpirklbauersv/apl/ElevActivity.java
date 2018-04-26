@@ -30,17 +30,9 @@ import java.net.MalformedURLException;
 import java.net.URL;
 import java.net.URLEncoder;
 /*
-
+xml fil för denna aktivitet är "activity_elev.xml"
 Beskriving:
 Här har vi Elevers startsida där hen ska kunna se Närvaro och annat material.
-
-Klasser:
-KopplaElevMedAPLPeriodActivity
-IN:
-Finns ingen data.
-
-UT:
-Finns ingen data.
 
 indata:
 man kan inte skriva in någon data.
