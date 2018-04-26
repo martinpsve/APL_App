@@ -28,12 +28,19 @@ import java.net.URLEncoder;
 import java.util.Objects;
 
 /*
-
+xml fil för denna aktivitet är "activity_login"
 Beskriving:
 Här har vi en funktion för att logga in.
 
 Klasser:
+alla klasser använder ip ifrån "strings.xml"
+all indata tas emot som jsonsträngar som jag lägger in i arrayer.
+all utdata skickas som strängar
+
 CheckLoginActivity
+Beskrivning:
+här kontrolleras inloggning på användarna
+
 IN:
 I denna klass matas användarens användarnamn. lösenord in.
 roll väljs via en spinner med de olika rollerna.

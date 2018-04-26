@@ -39,13 +39,32 @@ import java.net.URLEncoder;
 import java.util.Objects;
 
 /*
-
+xml fil för denna aktivitet är "activity_uppdateusers"
 Beskriving:
+Hit kommer Administratören efter han klickar in på en användare som listades i aktiviteten ListaUsers.
+Här får administratören möjlighetet att ändra förnamn, efternamn, lösenord, mailaddress och telefonnummer.
+extra uppgifter för:
+elever:
+önskning
+matchning
+Klass
+
+lärare:
+undervisar
+
+handledare:
+Arbetsplats
+
 Här har vi en funktion för att uppdatera användare i databasen.
 
 Klasser:
+alla klasser använder ip ifrån "strings.xml"
+all indata tas emot som jsonsträngar som jag lägger in i arrayer.
+all utdata skickas som strängar
 
 GetUserDataActivity
+Beskriving:
+Här hämtas information am vald användare för att sendare kunna uppdatera användaren
 
 IN:
 användarID på den valda användaren matas in
@@ -57,6 +76,9 @@ UndervisarID på läraren.
 ArbetsplatsID på Handledare.
 
 SendUpdateUserActivity
+Beskriving:
+Här skickas de uppdateringar som admin valt att göra på vald användare
+
 IN:
 förnamn, efternamn, lösenord, telefonnummer, mailadress, roll, önskan, UndervisarID och ArbetsplatsID skickas till databasen.
 

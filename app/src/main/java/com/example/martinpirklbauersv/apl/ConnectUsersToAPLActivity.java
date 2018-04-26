@@ -28,11 +28,15 @@ import java.net.URL;
 import java.net.URLEncoder;
 
 /*
-
+xml fil för denna aktivitet är "activity_connectuserstoapl"
 Beskriving:
 Här har vi en funktion för att koppla ihop Elever med en APl-Period.
 
 Klasser:
+alla klasser använder ip ifrån "strings.xml"
+all indata tas emot som jsonsträngar som jag lägger in i arrayer.
+all utdata skickas som strängar
+
 KopplaElevMedAPLPeriodActivity
 Beskrivning:
 Här kopplar man ihop vald elev med vald apl-period

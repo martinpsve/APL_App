@@ -4,7 +4,7 @@ import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 
 /*
-
+xml fil för denna aktivitet är "activity_kansli"
 Beskriving:
 Här har vi Kanslistens startsida där hen ska kunna se Närvaro och annat material.
 

@@ -4,7 +4,7 @@ import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 
 /*
-
+xml fil för denna aktivitet är "activity_larare"
 Beskriving:
 Här har vi Lärarens startsida där hen ska kunna se Närvaro och annat material.
 

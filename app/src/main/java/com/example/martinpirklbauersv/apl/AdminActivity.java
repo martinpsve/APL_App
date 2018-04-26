@@ -14,7 +14,7 @@ import android.widget.TextView;
 
 
 /*
-
+xml fil för denna aktivitet är "activity_admin"
 Beskriving:
 Här har vi Admins startsida där hen kommer åt de olika funktionerna via
 en Drawer.

@@ -30,6 +30,42 @@ import java.net.URL;
 import java.net.URLEncoder;
 import java.util.ArrayList;
 
+/*
+xml fil för denna aktivitet är "activity_listnarvaro"
+Beskriving:
+
+Här har vi en funktion för att lista användares närvaro
+denna funktion ska användas av elever, lärare och kanslisten.
+
+Klasser:
+alla klasser använder ip ifrån "strings.xml"
+all indata tas emot som jsonsträngar som jag lägger in i arrayer.
+all utdata skickas som strängar
+
+GetUsersFromNarvaroActivity
+
+Beskrivning:
+Här ska det inhämtas elever som har närvaro
+
+IN:
+ingen indata
+
+UT:
+för och efternamn.
+
+GetUsersNarvaroActivity
+
+Beskrivning:
+Här ska det inhämtas elevers närvaro
+
+IN:
+elevers användareID
+
+UT:
+Elevers Närvaro
+
+*/
+
 public class ListNarvaroActivity extends AppCompatActivity implements AdapterView.OnItemSelectedListener {
 
         String Fnamn, Enamn, AnvandarID, Narvarande, Datum;
@@ -37,7 +73,7 @@ public class ListNarvaroActivity extends AppCompatActivity implements AdapterVie
         String method;
         private LinearLayout test;
         private TextView närvarolista;
-        private TextView tMåndag, tTisdag, tOnsdag, tTorsdag, tFredag,testingNarvaro;
+        private TextView tMåndag,testingNarvaro;
 
         int UserID;
 
@@ -57,7 +93,7 @@ public class ListNarvaroActivity extends AppCompatActivity implements AdapterVie
 
             tMåndag = (TextView) findViewById(R.id.test1);
 
-            testingNarvaro = (TextView) findViewById(R.id.textView27);
+
 
             Spinner N = (Spinner)findViewById(R.id.spinner4);
 
@@ -75,15 +111,12 @@ public class ListNarvaroActivity extends AppCompatActivity implements AdapterVie
         public void onItemSelected(AdapterView<?> parent, View v,
                                    int pos, long id) {
 
-
             if (parent.getId() == R.id.spinner4) {
 
                 sFnamn = (String) parent.getItemAtPosition(pos);
 
                 if (!sFnamn.equals("Användare")) {
                     UserID = IDList.get(pos - 1);
-                    Toast toast = Toast.makeText(this, "" + UserID, Toast.LENGTH_LONG);
-                    toast.show();
 
                 }
 
@@ -171,6 +204,8 @@ public class ListNarvaroActivity extends AppCompatActivity implements AdapterVie
                 } catch (JSONException e) {
                     e.printStackTrace();
                 }
+try{
+
 
                 for (int i = 0; i < jsonarray.length(); i++) {
                     JSONObject obj = null;
@@ -201,6 +236,9 @@ public class ListNarvaroActivity extends AppCompatActivity implements AdapterVie
                         e.printStackTrace();
                     }
                 }
+}catch (Exception e) {
+
+}
                 Spinner N = (Spinner)findViewById(R.id.spinner4);
                 N.invalidate();
                 N.setSelection(0);
@@ -317,7 +355,7 @@ public class ListNarvaroActivity extends AppCompatActivity implements AdapterVie
                 }  catch (Exception r){
 
                 }
-                            närvarolista.setText("oj" + NList);
+
         }
     }
 }

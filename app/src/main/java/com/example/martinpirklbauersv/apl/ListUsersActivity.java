@@ -40,11 +40,19 @@ import java.net.URL;
 import java.net.URLEncoder;
 
 /*
-
+xml fil för denna aktivitet är "activity_listusers"
 Beskriving:
-Här har vi en funktion för att lista Användare utifrån deras olika roller, denna funktion ska användas av elever, lärare och kanslisten.
+Hit kommer Administratören efter han klickar in på "Lista användare".
+Här finns det en spinner där Admin får välja mellan olika roller.
+beroende på roll så visas de olika användare.
+
+
 
 Klasser:
+alla klasser använder ip ifrån "strings.xml"
+all indata tas emot som jsonsträngar som jag lägger in i arrayer.
+all utdata skickas som strängar
+
 GetUsersActivity
 Beskrivning:
 Här hämtas användarnas efternamn och läggs in i en lista
@@ -303,15 +311,6 @@ Användares ID och Efternamn skrivs ut på skärmen
                     ImageView RMButton = new ImageView(ListUsersActivity.this);
                     RMButton.setImageResource(R.drawable.ic_launcher_background);
 
-                    RMButton.setOnClickListener(new View.OnClickListener() {
-                        @Override
-                        public void onClick(View view) {
-
-                            Intent intent = new Intent(ctx, RemoveUsersActivity.class);
-                            intent.putExtra("AnvandarID", finalSAnvadarID);
-                            startActivity(intent);
-                        }
-                    });
 
                     Button IDButton = new Button(ListUsersActivity.this);
                     IDButton.setTextSize(10);

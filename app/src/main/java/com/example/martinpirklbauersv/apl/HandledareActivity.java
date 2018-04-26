@@ -35,14 +35,23 @@ import java.util.GregorianCalendar;
 import java.util.Objects;
 
 /*
-
+xml fil för denna aktivitet är "activity_handledare"
 Beskriving:
 Här har vi en funktion för handledaren att sätta närvaro på elever.
 
-all indata tas emot som jsonsträngar som jag lägger in i arrayer.
-all utdata skickas som strängar
+Hit kommer handledaren efter han loggar in via loginsidan(LoginActivity).
+Här finns det 2 olika spinners, en för elever och en för veckor.
+Det finns även Dagarna upplistade från måndag til fredag med en knapp
+för "ja" och en för "nej" för varjje veckodag.
+
+Handledaren kan välja mellan elever och veckor och välja
+med hjälp av knapparna om eleven är närvarande eller inte
+
 
 Klasser:
+alla klasser använder ip ifrån "strings.xml"
+all indata tas emot som jsonsträngar som jag lägger in i arrayer.
+all utdata skickas som strängar
 
 GetUsersWithLoginInfoActivity
 
