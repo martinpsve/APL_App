@@ -1,4 +1,17 @@
 <?php
+
+/*
+Beskrivning:
+funktion för att Lista Närvaro
+
+Indata:
+får in användarID ifrån applikation
+
+Utdata
+skickar Narvarande vilket är ett ID och Datum till applikationen som json
+
+*/
+
 include 'APL_databasConnect.php';
 
 $AnvandarID = $_POST["AnvandarID"];
