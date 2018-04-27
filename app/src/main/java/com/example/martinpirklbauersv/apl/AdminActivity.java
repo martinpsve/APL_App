@@ -19,11 +19,19 @@ Beskriving:
 Här har vi Admins startsida där hen kommer åt de olika funktionerna via
 en Drawer.
 
+De olika funktionerna:
+Lista användare
+Registrera användare
+koppla användare med apl-period
+Rapportera närvaro på elever
+
+
 indata:
 ingen indata möjlig.
 
 utdata:
 Admins Användarnamn och Roll Bekräftelse skriv ut på skärmen.
+Denna Utdata skickas vidare ifrån LoginActivity
 
 */
 

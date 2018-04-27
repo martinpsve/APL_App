@@ -55,10 +55,11 @@ all utdata skickas som strängar
 
 GetUsersActivity
 Beskrivning:
-Här hämtas användarnas efternamn och läggs in i en lista
+Här hämtas a nvändarnasefternamn och läggs in i en lista
 
 IN:
-I denna klass matas Användares roll in i PHP fil.
+användares Roll
+
 
 UT:
 data som man får tillbaka är användares ID och Efternamn.
