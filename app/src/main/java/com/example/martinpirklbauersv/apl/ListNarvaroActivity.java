@@ -51,7 +51,7 @@ IN:
 ingen indata
 
 UT:
-för och efternamn.
+för och efternamn på elever.
 
 GetUsersNarvaroActivity
 
@@ -59,7 +59,7 @@ Beskrivning:
 Här ska det inhämtas elevers närvaro
 
 IN:
-elevers användareID
+elevers användareID på elever
 
 UT:
 Elevers Närvaro

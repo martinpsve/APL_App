@@ -30,6 +30,7 @@ import java.net.URLEncoder;
 /*
 xml fil för denna aktivitet är "activity_connectuserstoapl"
 Beskriving:
+Med elevernas ID och apl-periodens ID använder vi en kopplingstabell som gör det möjligt att rapportera närvaro.
 Här har vi en funktion för att koppla ihop Elever med en APl-Period.
 
 Klasser:

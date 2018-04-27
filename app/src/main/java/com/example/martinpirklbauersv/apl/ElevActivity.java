@@ -39,7 +39,7 @@ man kan inte skriva in någon data.
 
 utdata:
 Eleven Användarnamn och Roll Bekräftelse kan skrivas ut på skärmen.
-
+Denna Utdata skickas vidare ifrån LoginActivity
 */
 public class ElevActivity extends AppCompatActivity {
 

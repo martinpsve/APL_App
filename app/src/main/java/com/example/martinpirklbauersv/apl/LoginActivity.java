@@ -30,7 +30,16 @@ import java.util.Objects;
 /*
 xml fil för denna aktivitet är "activity_login"
 Beskriving:
-Här har vi en funktion för att logga in.
+Hit kommer användaren när hen startar applikationen apl
+här får användaren skrvia in sitt användarnamn och lösenord.
+hej får även välja roll via en spinner.
+därefter om man skriver in korekkta uppgifter skickas man vidare till respektive inloggnings aktivitet.
+De olika aktiviteterna:
+ElevActivity.
+KansliActivity.
+LarareActivity.
+AdminActivity.
+HandledareActivity.
 
 Klasser:
 alla klasser använder ip ifrån "strings.xml"

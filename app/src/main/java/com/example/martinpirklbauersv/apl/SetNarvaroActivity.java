@@ -89,18 +89,12 @@ skickar närvaro status om vald elev och dag
 
 IN:
 
- stMonN status på närvaro om man är närvarande eller frånvarande och vilken veckodag
- NarvaroRaknare beroende vilken dag
- sEnamn: namn på personen som är vald från spinner
+stMonN status på närvaro om man är närvarande eller frånvarande och vilken veckodag
+NarvaroRaknare beroende vilken dag
+sEnamn: namn på personen som är vald från spinner
 
 UT:
 ingen utdata
-
-indata:
-
-
-utdata:
-
 
 */
 
