@@ -197,7 +197,7 @@ public class UppdateUsersActivity extends AppCompatActivity implements AdapterVi
 
         ArrayAdapter<String> adapter = new ArrayAdapter<String>(this,
                 android.R.layout.simple_spinner_item, arraySpinner);
-        adapter.setDropDownViewResource(android.R.layout.simple_spin‌​ner_dropdown_item);
+        adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
         s.setAdapter(adapter);
 
         UserID = AnvandarID.getText().toString();

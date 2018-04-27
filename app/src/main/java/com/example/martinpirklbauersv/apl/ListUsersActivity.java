@@ -166,7 +166,7 @@ Användares ID och Efternamn skrivs ut på skärmen
 
             ArrayAdapter<String> adapter4 = new ArrayAdapter<String>(this,
                     android.R.layout.simple_spinner_item, arraySpinner1);
-            adapter4.setDropDownViewResource(android.R.layout.simple_spin‌​ner_dropdown_item);
+            adapter4.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
             roller.setAdapter(adapter4);
             roller.setOnItemSelectedListener(this);
 

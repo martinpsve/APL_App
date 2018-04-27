@@ -206,7 +206,7 @@ public class SetNarvaroActivity extends AppCompatActivity implements AdapterView
 
         adapter10 = new ArrayAdapter<String>(this,
                 android.R.layout.simple_spinner_item, KList);
-        adapter10.setDropDownViewResource(android.R.layout.simple_spin‌​ner_dropdown_item);
+        adapter10.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
         //K.setEnabled(false);
         K.setAdapter(adapter10);
         K.setOnItemSelectedListener(this);
@@ -215,7 +215,7 @@ public class SetNarvaroActivity extends AppCompatActivity implements AdapterView
 
         adapter7 = new ArrayAdapter<String>(this,
                 android.R.layout.simple_spinner_item, fList);
-        adapter7.setDropDownViewResource(android.R.layout.simple_spin‌​ner_dropdown_item);
+        adapter7.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
         U.setEnabled(false);
         U.setAdapter(adapter7);
         U.setOnItemSelectedListener(this);
@@ -224,7 +224,7 @@ public class SetNarvaroActivity extends AppCompatActivity implements AdapterView
 
         ArrayAdapter<String> adapter = new ArrayAdapter<String>(this,
                 android.R.layout.simple_spinner_item, antallist);
-        adapter.setDropDownViewResource(android.R.layout.simple_spin‌​ner_dropdown_item);
+        adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
 
         s.setEnabled(false);
         s.setAdapter(adapter);

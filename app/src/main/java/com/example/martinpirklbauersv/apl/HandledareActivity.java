@@ -188,7 +188,7 @@ public class HandledareActivity extends AppCompatActivity implements AdapterView
 
         adapter7 = new ArrayAdapter<String>(this,
                 android.R.layout.simple_spinner_item, eList);
-        adapter7.setDropDownViewResource(android.R.layout.simple_spin‌​ner_dropdown_item);
+        adapter7.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
         U.setAdapter(adapter7);
         U.setOnItemSelectedListener(this);
 
@@ -196,7 +196,7 @@ public class HandledareActivity extends AppCompatActivity implements AdapterView
 
         adapter = new ArrayAdapter<String>(this,
                 android.R.layout.simple_spinner_item, antallist);
-        adapter.setDropDownViewResource(android.R.layout.simple_spin‌​ner_dropdown_item);
+        adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
         s.setEnabled(false);
         s.setAdapter(adapter);
         s.setOnItemSelectedListener(this);

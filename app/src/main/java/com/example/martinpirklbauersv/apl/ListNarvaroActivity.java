@@ -99,7 +99,7 @@ public class ListNarvaroActivity extends AppCompatActivity implements AdapterVie
 
             adapter1 = new ArrayAdapter<String>(this,
                     android.R.layout.simple_spinner_item, fList);
-            adapter1.setDropDownViewResource(android.R.layout.simple_spin‌​ner_dropdown_item);
+            adapter1.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
             N.setAdapter(adapter1);
             N.setOnItemSelectedListener(this);
 
